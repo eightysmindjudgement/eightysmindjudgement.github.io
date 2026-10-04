@@ -133,7 +133,7 @@ footer {
     height: 280px;
     object-fit: cover;
     display: block;
-    margin: 0 auto 30px;
+    margin: 0 0 30px;
 }
 
 /* ALBUM LIST */
@@ -155,8 +155,7 @@ article:last-of-type {
 
 article img {
     width: 280px;
-    height: 280px;
-    object-fit: cover;
+    height: auto;
     display: block;
     margin-bottom: 20px;
 }
