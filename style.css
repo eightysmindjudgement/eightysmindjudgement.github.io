@@ -129,11 +129,11 @@ footer {
 /* PROFILE ARTWORK */
 
 .profile-artwork {
-    width: 500px;
-    max-width: 70%;
-    height: auto;
+    width: 280px;
+    height: 280px;
+    object-fit: cover;
     display: block;
-    margin: 0 auto 50px;
+    margin: 0 auto 30px;
 }
 
 /* ALBUM LIST */
