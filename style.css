@@ -233,3 +233,12 @@ article img {
     display: block;
     margin: 0 0 25px;
 }
+
+/* CORPORATE WARRIOR ARTWORK */
+
+.corporate-warrior-artwork {
+    width: 280px;
+    height: auto;
+    display: block;
+    margin: 0 0 30px;
+}
