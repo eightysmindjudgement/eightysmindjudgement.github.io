@@ -191,3 +191,27 @@ article img {
     }
 
 }
+
+/* HOME ALBUM GRID */
+
+.album-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 18px;
+    margin: 40px 0;
+}
+
+.album-grid a {
+    display: block;
+}
+
+.album-grid img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: opacity 0.2s ease;
+}
+
+.album-grid img:hover {
+    opacity: 0.7;
+}
