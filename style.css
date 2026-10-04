@@ -126,6 +126,16 @@ footer {
     font-size: 0.8rem;
 }
 
+/* PROFILE ARTWORK */
+
+.profile-artwork {
+    width: 500px;
+    max-width: 70%;
+    height: auto;
+    display: block;
+    margin: 0 auto 50px;
+}
+
 /* ALBUM LIST */
 
 article {
