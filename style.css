@@ -281,12 +281,19 @@ header {
     opacity: 0.7;
 }
 
-.compilation-grid {
-    grid-template-columns: repeat(3, 1fr);
-    max-width: 700px;
+
+/* HOME SECTION */
+
+.home-section {
+    border-bottom: 1px solid #2c2c2c;
 }
 
-.collaboration-grid {
-    grid-template-columns: 1fr;
-    max-width: 280px;
+/* HOME LINKS */
+
+.home-section a {
+    color: #ffffff;
+    font-weight: bold;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    letter-spacing: 0.08em;
 }
