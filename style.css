@@ -190,6 +190,19 @@ article img {
         padding: 80px 25px;
     }
 
+        .music-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .compilation-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .collaboration-grid {
+        grid-template-columns: 1fr;
+    }
+
 }
 
 /* HOME ALBUM GRID */
@@ -241,4 +254,38 @@ article img {
     height: auto;
     display: block;
     margin: 0 0 30px;
+}
+
+/* MUSIC PAGE GRID */
+
+.music-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 18px;
+    margin: 40px 0;
+}
+
+.music-grid a {
+    display: block;
+}
+
+.music-grid img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: opacity 0.2s ease;
+}
+
+.music-grid img:hover {
+    opacity: 0.7;
+}
+
+.compilation-grid {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 700px;
+}
+
+.collaboration-grid {
+    grid-template-columns: 1fr;
+    max-width: 280px;
 }
