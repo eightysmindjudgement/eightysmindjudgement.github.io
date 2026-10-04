@@ -1,0 +1,184 @@
+*{
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background-color: #0a0a0a;
+    color: #f2f2f2;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.7;
+}
+
+/* HEADER */
+
+header {
+    min-height: 55vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px 20px;
+}
+
+header img {
+    width: min(90%, 900px);
+    height: auto;
+    display: block;
+}
+
+header p {
+    margin-top: 24px;
+    font-size: 1rem;
+    letter-spacing: 0.28em;
+    color: #a8a8a8;
+}
+
+/* NAVIGATION */
+
+nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 28px;
+
+    padding: 18px 20px;
+
+    background-color: rgba(10, 10, 10, 0.96);
+
+    border-top: 1px solid #333;
+    border-bottom: 1px solid #333;
+}
+
+nav a {
+    color: #ffffff;
+    text-decoration: none;
+
+    font-size: 0.85rem;
+    font-weight: bold;
+    letter-spacing: 0.14em;
+
+    transition: color 0.2s ease;
+}
+
+nav a:hover {
+    color: #888888;
+}
+
+/* MAIN */
+
+main {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* SECTIONS */
+
+section {
+    min-height: 45vh;
+    padding: 5px 40px;
+
+    border-bottom: 1px solid #2c2c2c;
+}
+
+section h2 {
+    margin: 0 0 30px;
+
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    letter-spacing: 0.15em;
+}
+
+section p {
+    max-width: 700px;
+    color: #cfcfcf;
+}
+
+/* LINKS */
+
+section a {
+    color: #ffffff;
+    font-weight: bold;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+}
+
+section a:hover {
+    color: #888888;
+}
+
+/* FOOTER */
+
+footer {
+    padding: 50px 20px;
+
+    text-align: center;
+
+    color: #666666;
+    font-size: 0.8rem;
+}
+
+/* ALBUM LIST */
+
+article {
+    padding: 50px 0;
+    border-bottom: 1px solid #333;
+}
+
+article:first-of-type {
+    padding-top: 20px;
+}
+
+article:last-of-type {
+    border-bottom: none;
+}
+
+/* ALBUM COVERS */
+
+article img {
+    width: 280px;
+    height: 280px;
+    object-fit: cover;
+    display: block;
+    margin-bottom: 20px;
+}
+
+/* SMARTPHONE */
+
+@media (max-width: 700px) {
+
+    header {
+        min-height: 65vh;
+    }
+
+    header h1 {
+        font-size: 2.2rem;
+    }
+
+    header p {
+        font-size: 0.8rem;
+        letter-spacing: 0.18em;
+    }
+
+    nav {
+        gap: 16px;
+        padding: 15px 12px;
+    }
+
+    nav a {
+        font-size: 0.75rem;
+    }
+
+    section {
+        padding: 80px 25px;
+    }
+
+}
