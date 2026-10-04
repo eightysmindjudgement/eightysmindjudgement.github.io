@@ -224,3 +224,12 @@ article img {
     display: block;
     margin: 0 0 25px;
 }
+
+/* HOME ABOUT LOGO */
+
+.about-logo {
+    width: 180px;
+    height: auto;
+    display: block;
+    margin: 0 0 25px;
+}
