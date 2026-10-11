@@ -28,8 +28,10 @@ header {
 
 header img {
     width: min(90%, 900px);
+    max-height: 180px;
     height: auto;
     display: block;
+    object-fit: contain;
 }
 
 header p {
