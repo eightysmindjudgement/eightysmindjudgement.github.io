@@ -99,6 +99,67 @@ nav a:hover {
     color: #888888;
 }
 
+/* TOOL DIRECTORY */
+
+.tools-main {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.tools-section {
+    min-height: 0;
+    padding: 48px 40px 64px;
+}
+
+.tool-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: 18px;
+}
+
+.tool-card {
+    display: flex;
+    min-height: 180px;
+    flex-direction: column;
+    padding: 24px;
+    border: 1px solid #444444;
+    background: linear-gradient(135deg, #141414, #0b0b0b 70%);
+    color: #f2f2f2;
+    text-decoration: none;
+}
+
+a.tool-card {
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+a.tool-card:hover,
+a.tool-card:focus-visible {
+    border-color: #999999;
+    background: #171717;
+}
+
+.tool-card-title {
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    letter-spacing: 0.12em;
+}
+
+.tool-card-description {
+    color: #cfcfcf;
+}
+
+.tool-card-japanese {
+    margin-top: 8px;
+    color: #999999;
+    font-size: 0.88rem;
+}
+
+.tool-card-coming-soon {
+    border-style: dashed;
+    color: #999999;
+}
+
 /* LIFE COUNTDOWN */
 
 .life-countdown-page header {
@@ -512,6 +573,10 @@ nav a:hover {
 }
 
 @media (max-width: 700px) {
+    .tools-section {
+        padding: 42px 20px 48px;
+    }
+
     .life-countdown-page header {
         min-height: auto;
     }
