@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculate estimated loan interest, repayments, and outstanding balances using your loan terms and selected day count convention.">
+    <title>LOAN INTEREST CALCULATOR | Eighty's Mind Judgement Official Website</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="loan-interest-calculator.js" defer></script>
+</head>
+
+<body class="loan-calculator-page">
+
+    <header>
+        <img src="EMJ_logo2026.png" alt="Eighty's Mind Judgement">
+        <h1>LOAN INTEREST CALCULATOR</h1>
+        <p class="site-name">Eighty's Mind Judgement Official Website<br><small>エイティズマインドジャッジメント オフィシャルウェブサイト</small></p>
+        <p>WORKING PEOPLE'S HEAVY METAL</p>
+    </header>
+
+    <nav>
+        <a href="index.html">HOME</a>
+        <a href="biography.html">BIOGRAPHY</a>
+        <a href="discography.html">DISCOGRAPHY</a>
+        <a href="videos.html">VIDEOS</a>
+        <a href="tools.html" aria-current="page">TOOLS</a>
+        <a href="market.html">MARKET</a>
+        <a href="links.html">LINKS</a>
+        <a href="sitemap.html">SITEMAP</a>
+    </nav>
+
+    <main class="loan-calculator-main">
+        <section class="loan-calculator-section" aria-labelledby="loan-calculator-title">
+            <div class="loan-calculator-intro">
+                <h2 id="loan-calculator-title">LOAN INTEREST CALCULATOR <span lang="ja">ローン利息計算ツール</span></h2>
+                <p>Calculate loan interest, repayment amounts, and outstanding balances based on your loan terms.</p>
+                <p class="loan-japanese-copy" lang="ja">借入条件に基づいて、支払利息、返済額、借入残高を計算できます。</p>
+            </div>
+
+            <form id="loan-calculator-form" class="loan-calculator-form" novalidate>
+                <label class="loan-field" for="loan-amount">
+                    <span>LOAN AMOUNT <span lang="ja">借入金額</span></span>
+                    <span class="loan-input-wrap">
+                        <span aria-hidden="true">¥</span>
+                        <input id="loan-amount" name="loan-amount" type="text" value="10,000,000" inputmode="decimal" autocomplete="off" required>
+                        <span aria-hidden="true">JPY</span>
+                    </span>
+                </label>
+
+                <label class="loan-field" for="annual-rate">
+                    <span>ANNUAL INTEREST RATE <span lang="ja">年利</span></span>
+                    <span class="loan-input-wrap">
+                        <input id="annual-rate" name="annual-rate" type="number" min="0" max="100" step="any" value="2" inputmode="decimal" required>
+                        <span aria-hidden="true">%</span>
+                    </span>
+                </label>
+
+                <label class="loan-field" for="loan-start-date">
+                    <span>LOAN START DATE <span lang="ja">借入開始日</span></span>
+                    <input id="loan-start-date" name="loan-start-date" type="date" required>
+                    <small class="loan-field-note">The date the loan is disbursed. <span lang="ja">借入が開始される日です。</span></small>
+                </label>
+
+                <label class="loan-field" for="loan-term">
+                    <span>LOAN TERM <span lang="ja">借入期間</span></span>
+                    <select id="loan-term" name="loan-term" required>
+                        <option value="1">1 Month / 1か月</option>
+                        <option value="3">3 Months / 3か月</option>
+                        <option value="6">6 Months / 6か月</option>
+                        <option value="12" selected>1 Year / 1年</option>
+                        <option value="24">2 Years / 2年</option>
+                        <option value="36">3 Years / 3年</option>
+                        <option value="60">5 Years / 5年</option>
+                        <option value="120">10 Years / 10年</option>
+                    </select>
+                </label>
+
+                <label class="loan-field loan-field-wide" for="repayment-method">
+                    <span>REPAYMENT METHOD <span lang="ja">返済方式</span></span>
+                    <select id="repayment-method" name="repayment-method" required>
+                        <option value="bullet" selected>Interest Only / Bullet Repayment / 利息払い・元本満期一括返済</option>
+                        <option value="equal-principal">Equal Principal Repayment / 元金均等返済</option>
+                        <option value="amortizing">Equal Total Payment / Amortizing Loan / 元利均等返済</option>
+                    </select>
+                    <small class="loan-field-note">Interest only: pay interest during the term; repay principal at maturity. <span lang="ja">利息払い：期間中は利息のみを支払い、満期に元本を返済します。</span></small>
+                    <small class="loan-field-note">Equal principal: repay equal principal installments; interest declines with the balance. <span lang="ja">元金均等：元金を均等に返済し、残高に応じて利息が減少します。</span></small>
+                    <small class="loan-field-note">Equal total: scheduled principal and interest payments are approximately equal. <span lang="ja">元利均等：元金と利息の合計返済額が原則として一定です。</span></small>
+                </label>
+
+                <label class="loan-field" for="payment-frequency">
+                    <span>PAYMENT FREQUENCY <span lang="ja">返済頻度</span></span>
+                    <select id="payment-frequency" name="payment-frequency" required>
+                        <option value="1" selected>Monthly / 月次</option>
+                        <option value="3">Quarterly / 四半期ごと</option>
+                        <option value="6">Semiannually / 半年ごと</option>
+                        <option value="12">Annually / 年次</option>
+                    </select>
+                    <small class="loan-field-note">For interest-only loans, interest is paid at this frequency; all principal is due at maturity. <span lang="ja">利息払い方式ではこの頻度で利息を払い、元本は満期日に全額返済します。</span></small>
+                </label>
+
+                <label class="loan-field loan-field-wide" for="day-count">
+                    <span>DAY COUNT CONVENTION <span lang="ja">日数計算方式</span></span>
+                    <select id="day-count" name="day-count" required>
+                        <option value="actual-365" selected>Actual/365</option>
+                        <option value="actual-360">Actual/360</option>
+                        <option value="actual-actual">Actual/Actual</option>
+                    </select>
+                    <small class="loan-field-note">Actual/365: actual calendar days ÷ 365. <span lang="ja">実日数を365で除して計算します。</span></small>
+                    <small class="loan-field-note">Actual/360: actual calendar days ÷ 360. <span lang="ja">実日数を360で除して計算します。</span></small>
+                    <small class="loan-field-note">Actual/Actual: split across calendar years; divide each part by 365 or 366 days. <span lang="ja">暦年ごとに期間を分け、実日数をその年の365日または366日で除します。</span></small>
+                </label>
+
+                <div class="loan-form-actions">
+                    <button id="reset-loan-calculator" class="loan-reset-button" type="button">RESET TO DEFAULTS <span lang="ja">初期値に戻す</span></button>
+                </div>
+            </form>
+
+            <p id="loan-error" class="loan-error" role="alert" aria-live="polite"></p>
+
+            <section class="loan-results" aria-labelledby="loan-results-title" aria-live="polite" aria-atomic="false">
+                <h3 id="loan-results-title" class="visually-hidden">Loan calculation results / ローン計算結果</h3>
+                <dl class="loan-summary-results">
+                    <div class="loan-summary-highlight">
+                        <dt>TOTAL INTEREST <span lang="ja">支払利息合計</span></dt>
+                        <dd><output id="total-interest">¥—</output></dd>
+                    </div>
+                    <div class="loan-summary-highlight">
+                        <dt>TOTAL REPAYMENT <span lang="ja">総返済額</span></dt>
+                        <dd><output id="total-repayment">¥—</output></dd>
+                    </div>
+                    <div>
+                        <dt>TOTAL PRINCIPAL REPAID <span lang="ja">元本返済額合計</span></dt>
+                        <dd><output id="total-principal">¥—</output></dd>
+                    </div>
+                    <div>
+                        <dt>FINAL PAYMENT DATE <span lang="ja">最終返済日</span></dt>
+                        <dd><output id="final-payment-date">—</output></dd>
+                    </div>
+                    <div>
+                        <dt>FINAL OUTSTANDING BALANCE <span lang="ja">最終借入残高</span></dt>
+                        <dd><output id="final-balance">¥—</output></dd>
+                    </div>
+                    <div>
+                        <dt>INTEREST AS % OF PRINCIPAL <span lang="ja">借入元本に対する利息の割合</span></dt>
+                        <dd><output id="interest-percent">—</output></dd>
+                    </div>
+                </dl>
+                <p id="payment-method-summary" class="loan-method-summary" role="status" aria-live="polite"></p>
+            </section>
+
+            <section class="loan-schedule-section" aria-labelledby="loan-schedule-title">
+                <div class="loan-schedule-heading">
+                    <h3 id="loan-schedule-title">REPAYMENT SCHEDULE <span lang="ja">返済予定表</span></h3>
+                    <button id="download-loan-csv" class="loan-download-button" type="button" disabled>DOWNLOAD CSV <span lang="ja">CSVダウンロード</span></button>
+                </div>
+                <div class="loan-table-wrap" role="region" aria-label="Repayment schedule / 返済予定表" tabindex="0">
+                    <table class="loan-schedule-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">PAYMENT NO. <span lang="ja">回数</span></th>
+                                <th scope="col">PAYMENT DATE <span lang="ja">支払日</span></th>
+                                <th scope="col">OPENING BALANCE <span lang="ja">返済前残高</span></th>
+                                <th scope="col">PRINCIPAL REPAID <span lang="ja">元本返済額</span></th>
+                                <th scope="col">INTEREST PAYMENT <span lang="ja">利息支払額</span></th>
+                                <th scope="col">TOTAL PAYMENT <span lang="ja">返済額合計</span></th>
+                                <th scope="col">CLOSING BALANCE <span lang="ja">返済後残高</span></th>
+                            </tr>
+                        </thead>
+                        <tbody id="loan-schedule-rows"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="loan-notes" aria-labelledby="loan-calculation-notes-title">
+                <h3 id="loan-calculation-notes-title">CALCULATION METHOD <span lang="ja">計算方法</span></h3>
+                <p>For each period, interest = opening balance × annual rate × day count fraction. Actual/Actual splits periods at each calendar year. Equal-total payments are solved using each period's accrual factor, not a fixed monthly rate. Actual loan agreements may use different payment schedules, rounding rules, and business-day conventions.</p>
+                <p lang="ja">各期間の利息＝返済前残高×年利×日数計算割合です。Actual/Actualでは暦年ごとに期間を分けます。元利均等方式は固定月利ではなく、各期間の日数計算割合を用いて返済額を求めます。実際のローン契約では、支払スケジュール、端数処理、営業日調整などが異なる場合があります。</p>
+                <p>Payment dates follow calendar months from the loan start date. If a target month has no corresponding day, its last calendar day is used. The final payment date is the contractual maturity date; holidays are not adjusted. Amounts are calculated at full precision and displayed to the nearest yen; equal-total payments may vary slightly, with the final payment adjusted to clear the balance.</p>
+                <p lang="ja">支払日は借入開始日を基準に暦月で設定します。対象月に同じ日がない場合は月末日とし、最終支払日は満期日とします。休日調整は行いません。内部計算は丸めず、表示は円単位に四捨五入します。元利均等方式の返済額には若干の差が生じることがあり、最終回に残高を調整します。</p>
+
+                <h3>IMPORTANT NOTICE <span lang="ja">重要なお知らせ</span></h3>
+                <p>This calculator provides estimates for informational purposes only. Actual interest and repayment amounts may differ from those under your loan agreement. Check your loan contract for the applicable terms and calculation method.</p>
+                <p lang="ja">本ツールは参考情報として試算を提供するものです。実際の利息や返済額は借入契約に基づく金額と異なる場合があります。実際の計算には、借入契約に定められた条件と計算方法を確認してください。</p>
+                <p class="loan-privacy-note">All calculations are performed in your browser. No input or result is sent to a server. <span lang="ja">すべての計算はブラウザー内で行われ、入力や計算結果がサーバーへ送信されることはありません。</span></p>
+            </section>
+
+            <p class="loan-related-tool"><a href="compound-interest-calculator.html">COMPOUND INTEREST CALCULATOR <span lang="ja">複利計算ツール</span></a></p>
+        </section>
+    </main>
+
+    <footer>
+        <p>℗ 2025 Eighty's Mind Judgement<br>
+        © 2025 Eighty's Mind Judgement<br>
+        Based in Japan | Active since November 8, 2025</p>
+        <p class="footer-sitemap"><a href="sitemap.html">SITEMAP</a></p>
+    </footer>
+
+</body>
+
+</html>

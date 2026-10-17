@@ -73,12 +73,40 @@
         }
     }
 
+    function formatAmountInput(input) {
+        const original = input.value;
+        const selectionStart = input.selectionStart;
+        const rawValue = original.replace(/,/g, "");
+        const rawPrefix = original.slice(0, selectionStart).replace(/,/g, "");
+        const decimalIndex = rawValue.indexOf(".");
+        const integerPart = decimalIndex === -1 ? rawValue : rawValue.slice(0, decimalIndex);
+        const fractionalPart = decimalIndex === -1 ? "" : rawValue.slice(decimalIndex);
+        const formattedValue = `${integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}${fractionalPart}`;
+
+        if (formattedValue === original) {
+            return;
+        }
+
+        input.value = formattedValue;
+        let formattedPosition = 0;
+        let rawCharactersCounted = 0;
+        while (formattedPosition < formattedValue.length && rawCharactersCounted < rawPrefix.length) {
+            if (formattedValue[formattedPosition] !== ",") {
+                rawCharactersCounted += 1;
+            }
+            formattedPosition += 1;
+        }
+        input.setSelectionRange(formattedPosition, formattedPosition);
+    }
+
     function readInput(input, { minimum, maximum, integer = false, maxDecimalPlaces }) {
         if (input.value.trim() === "") {
             return null;
         }
 
-        const value = input.valueAsNumber;
+        const value = input === initialInvestmentInput || input === monthlyContributionInput
+            ? Number(input.value.replace(/,/g, ""))
+            : input.valueAsNumber;
         if (!Number.isFinite(value) || value < minimum
             || (maximum !== undefined && value > maximum)
             || (integer && !Number.isInteger(value))
@@ -403,6 +431,8 @@
         renderChart(projection, settings.years);
     }
 
+    initialInvestmentInput.addEventListener("input", () => formatAmountInput(initialInvestmentInput));
+    monthlyContributionInput.addEventListener("input", () => formatAmountInput(monthlyContributionInput));
     form.addEventListener("submit", (event) => event.preventDefault());
     form.addEventListener("input", updateCalculator);
     contributionTimingSelect.addEventListener("change", updateCalculator);
@@ -412,7 +442,9 @@
     });
     resetButton.addEventListener("click", () => {
         initialInvestmentInput.value = DEFAULTS.initialInvestment;
+        formatAmountInput(initialInvestmentInput);
         monthlyContributionInput.value = DEFAULTS.monthlyContribution;
+        formatAmountInput(monthlyContributionInput);
         investmentPeriodInput.value = DEFAULTS.investmentPeriod;
         annualReturnInput.value = DEFAULTS.annualReturn;
         contributionTimingSelect.value = DEFAULTS.contributionTiming;
@@ -421,6 +453,8 @@
         updateCalculator();
     });
 
+    formatAmountInput(initialInvestmentInput);
+    formatAmountInput(monthlyContributionInput);
     updateCurrencyLabels();
     updateCalculator();
 })();

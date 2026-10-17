@@ -53,7 +53,7 @@
                     <span>INITIAL INVESTMENT <span lang="ja">初期投資額</span></span>
                     <span class="compound-input-wrap">
                         <span data-currency-symbol aria-hidden="true">¥</span>
-                        <input id="initial-investment" name="initial-investment" type="number" min="0" step="any" value="1000000" inputmode="decimal" required>
+                        <input id="initial-investment" name="initial-investment" type="text" value="1,000,000" inputmode="decimal" autocomplete="off" required>
                         <span data-currency-code aria-hidden="true">JPY</span>
                     </span>
                 </label>
@@ -62,7 +62,7 @@
                     <span>MONTHLY CONTRIBUTION <span lang="ja">毎月の積立額</span></span>
                     <span class="compound-input-wrap">
                         <span data-currency-symbol aria-hidden="true">¥</span>
-                        <input id="monthly-contribution" name="monthly-contribution" type="number" min="0" step="any" value="30000" inputmode="decimal" required>
+                        <input id="monthly-contribution" name="monthly-contribution" type="text" value="30,000" inputmode="decimal" autocomplete="off" required>
                         <span data-currency-code aria-hidden="true">JPY</span>
                     </span>
                 </label>
@@ -175,6 +175,7 @@
             </div>
 
             <p class="compound-privacy-note">All calculations run in your browser. Your inputs are not sent to a server.<br><span lang="ja">計算はすべてブラウザー内で行われ、入力値がサーバーへ送信されることはありません。</span></p>
+            <p class="compound-related-tool"><a href="loan-interest-calculator.html">LOAN INTEREST CALCULATOR <span lang="ja">ローン利息計算ツール</span></a></p>
         </section>
     </main>
 
