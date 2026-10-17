@@ -310,9 +310,22 @@ nav a:hover {
 }
 
 .countdown-age-value {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
     font-size: clamp(1.2rem, 3vw, 1.7rem);
     font-weight: bold;
     letter-spacing: 0.06em;
+}
+
+.countdown-unit {
+    display: inline-block;
+    color: #a0a0a0;
+    font-size: 0.52em;
+    font-weight: normal;
+    letter-spacing: 0.08em;
+    line-height: 1.2;
+    vertical-align: baseline;
 }
 
 .countdown-progress {
@@ -334,10 +347,20 @@ nav a:hover {
 }
 
 .countdown-progress-track {
+    position: relative;
     height: 14px;
     overflow: hidden;
     border: 1px solid #555555;
     background: #191919;
+}
+
+.countdown-progress-track::after {
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(to right, transparent calc(100% - 1px), rgba(255, 255, 255, 0.2) 1px);
+    background-size: 10% 100%;
+    content: "";
+    pointer-events: none;
 }
 
 .countdown-progress-fill {
@@ -356,12 +379,21 @@ nav a:hover {
 }
 
 .countdown-days-value {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
     color: #ffffff;
     font-size: clamp(4rem, 13vw, 8.5rem);
     font-weight: bold;
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.055em;
     line-height: 1.08;
+}
+
+.countdown-days-value .countdown-unit {
+    margin-bottom: 0.14em;
+    font-size: 0.2em;
+    letter-spacing: 0.12em;
 }
 
 .countdown-secondary-results {
@@ -388,6 +420,11 @@ nav a:hover {
     font-size: clamp(1.2rem, 3vw, 1.8rem);
     font-weight: bold;
     font-variant-numeric: tabular-nums;
+}
+
+.countdown-secondary-results .countdown-unit {
+    margin-left: 5px;
+    font-size: 0.55em;
 }
 
 .countdown-rounding-note {

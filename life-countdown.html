@@ -101,8 +101,8 @@
             <p class="countdown-result-message" id="countdown-result-message" role="status" aria-live="polite">Enter your date of birth to calculate your personal countdown. / 生年月日を入力して、カウントダウンを計算してください。</p>
 
             <div class="countdown-current-age">
-                <span class="countdown-label">CURRENT AGE <span class="countdown-japanese-label" lang="ja">現在の年齢</span></span>
-                <output id="current-age" class="countdown-age-value">—</output>
+                <span class="countdown-label">CURRENT AGE</span>
+                <output id="current-age" class="countdown-age-value"><span id="current-age-number">—</span><span id="current-age-unit" class="countdown-unit">YEARS OLD</span></output>
             </div>
 
             <div class="countdown-progress">
@@ -116,22 +116,22 @@
             </div>
 
             <div class="countdown-days">
-                <span class="countdown-label">DAYS REMAINING <span class="countdown-japanese-label" lang="ja">残り日数</span></span>
-                <output id="days-remaining" class="countdown-days-value">—</output>
+                <span class="countdown-label">DAYS REMAINING</span>
+                <output id="days-remaining" class="countdown-days-value"><span id="days-remaining-number">—</span><span class="countdown-unit">DAYS</span></output>
             </div>
 
             <dl class="countdown-secondary-results">
                 <div>
-                    <dt>REMAINING YEARS <span class="countdown-japanese-label" lang="ja">残り年数</span></dt>
-                    <dd><output id="years-remaining">—</output></dd>
+                    <dt>REMAINING YEARS</dt>
+                    <dd><output id="years-remaining"><span id="years-remaining-number">—</span><span id="years-remaining-unit" class="countdown-unit">YEARS</span></output></dd>
                 </div>
                 <div>
-                    <dt>REMAINING MONTHS <span class="countdown-japanese-label" lang="ja">残り月数</span></dt>
-                    <dd><output id="months-remaining">—</output></dd>
+                    <dt>REMAINING MONTHS</dt>
+                    <dd><output id="months-remaining"><span id="months-remaining-number">—</span><span id="months-remaining-unit" class="countdown-unit">MONTHS</span></output></dd>
                 </div>
                 <div>
-                    <dt>REMAINING WEEKS <span class="countdown-japanese-label" lang="ja">残り週数</span></dt>
-                    <dd><output id="weeks-remaining">—</output></dd>
+                    <dt>REMAINING WEEKS</dt>
+                    <dd><output id="weeks-remaining"><span id="weeks-remaining-number">—</span><span id="weeks-remaining-unit" class="countdown-unit">WEEKS</span></output></dd>
                 </div>
             </dl>
 

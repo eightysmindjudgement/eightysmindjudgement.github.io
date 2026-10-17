@@ -6,14 +6,18 @@
     const targetAgeInput = document.getElementById("target-age");
     const formMessage = document.getElementById("countdown-form-message");
     const resultMessage = document.getElementById("countdown-result-message");
-    const currentAgeOutput = document.getElementById("current-age");
+    const currentAgeNumber = document.getElementById("current-age-number");
+    const currentAgeUnit = document.getElementById("current-age-unit");
     const progressPercentageOutput = document.getElementById("progress-percentage");
     const progressBar = document.getElementById("countdown-progress-bar");
     const progressFill = document.getElementById("countdown-progress-fill");
-    const daysRemainingOutput = document.getElementById("days-remaining");
-    const yearsRemainingOutput = document.getElementById("years-remaining");
-    const monthsRemainingOutput = document.getElementById("months-remaining");
-    const weeksRemainingOutput = document.getElementById("weeks-remaining");
+    const daysRemainingNumber = document.getElementById("days-remaining-number");
+    const yearsRemainingNumber = document.getElementById("years-remaining-number");
+    const yearsRemainingUnit = document.getElementById("years-remaining-unit");
+    const monthsRemainingNumber = document.getElementById("months-remaining-number");
+    const monthsRemainingUnit = document.getElementById("months-remaining-unit");
+    const weeksRemainingNumber = document.getElementById("weeks-remaining-number");
+    const weeksRemainingUnit = document.getElementById("weeks-remaining-unit");
 
     const DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000;
     const numberFormatter = new Intl.NumberFormat("en-US");
@@ -231,7 +235,8 @@
         const targetDateText = dateFormatter.format(new Date(targetTimestamp));
         const japaneseTargetDateText = japaneseDateFormatter.format(new Date(targetTimestamp));
 
-        currentAgeOutput.value = `${currentAge} ${currentAge === 1 ? "YEAR" : "YEARS"} OLD / ${currentAge}歳`;
+        currentAgeNumber.textContent = String(currentAge);
+        currentAgeUnit.textContent = currentAge === 1 ? "YEAR OLD" : "YEARS OLD";
         progressPercentageOutput.value = formattedProgress;
         progressBar.setAttribute("aria-valuenow", progress.toFixed(1));
         progressBar.setAttribute(
@@ -239,10 +244,13 @@
             `${formattedProgress} of the time from your date of birth to your target age has elapsed. / 生年月日から目標年齢までの期間の${formattedProgress}が経過しました。`
         );
         progressFill.style.width = formattedProgress;
-        daysRemainingOutput.value = numberFormatter.format(daysRemaining);
-        yearsRemainingOutput.value = `${remainingTime.years} ${remainingTime.years === 1 ? "YEAR" : "YEARS"} / ${remainingTime.years}年`;
-        monthsRemainingOutput.value = `${remainingTime.months} ${remainingTime.months === 1 ? "MONTH" : "MONTHS"} / ${remainingTime.months}か月`;
-        weeksRemainingOutput.value = `${numberFormatter.format(weeksRemaining)} ${weeksRemaining === 1 ? "WEEK" : "WEEKS"} / ${numberFormatter.format(weeksRemaining)}週`;
+        daysRemainingNumber.textContent = numberFormatter.format(daysRemaining);
+        yearsRemainingNumber.textContent = String(remainingTime.years);
+        yearsRemainingUnit.textContent = remainingTime.years === 1 ? "YEAR" : "YEARS";
+        monthsRemainingNumber.textContent = String(remainingTime.months);
+        monthsRemainingUnit.textContent = remainingTime.months === 1 ? "MONTH" : "MONTHS";
+        weeksRemainingNumber.textContent = numberFormatter.format(weeksRemaining);
+        weeksRemainingUnit.textContent = weeksRemaining === 1 ? "WEEK" : "WEEKS";
 
         if (hasReachedTarget) {
             resultMessage.textContent = targetTimestamp === todayTimestamp
