@@ -85,7 +85,7 @@
             </fieldset>
 
             <fieldset class="countdown-field-group target-age-group">
-                <legend>TARGET AGE <span class="countdown-japanese-label" lang="ja">目標年齢</span></legend>
+                <legend>AGE YOU AIM TO REACH <span class="countdown-japanese-label" lang="ja">目標到達年齢</span></legend>
                 <label for="target-age">YOUR PERSONAL GOAL (1–120) <span class="countdown-japanese-label" lang="ja">あなたが設定する目標（1～120歳）</span>
                     <input id="target-age" name="target-age" type="number" min="1" max="120" step="1" value="80" inputmode="numeric" required>
                 </label>
@@ -98,7 +98,16 @@
 
         <div class="countdown-results" role="region" aria-labelledby="countdown-results-title">
             <h3 id="countdown-results-title" class="visually-hidden">Your life countdown results / カウントダウンの結果</h3>
+            <div class="countdown-from-today">
+                <span class="countdown-label">COUNTDOWN FROM TODAY <span class="countdown-japanese-label" lang="ja">今日からのカウントダウン</span></span>
+                <p>Counting down from today to your target birthday.<br><span lang="ja">今日から、設定した目標年齢の誕生日までをカウントダウンします。</span></p>
+            </div>
             <p class="countdown-result-message" id="countdown-result-message" role="status" aria-live="polite">Enter your date of birth to calculate your personal countdown. / 生年月日を入力して、カウントダウンを計算してください。</p>
+
+            <div class="countdown-target-date">
+                <span class="countdown-label">TARGET DATE <span class="countdown-japanese-label" lang="ja">目標日</span></span>
+                <output id="target-date">—</output>
+            </div>
 
             <div class="countdown-current-age">
                 <span class="countdown-label">CURRENT AGE</span>
@@ -116,21 +125,21 @@
             </div>
 
             <div class="countdown-days">
-                <span class="countdown-label">DAYS REMAINING</span>
+                <span class="countdown-label">DAYS UNTIL TARGET AGE <span class="countdown-japanese-inline" lang="ja">目標年齢までの残り日数</span></span>
                 <output id="days-remaining" class="countdown-days-value"><span id="days-remaining-number">—</span><span class="countdown-unit">DAYS</span></output>
             </div>
 
             <dl class="countdown-secondary-results">
                 <div>
-                    <dt>REMAINING YEARS</dt>
-                    <dd><output id="years-remaining"><span id="years-remaining-number">—</span><span id="years-remaining-unit" class="countdown-unit">YEARS</span></output></dd>
+                    <dt>REMAINING YEARS + MONTHS <span class="countdown-japanese-inline" lang="ja">年月換算</span></dt>
+                    <dd class="countdown-calendar-time">
+                        <output id="years-remaining"><span id="years-remaining-number">—</span><span id="years-remaining-unit" class="countdown-unit">YEARS</span></output>
+                        <span class="countdown-time-join" aria-hidden="true">+</span>
+                        <output id="months-remaining"><span id="months-remaining-number">—</span><span id="months-remaining-unit" class="countdown-unit">MONTHS</span></output>
+                    </dd>
                 </div>
                 <div>
-                    <dt>REMAINING MONTHS</dt>
-                    <dd><output id="months-remaining"><span id="months-remaining-number">—</span><span id="months-remaining-unit" class="countdown-unit">MONTHS</span></output></dd>
-                </div>
-                <div>
-                    <dt>REMAINING WEEKS</dt>
+                    <dt>REMAINING WEEKS <span class="countdown-japanese-inline" lang="ja">週間換算</span></dt>
                     <dd><output id="weeks-remaining"><span id="weeks-remaining-number">—</span><span id="weeks-remaining-unit" class="countdown-unit">WEEKS</span></output></dd>
                 </div>
             </dl>

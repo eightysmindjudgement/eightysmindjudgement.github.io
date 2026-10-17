@@ -6,6 +6,7 @@
     const targetAgeInput = document.getElementById("target-age");
     const formMessage = document.getElementById("countdown-form-message");
     const resultMessage = document.getElementById("countdown-result-message");
+    const targetDateOutput = document.getElementById("target-date");
     const currentAgeNumber = document.getElementById("current-age-number");
     const currentAgeUnit = document.getElementById("current-age-unit");
     const progressPercentageOutput = document.getElementById("progress-percentage");
@@ -222,7 +223,7 @@
         const hasReachedTarget = targetTimestamp <= todayTimestamp;
         const daysRemaining = hasReachedTarget
             ? 0
-            : Math.round((targetTimestamp - todayTimestamp) / DAY_IN_MILLISECONDS);
+            : Math.floor((targetTimestamp - todayTimestamp) / DAY_IN_MILLISECONDS);
         const progress = hasReachedTarget
             ? 100
             : Math.min(100, Math.max(0,
@@ -235,6 +236,7 @@
         const targetDateText = dateFormatter.format(new Date(targetTimestamp));
         const japaneseTargetDateText = japaneseDateFormatter.format(new Date(targetTimestamp));
 
+        targetDateOutput.textContent = `${targetDateText} / ${japaneseTargetDateText}`;
         currentAgeNumber.textContent = String(currentAge);
         currentAgeUnit.textContent = currentAge === 1 ? "YEAR OLD" : "YEARS OLD";
         progressPercentageOutput.value = formattedProgress;
