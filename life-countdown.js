@@ -21,6 +21,8 @@
     const weeksRemainingUnit = document.getElementById("weeks-remaining-unit");
 
     const DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000;
+    const DEFAULT_TARGET_AGE = 80;
+    const STORAGE_KEY = "emj-life-countdown-settings";
     const numberFormatter = new Intl.NumberFormat("en-US");
     const dateFormatter = new Intl.DateTimeFormat("en-US", {
         year: "numeric",
@@ -72,6 +74,80 @@
 
     function daysInMonth(year, month) {
         return new Date(Date.UTC(year, month, 0)).getUTCDate();
+    }
+
+    function isValidBirthDate(birthDate) {
+        if (!birthDate || !Number.isInteger(birthDate.year)
+            || !Number.isInteger(birthDate.month) || !Number.isInteger(birthDate.day)) {
+            return false;
+        }
+
+        const today = getTodayParts();
+        return birthDate.year >= today.year - 120
+            && birthDate.year <= today.year
+            && birthDate.month >= 1
+            && birthDate.month <= 12
+            && birthDate.day >= 1
+            && birthDate.day <= daysInMonth(birthDate.year, birthDate.month)
+            && datePartsToUtc(birthDate) <= datePartsToUtc(today);
+    }
+
+    function isValidTargetAge(targetAge) {
+        return Number.isInteger(targetAge) && targetAge >= 1 && targetAge <= 120;
+    }
+
+    function readSavedSettings() {
+        let serializedSettings;
+        try {
+            serializedSettings = localStorage.getItem(STORAGE_KEY);
+        } catch {
+            return null;
+        }
+
+        if (serializedSettings === null) {
+            return null;
+        }
+
+        let settings;
+        try {
+            settings = JSON.parse(serializedSettings);
+        } catch {
+            return null;
+        }
+
+        if (!settings || typeof settings !== "object"
+            || !isValidTargetAge(settings.targetAge)
+            || (settings.birthDate !== null && !isValidBirthDate(settings.birthDate))) {
+            return null;
+        }
+
+        return settings;
+    }
+
+    function getSelectedBirthDate() {
+        const birthDate = {
+            year: Number(yearSelect.value),
+            month: Number(monthSelect.value),
+            day: Number(daySelect.value)
+        };
+        return isValidBirthDate(birthDate) ? birthDate : null;
+    }
+
+    function saveSettings() {
+        const previousSettings = readSavedSettings();
+        const targetAge = Number(targetAgeInput.value);
+        const settings = {
+            birthDate: getSelectedBirthDate() || previousSettings?.birthDate || null,
+            targetAge: isValidTargetAge(targetAge)
+                ? targetAge
+                : previousSettings?.targetAge || DEFAULT_TARGET_AGE
+        };
+
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+        } catch {
+            // The countdown remains usable when browser storage is unavailable.
+        }
     }
 
     function calculateAge(birthDate, today) {
@@ -263,23 +339,6 @@
         }
     }
 
-    yearSelect.addEventListener("change", () => {
-        updateMonthOptions();
-        updateDayOptions();
-        setInvalidControl(yearSelect, false);
-        setInvalidControl(monthSelect, false);
-        setInvalidControl(daySelect, false);
-    });
-
-    monthSelect.addEventListener("change", () => {
-        updateDayOptions();
-        setInvalidControl(monthSelect, false);
-        setInvalidControl(daySelect, false);
-    });
-
-    daySelect.addEventListener("change", () => setInvalidControl(daySelect, false));
-    targetAgeInput.addEventListener("input", () => setInvalidControl(targetAgeInput, false));
-
     form.addEventListener("submit", (event) => {
         event.preventDefault();
         clearValidation();
@@ -295,10 +354,47 @@
             return;
         }
 
+        saveSettings();
         updateResults(birthDate, targetAge);
     });
 
     populateYears();
     updateMonthOptions();
     updateDayOptions();
+
+    const savedSettings = readSavedSettings();
+    targetAgeInput.value = String(savedSettings?.targetAge || DEFAULT_TARGET_AGE);
+    if (savedSettings?.birthDate) {
+        yearSelect.value = String(savedSettings.birthDate.year);
+        updateMonthOptions();
+        monthSelect.value = String(savedSettings.birthDate.month);
+        updateDayOptions();
+        daySelect.value = String(savedSettings.birthDate.day);
+        updateResults(savedSettings.birthDate, savedSettings.targetAge);
+    }
+
+    yearSelect.addEventListener("change", () => {
+        updateMonthOptions();
+        updateDayOptions();
+        setInvalidControl(yearSelect, false);
+        setInvalidControl(monthSelect, false);
+        setInvalidControl(daySelect, false);
+        saveSettings();
+    });
+
+    monthSelect.addEventListener("change", () => {
+        updateDayOptions();
+        setInvalidControl(monthSelect, false);
+        setInvalidControl(daySelect, false);
+        saveSettings();
+    });
+
+    daySelect.addEventListener("change", () => {
+        setInvalidControl(daySelect, false);
+        saveSettings();
+    });
+    targetAgeInput.addEventListener("input", () => {
+        setInvalidControl(targetAgeInput, false);
+        saveSettings();
+    });
 })();
