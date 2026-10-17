@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Estimate how your money could grow through compound interest and regular contributions.">
+
+    <title>COMPOUND INTEREST CALCULATOR | Eighty's Mind Judgement Official Website</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="compound-calculator-page">
+
+    <header>
+        <img src="EMJ_logo2026.png" alt="Eighty's Mind Judgement">
+        <h1>COMPOUND INTEREST CALCULATOR</h1>
+        <p class="site-name">Eighty's Mind Judgement Official Website<br><small>エイティズマインドジャッジメント オフィシャルウェブサイト</small></p>
+        <p>WORKING PEOPLE'S HEAVY METAL</p>
+    </header>
+
+    <nav>
+        <a href="index.html">HOME</a>
+        <a href="biography.html">BIOGRAPHY</a>
+        <a href="discography.html">DISCOGRAPHY</a>
+        <a href="videos.html">VIDEOS</a>
+        <a href="tools.html" aria-current="page">TOOLS</a>
+        <a href="market.html">MARKET</a>
+        <a href="links.html">LINKS</a>
+    </nav>
+
+    <main class="compound-calculator-main">
+        <section class="compound-calculator-section" aria-labelledby="calculator-title">
+            <div class="compound-calculator-intro">
+                <h2 id="calculator-title">COMPOUND INTEREST CALCULATOR <span class="compound-japanese-inline" lang="ja">複利計算ツール</span></h2>
+                <p>See how your money could grow over time through compound interest and regular contributions.</p>
+                <p class="compound-japanese-copy" lang="ja">複利と定期的な積立によって、資産が時間とともにどのように増えるかを試算できます。</p>
+            </div>
+
+            <form id="compound-calculator-form" class="compound-calculator-form" novalidate>
+                <label class="compound-field" for="display-currency">
+                    <span>DISPLAY CURRENCY <span lang="ja">表示通貨</span></span>
+                    <select id="display-currency" name="display-currency">
+                        <option value="JPY">Japanese yen / JPY</option>
+                        <option value="USD">US dollar / USD</option>
+                    </select>
+                    <small class="compound-field-note" lang="ja">表示記号のみ変更し、為替換算は行いません。</small>
+                </label>
+
+                <label class="compound-field" for="initial-investment">
+                    <span>INITIAL INVESTMENT <span lang="ja">初期投資額</span></span>
+                    <span class="compound-input-wrap">
+                        <span data-currency-symbol aria-hidden="true">¥</span>
+                        <input id="initial-investment" name="initial-investment" type="number" min="0" step="any" value="1000000" inputmode="decimal" required>
+                        <span data-currency-code aria-hidden="true">JPY</span>
+                    </span>
+                </label>
+
+                <label class="compound-field" for="monthly-contribution">
+                    <span>MONTHLY CONTRIBUTION <span lang="ja">毎月の積立額</span></span>
+                    <span class="compound-input-wrap">
+                        <span data-currency-symbol aria-hidden="true">¥</span>
+                        <input id="monthly-contribution" name="monthly-contribution" type="number" min="0" step="any" value="30000" inputmode="decimal" required>
+                        <span data-currency-code aria-hidden="true">JPY</span>
+                    </span>
+                </label>
+
+                <label class="compound-field" for="investment-period">
+                    <span>INVESTMENT PERIOD <span lang="ja">運用期間</span></span>
+                    <span class="compound-input-wrap">
+                        <input id="investment-period" name="investment-period" type="number" min="1" max="100" step="1" value="20" inputmode="numeric" required>
+                        <span>YEARS <span lang="ja">年</span></span>
+                    </span>
+                </label>
+
+                <label class="compound-field" for="annual-return">
+                    <span>EXPECTED ANNUAL RETURN <span lang="ja">想定年利</span></span>
+                    <span class="compound-input-wrap">
+                        <input id="annual-return" name="annual-return" type="number" min="0" max="100" step="0.01" value="5" inputmode="decimal" required>
+                        <span>%</span>
+                    </span>
+                </label>
+
+                <label class="compound-field compound-field-timing" for="contribution-timing">
+                    <span>CONTRIBUTION TIMING <span lang="ja">積立タイミング</span></span>
+                    <select id="contribution-timing" name="contribution-timing">
+                        <option value="end">End of Month</option>
+                        <option value="beginning">Beginning of Month</option>
+                    </select>
+                    <small class="compound-field-note" lang="ja">選択肢：毎月末 / 毎月初</small>
+                </label>
+
+            </form>
+
+            <p class="compound-assumption-note">The expected return is an assumption you choose and does not guarantee future results.<br><span lang="ja">想定年利はご自身で設定する仮定であり、将来の運用成果を保証するものではありません。</span></p>
+            <p class="compound-currency-note">Changing the display currency changes the symbol only; amounts are not converted.<br><span lang="ja">表示通貨の変更は記号のみで、金額の換算は行いません。</span></p>
+
+            <p id="compound-error" class="compound-error" role="alert" aria-live="polite"></p>
+
+            <div class="compound-results" aria-live="polite" aria-atomic="false">
+                <div class="compound-future-value">
+                    <span class="compound-result-label">FUTURE VALUE <span lang="ja">将来の資産額</span></span>
+                    <output id="future-value" class="compound-future-amount">¥—</output>
+                </div>
+
+                <dl class="compound-summary-results">
+                    <div>
+                        <dt>TOTAL PRINCIPAL <span lang="ja">元本合計</span></dt>
+                        <dd><output id="total-principal">—</output></dd>
+                    </div>
+                    <div>
+                        <dt>TOTAL CONTRIBUTIONS <span lang="ja">積立元本合計</span></dt>
+                        <dd><output id="total-contributions">—</output></dd>
+                    </div>
+                    <div>
+                        <dt>TOTAL INTEREST EARNED <span lang="ja">運用益</span></dt>
+                        <dd><output id="total-interest">—</output></dd>
+                    </div>
+                    <div>
+                        <dt>TOTAL RETURN <span lang="ja">元本に対する収益率</span></dt>
+                        <dd><output id="total-return">—</output></dd>
+                    </div>
+                </dl>
+
+                <div class="compound-chart-section">
+                    <h3>GROWTH OVER TIME <span lang="ja">資産の推移</span></h3>
+                    <div class="compound-chart-legend" aria-hidden="true">
+                        <span><i class="compound-legend-principal"></i>Total Contributions / 元本合計</span>
+                        <span><i class="compound-legend-value"></i>Investment Value / 資産評価額</span>
+                    </div>
+                    <div class="compound-chart-wrap">
+                        <svg id="compound-chart" viewBox="0 0 900 300" role="img" aria-labelledby="compound-chart-title compound-chart-description">
+                            <title id="compound-chart-title">Investment growth chart</title>
+                            <desc id="compound-chart-description">Chart comparing total contributions and investment value each year.</desc>
+                            <g id="compound-chart-grid" aria-hidden="true"></g>
+                            <path id="contributions-chart-line" class="compound-chart-line compound-chart-principal-line"></path>
+                            <path id="investment-chart-line" class="compound-chart-line compound-chart-value-line"></path>
+                            <g id="compound-chart-labels" aria-hidden="true"></g>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="compound-projection-section">
+                    <h3>YEAR-BY-YEAR PROJECTION <span lang="ja">年ごとの試算</span></h3>
+                    <div class="compound-table-wrap" tabindex="0" role="region" aria-label="Year-by-year investment projection / 年ごとの運用試算">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th scope="col">YEAR <span lang="ja">年</span></th>
+                                    <th scope="col">TOTAL CONTRIBUTIONS <span lang="ja">元本合計</span></th>
+                                    <th scope="col">INVESTMENT VALUE <span lang="ja">資産評価額</span></th>
+                                    <th scope="col">INTEREST EARNED <span lang="ja">運用益</span></th>
+                                </tr>
+                            </thead>
+                            <tbody id="projection-rows"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <button id="reset-calculator" class="compound-reset-button" type="button">RESET TO DEFAULTS <span lang="ja">初期値に戻す</span></button>
+            </div>
+
+            <div class="compound-notes">
+                <h3>CALCULATION METHOD <span lang="ja">計算方法</span></h3>
+                <p>Calculations assume a constant effective annual return converted to a monthly rate, with monthly compounding. Actual investment returns vary and are not guaranteed.</p>
+                <p class="compound-japanese-copy" lang="ja">一定の実効年利を月利に換算し、月次複利で計算します。実際の運用成果は変動し、保証されません。</p>
+
+                <h3>IMPORTANT NOTICE <span lang="ja">重要なお知らせ</span></h3>
+                <p>This calculator provides estimates for informational purposes only. Taxes, fees, inflation, and fluctuations in investment returns are not included. The results do not constitute investment advice or a guarantee of future performance.</p>
+                <p class="compound-japanese-copy" lang="ja">本ツールは参考情報として試算を提供するものです。税金、手数料、インフレ、運用利回りの変動は考慮していません。結果は投資助言や将来の運用成果を保証するものではありません。</p>
+            </div>
+
+            <p class="compound-privacy-note">All calculations run in your browser. Your inputs are not sent to a server.<br><span lang="ja">計算はすべてブラウザー内で行われ、入力値がサーバーへ送信されることはありません。</span></p>
+        </section>
+    </main>
+
+    <footer>
+        <p>℗ 2025 Eighty's Mind Judgement<br>
+        © 2025 Eighty's Mind Judgement<br>
+        Based in Japan | Active since November 8, 2025</p>
+    </footer>
+
+    <script src="compound-interest-calculator.js" defer></script>
+</body>
+
+</html>

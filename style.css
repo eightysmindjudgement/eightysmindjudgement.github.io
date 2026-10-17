@@ -170,6 +170,432 @@ a.tool-card:focus-visible {
     color: #999999;
 }
 
+/* COMPOUND INTEREST CALCULATOR */
+
+.compound-calculator-page header h1 {
+    max-width: 1000px;
+    margin: 14px 0 0;
+    font-size: clamp(1.6rem, 4vw, 2.7rem);
+    letter-spacing: 0.12em;
+    overflow-wrap: anywhere;
+}
+
+.compound-calculator-main {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.compound-calculator-section {
+    min-height: 0;
+    padding: 48px 40px 64px;
+}
+
+.compound-calculator-intro {
+    margin-bottom: 30px;
+}
+
+.compound-calculator-intro h2 {
+    margin-bottom: 16px;
+}
+
+.compound-calculator-intro .compound-japanese-copy,
+.compound-assumption-note span,
+.compound-currency-note span,
+.compound-results dt span,
+.compound-chart-section h3 span,
+.compound-projection-section h3 span,
+.compound-notes h3 span,
+.compound-privacy-note span {
+    color: #999999;
+    font-size: 0.72em;
+    font-weight: normal;
+    letter-spacing: 0.04em;
+}
+
+.compound-japanese-inline {
+    color: #999999;
+    font-size: 0.58em;
+    font-weight: normal;
+    letter-spacing: 0.04em;
+}
+
+.compound-calculator-intro .compound-japanese-copy,
+.compound-japanese-copy {
+    margin-top: -10px;
+    color: #999999;
+    font-size: 0.92rem;
+}
+
+.compound-calculator-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    padding: 26px;
+    border: 1px solid #444444;
+    background: linear-gradient(135deg, #141414, #0b0b0b 70%);
+}
+
+.compound-field {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 9px;
+    color: #d7d7d7;
+    font-size: 0.78rem;
+    font-weight: bold;
+    letter-spacing: 0.12em;
+}
+
+.compound-field > span:first-child > span {
+    display: block;
+    color: #999999;
+    font-size: 0.9em;
+    font-weight: normal;
+    letter-spacing: 0.04em;
+}
+
+.compound-input-wrap {
+    display: flex;
+    min-width: 0;
+    min-height: 48px;
+    align-items: center;
+    gap: 10px;
+    padding: 0 12px;
+    border: 1px solid #555555;
+    background: #090909;
+    color: #bdbdbd;
+    letter-spacing: normal;
+}
+
+.compound-input-wrap input {
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    padding: 8px 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: #f2f2f2;
+    font: inherit;
+    font-size: 1.05rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.compound-input-wrap input:focus-visible {
+    outline: 2px solid #d5d5d5;
+    outline-offset: 2px;
+}
+
+.compound-field select {
+    width: 100%;
+    min-height: 48px;
+    padding: 10px 12px;
+    border: 1px solid #555555;
+    border-radius: 0;
+    background-color: #090909;
+    color: #f2f2f2;
+    color-scheme: dark;
+    font: inherit;
+    font-size: 0.9rem;
+    letter-spacing: normal;
+}
+
+.compound-field-note {
+    margin-top: -4px;
+    color: #999999;
+    font-size: 0.78em;
+    font-weight: normal;
+    letter-spacing: normal;
+}
+
+.compound-field select:focus-visible,
+.compound-reset-button:focus-visible,
+.compound-table-wrap:focus-visible {
+    outline: 2px solid #d5d5d5;
+    outline-offset: 3px;
+}
+
+.compound-assumption-note,
+.compound-currency-note,
+.compound-privacy-note {
+    margin: 14px 0 0;
+    color: #999999;
+    font-size: 0.8rem;
+}
+
+.compound-error {
+    margin: 18px 0 0;
+    color: #f0b6b6;
+    font-size: 0.9rem;
+}
+
+.compound-error:empty {
+    display: none;
+}
+
+.compound-results {
+    margin-top: 34px;
+}
+
+.compound-future-value {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 26px;
+}
+
+.compound-result-label,
+.compound-summary-results dt {
+    color: #a0a0a0;
+    font-size: 0.78rem;
+    font-weight: bold;
+    letter-spacing: 0.14em;
+}
+
+.compound-result-label span {
+    margin-left: 6px;
+    color: #999999;
+    font-size: 0.9em;
+    font-weight: normal;
+    letter-spacing: 0.04em;
+}
+
+.compound-future-amount {
+    color: #ffffff;
+    font-size: clamp(2.6rem, 8vw, 5.5rem);
+    font-weight: bold;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.04em;
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+}
+
+.compound-summary-results {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    margin: 0;
+    padding: 22px 0;
+    border-top: 1px solid #3a3a3a;
+    border-bottom: 1px solid #3a3a3a;
+}
+
+.compound-summary-results div {
+    min-width: 0;
+}
+
+.compound-summary-results dt {
+    min-height: 2.5em;
+}
+
+.compound-summary-results dd {
+    margin: 5px 0 0;
+    color: #f2f2f2;
+    font-size: clamp(1.05rem, 2.8vw, 1.5rem);
+    font-weight: bold;
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+}
+
+.compound-summary-results dt span {
+    display: block;
+}
+
+.compound-chart-section,
+.compound-projection-section {
+    margin-top: 38px;
+}
+
+.compound-chart-section h3,
+.compound-projection-section h3,
+.compound-notes h3 {
+    margin: 0 0 14px;
+    color: #d7d7d7;
+    font-size: 1rem;
+    letter-spacing: 0.12em;
+}
+
+.compound-chart-section h3 span,
+.compound-projection-section h3 span,
+.compound-notes h3 span {
+    margin-left: 5px;
+}
+
+.compound-chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 22px;
+    margin-bottom: 10px;
+    color: #bdbdbd;
+    font-size: 0.78rem;
+}
+
+.compound-chart-legend i {
+    display: inline-block;
+    width: 16px;
+    height: 3px;
+    margin: 0 7px 3px 0;
+    background: #a0a0a0;
+}
+
+.compound-chart-legend .compound-legend-value {
+    background: #eeeeee;
+}
+
+.compound-chart-legend .compound-legend-principal {
+    height: 0;
+    border-top: 2px dashed #777777;
+    background: transparent;
+    vertical-align: middle;
+}
+
+.compound-chart-wrap {
+    overflow-x: auto;
+    border: 1px solid #333333;
+    background: #0d0d0d;
+}
+
+.compound-chart-wrap svg {
+    display: block;
+    width: 100%;
+    min-width: 620px;
+    height: auto;
+}
+
+.compound-chart-grid-line {
+    stroke: #333333;
+    stroke-width: 1;
+}
+
+.compound-chart-axis-label {
+    fill: #999999;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+}
+
+.compound-chart-line {
+    fill: none;
+    stroke-width: 3;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+}
+
+.compound-chart-principal-line {
+    stroke: #777777;
+    stroke-dasharray: 7 5;
+}
+
+.compound-chart-value-line {
+    stroke: #eeeeee;
+}
+
+.compound-table-wrap {
+    overflow-x: auto;
+    border: 1px solid #333333;
+}
+
+.compound-table-wrap table {
+    width: 100%;
+    min-width: 700px;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+}
+
+.compound-table-wrap th,
+.compound-table-wrap td {
+    padding: 11px 12px;
+    border-bottom: 1px solid #2c2c2c;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.compound-table-wrap th {
+    background: #151515;
+    color: #bdbdbd;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+}
+
+.compound-table-wrap th span {
+    display: block;
+    color: #888888;
+    font-size: 0.9em;
+    font-weight: normal;
+}
+
+.compound-table-wrap th:first-child,
+.compound-table-wrap td:first-child {
+    text-align: left;
+}
+
+.compound-table-wrap td {
+    color: #e6e6e6;
+    font-size: 0.9rem;
+}
+
+.compound-table-wrap tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.compound-reset-button {
+    display: block;
+    min-height: 46px;
+    margin: 26px auto 0;
+    padding: 10px 18px;
+    border: 1px solid #777777;
+    background: #111111;
+    color: #f2f2f2;
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.compound-reset-button:hover {
+    background: #f2f2f2;
+    color: #111111;
+}
+
+.compound-reset-button span {
+    display: block;
+    color: #999999;
+    font-size: 0.85em;
+    font-weight: normal;
+}
+
+.compound-notes {
+    margin-top: 42px;
+    padding-top: 24px;
+    border-top: 1px solid #333333;
+}
+
+.compound-notes h3:not(:first-child) {
+    margin-top: 26px;
+}
+
+.compound-notes p {
+    margin: 0 0 14px;
+    color: #bdbdbd;
+    font-size: 0.9rem;
+}
+
+.compound-notes .compound-japanese-copy {
+    margin-top: -9px;
+    color: #888888;
+    font-size: 0.82rem;
+}
+
+.compound-privacy-note {
+    margin-top: 26px;
+}
+
+.compound-privacy-note span {
+    display: inline-block;
+    margin-top: 2px;
+}
+
 /* LIFE COUNTDOWN */
 
 .life-countdown-page header {
@@ -319,6 +745,10 @@ a.tool-card:focus-visible {
 
 .countdown-calculate-button {
     min-height: 50px;
+    grid-column: 1 / -1;
+}
+
+.compound-field-currency {
     grid-column: 1 / -1;
     padding: 12px 20px;
     border: 1px solid #bcbcbc;
@@ -583,6 +1013,35 @@ a.tool-card:focus-visible {
 }
 
 @media (max-width: 700px) {
+    .compound-calculator-page header h1 {
+        font-size: clamp(1.3rem, 6vw, 2rem);
+        letter-spacing: 0.08em;
+    }
+
+    .compound-calculator-section {
+        padding: 42px 20px 48px;
+    }
+
+    .compound-calculator-form {
+        grid-template-columns: 1fr;
+        gap: 18px;
+        padding: 20px 16px;
+    }
+
+    .compound-summary-results {
+        gap: 14px 10px;
+    }
+
+    .compound-summary-results dt {
+        font-size: 0.68rem;
+        letter-spacing: 0.06em;
+    }
+
+    .compound-chart-section,
+    .compound-projection-section {
+        margin-top: 30px;
+    }
+
     .tools-section {
         padding: 42px 20px 48px;
     }
