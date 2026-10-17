@@ -15,11 +15,15 @@
     const totalInterestOutput = document.getElementById("total-interest");
     const totalReturnOutput = document.getElementById("total-return");
     const projectionRows = document.getElementById("projection-rows");
+    const chartSvg = document.getElementById("compound-chart");
     const contributionsLine = document.getElementById("contributions-chart-line");
     const investmentLine = document.getElementById("investment-chart-line");
     const chartGrid = document.getElementById("compound-chart-grid");
     const chartLabels = document.getElementById("compound-chart-labels");
+    const chartPoints = document.getElementById("compound-chart-points");
     const chartDescription = document.getElementById("compound-chart-description");
+    const chartTooltip = document.getElementById("compound-chart-tooltip");
+    const chartWrap = document.querySelector(".compound-chart-wrap");
     const resetButton = document.getElementById("reset-calculator");
 
     const DEFAULTS = {
@@ -38,6 +42,8 @@
         maximumFractionDigits: 1
     });
     const SVG_NS = "http://www.w3.org/2000/svg";
+    let chartPointTargets = [];
+    let activeChartPoint = null;
 
     function formatCurrency(value) {
         return new Intl.NumberFormat("en-US", {
@@ -96,6 +102,11 @@
         investmentLine.setAttribute("d", "");
         chartGrid.replaceChildren();
         chartLabels.replaceChildren();
+        chartPoints.replaceChildren();
+        chartPointTargets = [];
+        activeChartPoint = null;
+        chartTooltip.hidden = true;
+        chartTooltip.replaceChildren();
         chartDescription.textContent = "Enter valid assumptions to see an investment growth projection.";
     }
 
@@ -222,9 +233,122 @@
 
         contributionsLine.setAttribute("d", `M ${pointsFor("totalPrincipal").join(" L ")}`);
         investmentLine.setAttribute("d", `M ${pointsFor("investmentValue").join(" L ")}`);
+        if (activeChartPoint) {
+            activeChartPoint.classList.remove("compound-chart-point-active");
+        }
+        activeChartPoint = null;
+        chartTooltip.hidden = true;
+        chartPointTargets = [];
+        const chartPointElements = [];
+        const series = [
+            { key: "totalPrincipal", label: "Total Contributions / 元本合計", className: "compound-chart-point-principal" },
+            { key: "investmentValue", label: "Investment Value / 資産評価額", className: "compound-chart-point-value" }
+        ];
+        for (const point of projection) {
+            for (const item of series) {
+                const circle = createSvgElement("circle", {
+                    cx: x(point.year),
+                    cy: y(point[item.key]),
+                    r: 9,
+                    class: `compound-chart-point ${item.className}`
+                });
+                chartPointTargets.push({ point, series: item, circle });
+                chartPointElements.push(circle);
+            }
+        }
+        chartPoints.replaceChildren(...chartPointElements);
         const finalResult = projection[projection.length - 1];
         chartDescription.textContent = `At year ${years}, total principal is ${formatCurrency(finalResult.totalPrincipal)} and investment value is ${formatCurrency(finalResult.investmentValue)}.`;
     }
+
+    function showChartTooltip(point, selectedSeries, target) {
+        const samePosition = Math.abs(point.totalPrincipal - point.investmentValue)
+            <= Math.max(1, point.investmentValue * 0.005);
+        const tooltipSeries = samePosition
+            ? [
+                { label: "Total Contributions / 元本合計", value: point.totalPrincipal },
+                { label: "Investment Value / 資産評価額", value: point.investmentValue }
+            ]
+            : [{ label: selectedSeries.label, value: point[selectedSeries.key] }];
+
+        const heading = document.createElement("span");
+        heading.className = "compound-chart-tooltip-year";
+        heading.textContent = `YEAR ${numberFormatter.format(point.year)}`;
+        const values = tooltipSeries.map((item) => {
+            const row = document.createElement("span");
+            row.className = "compound-chart-tooltip-value";
+            const label = document.createElement("span");
+            label.textContent = item.label;
+            const amount = document.createElement("strong");
+            amount.textContent = formatCurrency(item.value);
+            row.append(label, amount);
+            return row;
+        });
+        chartTooltip.replaceChildren(heading, ...values);
+        chartTooltip.hidden = false;
+
+        const targetRect = target.getBoundingClientRect();
+        const wrapRect = chartWrap.getBoundingClientRect();
+        const tooltipWidth = chartTooltip.offsetWidth;
+        const tooltipHeight = chartTooltip.offsetHeight;
+        const left = targetRect.left - wrapRect.left + chartWrap.scrollLeft;
+        const top = targetRect.top - wrapRect.top + chartWrap.scrollTop;
+        chartTooltip.style.left = `${Math.max(chartWrap.scrollLeft + 8, Math.min(left - tooltipWidth / 2, chartWrap.scrollLeft + chartWrap.clientWidth - tooltipWidth - 8))}px`;
+        chartTooltip.style.top = `${Math.max(8, top - tooltipHeight - 12)}px`;
+    }
+
+    function updateChartTooltip(event) {
+        const chartRect = chartSvg.getBoundingClientRect();
+        const pointerX = (event.clientX - chartRect.left) * 900 / chartRect.width;
+        const pointerY = (event.clientY - chartRect.top) * 300 / chartRect.height;
+        let closest = null;
+        let closestDistance = Infinity;
+
+        for (const target of chartPointTargets) {
+            const pointX = Number(target.circle.getAttribute("cx"));
+            const pointY = Number(target.circle.getAttribute("cy"));
+            const distance = Math.hypot(pointerX - pointX, pointerY - pointY);
+            if (distance < closestDistance) {
+                closest = target;
+                closestDistance = distance;
+            }
+        }
+
+        const yearCount = chartPointTargets.length / 2 - 1;
+        const hoverRange = Math.max(18, ((880 - 78) / yearCount / 2) + 6);
+        if (!closest || closestDistance > hoverRange) {
+            chartTooltip.hidden = true;
+            if (activeChartPoint) {
+                activeChartPoint.classList.remove("compound-chart-point-active");
+                activeChartPoint = null;
+            }
+            return;
+        }
+
+        const pointChanged = activeChartPoint !== closest.circle;
+        if (pointChanged) {
+            if (activeChartPoint) {
+                activeChartPoint.classList.remove("compound-chart-point-active");
+            }
+            activeChartPoint = closest.circle;
+            activeChartPoint.classList.add("compound-chart-point-active");
+        }
+        if (pointChanged || chartTooltip.hidden) {
+            showChartTooltip(closest.point, closest.series, closest.circle);
+        }
+    }
+
+    chartSvg.addEventListener("pointermove", updateChartTooltip);
+    chartSvg.addEventListener("pointerdown", updateChartTooltip);
+    chartSvg.addEventListener("pointerleave", (event) => {
+        if (event.pointerType !== "touch") {
+            chartTooltip.hidden = true;
+            if (activeChartPoint) {
+                activeChartPoint.classList.remove("compound-chart-point-active");
+                activeChartPoint = null;
+            }
+        }
+    });
 
     function updateCalculator() {
         const annualReturnPercent = readInput(annualReturnInput, {

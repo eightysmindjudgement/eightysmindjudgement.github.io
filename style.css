@@ -170,6 +170,81 @@ a.tool-card:focus-visible {
     color: #999999;
 }
 
+/* HTML SITEMAP */
+
+.sitemap-main {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.sitemap-section {
+    padding: 42px 40px 64px;
+}
+
+.sitemap-category {
+    padding: 22px 0;
+    border-bottom: 1px solid #333333;
+}
+
+.sitemap-category:first-child {
+    padding-top: 0;
+}
+
+.sitemap-category h2 {
+    margin: 0 0 12px;
+    color: #f2f2f2;
+    font-size: 1.05rem;
+    letter-spacing: 0.12em;
+}
+
+.sitemap-category h2 small {
+    margin-left: 6px;
+    color: #999999;
+    font-size: 0.72em;
+    letter-spacing: 0.04em;
+}
+
+.sitemap-pages,
+.sitemap-items {
+    margin: 0;
+    padding-left: 22px;
+}
+
+.sitemap-pages > li {
+    margin: 7px 0;
+}
+
+.sitemap-pages a {
+    color: #f2f2f2;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.sitemap-pages a:hover,
+.sitemap-pages a:focus-visible {
+    color: #999999;
+}
+
+.sitemap-items {
+    margin-top: 5px;
+    color: #999999;
+    font-size: 0.88rem;
+}
+
+.sitemap-items li {
+    margin: 3px 0;
+}
+
+.sitemap-items .sitemap-biography-subsection {
+    margin-left: 2ch;
+}
+
+.sitemap-item-japanese {
+    margin-left: 5px;
+    color: #777777;
+    font-size: 0.86em;
+}
+
 /* COMPOUND INTEREST CALCULATOR */
 
 .compound-calculator-page header h1 {
@@ -450,9 +525,44 @@ a.tool-card:focus-visible {
 }
 
 .compound-chart-wrap {
+    position: relative;
     overflow-x: auto;
     border: 1px solid #333333;
     background: #0d0d0d;
+}
+
+.compound-chart-tooltip {
+    position: absolute;
+    z-index: 1;
+    display: grid;
+    gap: 5px;
+    max-width: min(320px, calc(100% - 16px));
+    padding: 9px 11px;
+    border: 1px solid #777777;
+    background: #181818;
+    color: #eeeeee;
+    font-size: 0.72rem;
+    pointer-events: none;
+}
+
+.compound-chart-tooltip[hidden] {
+    display: none;
+}
+
+.compound-chart-tooltip-year {
+    color: #bdbdbd;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+}
+
+.compound-chart-tooltip-value {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.compound-chart-tooltip-value strong {
+    white-space: nowrap;
 }
 
 .compound-chart-wrap svg {
@@ -487,6 +597,23 @@ a.tool-card:focus-visible {
 
 .compound-chart-value-line {
     stroke: #eeeeee;
+}
+
+.compound-chart-point {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.compound-chart-point-active {
+    opacity: 1;
+}
+
+.compound-chart-point-principal {
+    fill: #aaaaaa;
+}
+
+.compound-chart-point-value {
+    fill: #ffffff;
 }
 
 .compound-table-wrap {
@@ -1013,6 +1140,10 @@ a.tool-card:focus-visible {
 }
 
 @media (max-width: 700px) {
+    .sitemap-section {
+        padding: 42px 20px 48px;
+    }
+
     .compound-calculator-page header h1 {
         font-size: clamp(1.3rem, 6vw, 2rem);
         letter-spacing: 0.08em;
@@ -1095,6 +1226,258 @@ a.tool-card:focus-visible {
     }
 }
 
+/* JAPANESE ERA CONVERTER */
+
+.japanese-era-converter-page header h1 {
+    max-width: 1000px;
+    margin: 14px 0 0;
+    font-size: clamp(1.6rem, 4vw, 2.7rem);
+    letter-spacing: 0.1em;
+    overflow-wrap: anywhere;
+}
+
+.japanese-era-converter-main {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.japanese-era-converter-section {
+    min-height: 0;
+    padding: 48px 40px 64px;
+}
+
+.era-converter-intro {
+    margin-bottom: 30px;
+}
+
+.era-converter-intro h2 {
+    margin-bottom: 16px;
+    letter-spacing: 0.08em;
+}
+
+.era-converter-intro h2 span,
+.era-converter-panels h3 span,
+.era-converter-note h3 span {
+    margin-left: 8px;
+    color: #999999;
+    font-size: 0.58em;
+    letter-spacing: 0.04em;
+}
+
+.era-converter-intro h2 span {
+    display: block;
+    margin: 8px 0 0;
+}
+
+.era-converter-japanese {
+    margin-top: -10px;
+    color: #999999;
+    font-size: 0.92rem;
+}
+
+.era-converter-panels {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.era-converter-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    min-width: 0;
+    padding: 24px;
+    border: 1px solid #444444;
+    background: linear-gradient(135deg, #141414, #0b0b0b 70%);
+}
+
+.era-converter-panel h3,
+.era-converter-note h3 {
+    margin: 0;
+    font-size: 1rem;
+    letter-spacing: 0.09em;
+}
+
+.era-converter-panel h3 span,
+.era-converter-note h3 span {
+    display: block;
+    margin: 3px 0 0;
+}
+
+.era-converter-field {
+    display: grid;
+    gap: 8px;
+    color: #cfcfcf;
+    font-size: 0.78rem;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+}
+
+.era-converter-field input,
+.era-converter-field select {
+    width: 100%;
+    min-height: 52px;
+    padding: 12px 14px;
+    border: 1px solid #666666;
+    border-radius: 0;
+    background-color: #0a0a0a;
+    color: #f2f2f2;
+    font: inherit;
+    font-size: 1rem;
+    letter-spacing: 0.02em;
+}
+
+.era-converter-field input:focus-visible,
+.era-converter-field select:focus-visible,
+.era-converter-copy:focus-visible {
+    outline: 2px solid #f2f2f2;
+    outline-offset: 3px;
+}
+
+.era-converter-field input[aria-invalid="true"],
+.era-converter-field select[aria-invalid="true"] {
+    border-color: #e08080;
+}
+
+.era-converter-result {
+    min-height: 112px;
+    padding: 14px 0;
+    border-top: 1px solid #333333;
+    border-bottom: 1px solid #333333;
+}
+
+.era-converter-result-label {
+    display: block;
+    margin-bottom: 8px;
+    color: #999999;
+    font-size: 0.72rem;
+    font-weight: bold;
+    letter-spacing: 0.14em;
+}
+
+.era-converter-result-label span {
+    letter-spacing: 0.04em;
+}
+
+.era-converter-result output {
+    display: block;
+    color: #f2f2f2;
+    font-size: 1.08rem;
+    font-weight: bold;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+    white-space: pre-line;
+}
+
+.era-converter-error {
+    min-height: 0;
+    margin: -10px 0 0;
+    color: #f0a0a0;
+    font-size: 0.85rem;
+    white-space: pre-line;
+}
+
+.era-converter-error:empty {
+    display: none;
+}
+
+.era-converter-copy {
+    align-self: flex-start;
+    min-height: 46px;
+    padding: 10px 16px;
+    border: 1px solid #777777;
+    background-color: #171717;
+    color: #f2f2f2;
+    font: inherit;
+    font-size: 0.78rem;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.era-converter-copy span {
+    margin-left: 4px;
+    color: #aaaaaa;
+    font-size: 0.9em;
+    letter-spacing: 0.03em;
+}
+
+.era-converter-copy:hover:not(:disabled) {
+    border-color: #ffffff;
+    background-color: #242424;
+}
+
+.era-converter-copy:disabled {
+    color: #777777;
+    cursor: not-allowed;
+}
+
+.era-converter-copy-status {
+    min-height: 1.5em;
+    margin: -14px 0 0;
+    color: #b8d8b8;
+    font-size: 0.85rem;
+}
+
+.era-converter-note {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid #333333;
+}
+
+.era-converter-note p {
+    margin: 12px 0;
+}
+
+.era-converter-note p[lang="ja"],
+.era-converter-note li {
+    color: #999999;
+    font-size: 0.9rem;
+}
+
+.era-converter-note ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 4px 20px;
+    margin: 16px 0 0;
+    padding-left: 22px;
+}
+
+.era-converter-copy-fallback {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+@media (max-width: 700px) {
+    .japanese-era-converter-page header {
+        min-height: auto;
+        padding: 42px 20px;
+    }
+
+    .japanese-era-converter-page header h1 {
+        font-size: clamp(1.3rem, 6vw, 2rem);
+        letter-spacing: 0.08em;
+    }
+
+    .japanese-era-converter-section {
+        padding: 42px 20px 48px;
+    }
+
+    .era-converter-panels {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .era-converter-panel {
+        padding: 20px 16px;
+    }
+}
+
 /* MAIN */
 
 main {
@@ -1157,6 +1540,22 @@ footer {
 
     color: #666666;
     font-size: 0.8rem;
+}
+
+footer .footer-sitemap {
+    margin: 14px 0 0;
+}
+
+footer .footer-sitemap a {
+    color: #999999;
+    font-weight: bold;
+    letter-spacing: 0.12em;
+    text-decoration: none;
+}
+
+footer .footer-sitemap a:hover,
+footer .footer-sitemap a:focus-visible {
+    color: #ffffff;
 }
 
 /* PROFILE ARTWORK */

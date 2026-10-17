@@ -28,6 +28,7 @@
         <a href="tools.html" aria-current="page">TOOLS</a>
         <a href="market.html">MARKET</a>
         <a href="links.html">LINKS</a>
+        <a href="sitemap.html">SITEMAP</a>
     </nav>
 
     <main class="compound-calculator-main">
@@ -130,12 +131,14 @@
                         <span><i class="compound-legend-value"></i>Investment Value / 資産評価額</span>
                     </div>
                     <div class="compound-chart-wrap">
+                        <div id="compound-chart-tooltip" class="compound-chart-tooltip" role="status" aria-live="polite" hidden></div>
                         <svg id="compound-chart" viewBox="0 0 900 300" role="img" aria-labelledby="compound-chart-title compound-chart-description">
                             <title id="compound-chart-title">Investment growth chart</title>
                             <desc id="compound-chart-description">Chart comparing total contributions and investment value each year.</desc>
                             <g id="compound-chart-grid" aria-hidden="true"></g>
                             <path id="contributions-chart-line" class="compound-chart-line compound-chart-principal-line"></path>
                             <path id="investment-chart-line" class="compound-chart-line compound-chart-value-line"></path>
+                            <g id="compound-chart-points" aria-hidden="true"></g>
                             <g id="compound-chart-labels" aria-hidden="true"></g>
                         </svg>
                     </div>
@@ -179,6 +182,7 @@
         <p>℗ 2025 Eighty's Mind Judgement<br>
         © 2025 Eighty's Mind Judgement<br>
         Based in Japan | Active since November 8, 2025</p>
+        <p class="footer-sitemap"><a href="sitemap.html">SITEMAP</a></p>
     </footer>
 
     <script src="compound-interest-calculator.js" defer></script>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Convert between Gregorian years and Japanese era years, with accurate era transition dates.">
+    <title>JAPANESE ERA CONVERTER | Eighty's Mind Judgement Official Website</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="japanese-era-converter.js" defer></script>
+</head>
+
+<body class="japanese-era-converter-page">
+
+    <header>
+        <img src="EMJ_logo2026.png" alt="Eighty's Mind Judgement">
+        <h1>JAPANESE ERA CONVERTER</h1>
+        <p class="site-name">Eighty's Mind Judgement Official Website<br><small>エイティズマインドジャッジメント オフィシャルウェブサイト</small></p>
+        <p>WORKING PEOPLE'S HEAVY METAL</p>
+    </header>
+
+    <nav>
+        <a href="index.html">HOME</a>
+        <a href="biography.html">BIOGRAPHY</a>
+        <a href="discography.html">DISCOGRAPHY</a>
+        <a href="videos.html">VIDEOS</a>
+        <a href="tools.html" aria-current="page">TOOLS</a>
+        <a href="market.html">MARKET</a>
+        <a href="links.html">LINKS</a>
+        <a href="sitemap.html">SITEMAP</a>
+    </nav>
+
+    <main class="japanese-era-converter-main">
+        <section class="japanese-era-converter-section" aria-labelledby="era-converter-title">
+            <div class="era-converter-intro">
+                <h2 id="era-converter-title">JAPANESE ERA CONVERTER <span lang="ja">和暦・西暦変換</span></h2>
+                <p>Convert between Gregorian years and Japanese era years.</p>
+                <p class="era-converter-japanese" lang="ja">西暦と和暦を相互に変換できます。</p>
+            </div>
+
+            <div class="era-converter-panels">
+                <form id="gregorian-converter" class="era-converter-panel" novalidate>
+                    <h3>GREGORIAN TO JAPANESE ERA <span lang="ja">西暦から和暦へ</span></h3>
+                    <label class="era-converter-field" for="gregorian-year">
+                        <span>GREGORIAN YEAR <span lang="ja">西暦</span></span>
+                        <input id="gregorian-year" name="gregorian-year" type="number" min="1" max="9999" step="1" inputmode="numeric" placeholder="e.g. 1983">
+                    </label>
+                    <div class="era-converter-result">
+                        <span class="era-converter-result-label">RESULT <span lang="ja">変換結果</span></span>
+                        <output id="era-result" for="gregorian-year" aria-live="polite" aria-atomic="true">Enter a Gregorian year to convert. / 西暦を入力してください。</output>
+                    </div>
+                    <p id="gregorian-error" class="era-converter-error" role="alert" aria-live="polite"></p>
+                    <button class="era-converter-copy" type="button" data-copy-source="era-result" disabled>COPY RESULT <span lang="ja">結果をコピー</span></button>
+                    <p class="era-converter-copy-status" data-copy-status="era-result" role="status" aria-live="polite"></p>
+                </form>
+
+                <form id="era-converter" class="era-converter-panel" novalidate>
+                    <h3>JAPANESE ERA TO GREGORIAN <span lang="ja">和暦から西暦へ</span></h3>
+                    <label class="era-converter-field" for="era-name">
+                        <span>ERA <span lang="ja">元号</span></span>
+                        <select id="era-name" name="era-name">
+                            <option value="">Select an era / 元号を選択</option>
+                            <option value="meiji">Meiji / 明治</option>
+                            <option value="taisho">Taisho / 大正</option>
+                            <option value="showa">Showa / 昭和</option>
+                            <option value="heisei">Heisei / 平成</option>
+                            <option value="reiwa">Reiwa / 令和</option>
+                        </select>
+                    </label>
+                    <label class="era-converter-field" for="era-year">
+                        <span>ERA YEAR <span lang="ja">年数</span></span>
+                        <input id="era-year" name="era-year" type="number" min="1" max="9999" step="1" inputmode="numeric" placeholder="e.g. 58">
+                    </label>
+                    <div class="era-converter-result">
+                        <span class="era-converter-result-label">RESULT <span lang="ja">変換結果</span></span>
+                        <output id="gregorian-result" for="era-name era-year" aria-live="polite" aria-atomic="true">Select an era and enter a year. / 元号と年数を入力してください。</output>
+                    </div>
+                    <p id="era-error" class="era-converter-error" role="alert" aria-live="polite"></p>
+                    <button class="era-converter-copy" type="button" data-copy-source="gregorian-result" disabled>COPY RESULT <span lang="ja">結果をコピー</span></button>
+                    <p class="era-converter-copy-status" data-copy-status="gregorian-result" role="status" aria-live="polite"></p>
+                </form>
+            </div>
+
+            <aside class="era-converter-note">
+                <h3>ABOUT ERA TRANSITIONS <span lang="ja">改元について</span></h3>
+                <p>A year-only conversion cannot identify an exact era when a transition happened during that year. The possible eras and their actual date ranges are shown; dates before Meiji are outside this tool's supported range.</p>
+                <p lang="ja">改元のあった年は、年だけでは元号を一意に特定できません。該当する元号と実際の期間を表示します。明治より前の日付はこのツールの対象外です。</p>
+                <ul>
+                    <li>Meiji / 明治: January 25, 1868</li>
+                    <li>Taisho / 大正: July 30, 1912</li>
+                    <li>Showa / 昭和: December 25, 1926</li>
+                    <li>Heisei / 平成: January 8, 1989</li>
+                    <li>Reiwa / 令和: May 1, 2019</li>
+                </ul>
+            </aside>
+        </section>
+    </main>
+
+    <footer>
+        <p>℗ 2025 Eighty's Mind Judgement<br>
+        © 2025 Eighty's Mind Judgement<br>
+        Based in Japan | Active since November 8, 2025</p>
+        <p class="footer-sitemap"><a href="sitemap.html">SITEMAP</a></p>
+    </footer>
+
+</body>
+
+</html>
