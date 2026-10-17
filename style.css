@@ -115,6 +115,18 @@ section p {
     color: #cfcfcf;
 }
 
+.apostrophe-note {
+    padding: 0 40px 24px;
+    color: #777777;
+    font-size: 0.72rem;
+    line-height: 1.5;
+}
+
+.apostrophe-note p {
+    max-width: 900px;
+    margin: 8px 0;
+}
+
 /* LINKS */
 
 section a {
