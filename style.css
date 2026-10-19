@@ -16,6 +16,81 @@ body {
 
 /* HEADER */
 
+.home-page,
+.biography-page,
+.discography-page,
+.videos-page,
+.tools-page,
+.links-page,
+.market-page,
+.sitemap-page {
+    isolation: isolate;
+}
+
+.home-page {
+    --page-background-image: url("HOME%E8%83%8C%E6%99%AF.JPG");
+}
+
+.biography-page {
+    --page-background-image: url("BIO%E8%83%8C%E6%99%AF.PNG");
+}
+
+.discography-page {
+    --page-background-image: url("DISCO%E8%83%8C%E6%99%AF.PNG");
+}
+
+.videos-page {
+    --page-background-image: url("VIDEOS%E8%83%8C%E6%99%AF.PNG");
+}
+
+.tools-page {
+    --page-background-image: url("TOOL%E8%83%8C%E6%99%AF.PNG");
+}
+
+.links-page {
+    --page-background-image: url("LINK%E8%83%8C%E6%99%AF.PNG");
+}
+
+.market-page {
+    --page-background-image: url("MARKET%E8%83%8C%E6%99%AF.JPEG");
+}
+
+.sitemap-page {
+    --page-background-image: url("MAP%E8%83%8C%E6%99%AF.PNG");
+}
+
+.home-page > header,
+.biography-page > header,
+.discography-page > header,
+.videos-page > header,
+.tools-page > header,
+.links-page > header,
+.market-page > header,
+.sitemap-page > header {
+    background-image: none;
+}
+
+.home-page::before,
+.biography-page::before,
+.discography-page::before,
+.videos-page::before,
+.tools-page::before,
+.links-page::before,
+.market-page::before,
+.sitemap-page::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+        linear-gradient(rgba(10, 10, 10, 0.58), rgba(10, 10, 10, 0.68)),
+        var(--page-background-image);
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 header {
     min-height: 55vh;
     display: flex;
