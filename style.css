@@ -252,6 +252,15 @@ a.tool-card:focus-visible {
     margin: 3px 0;
 }
 
+.sitemap-tools {
+    list-style-type: circle;
+}
+
+.sitemap-tools a {
+    color: #999999;
+    font-weight: normal;
+}
+
 .sitemap-items .sitemap-biography-subsection {
     margin-left: 2ch;
 }
