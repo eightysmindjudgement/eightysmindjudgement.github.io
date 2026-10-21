@@ -2250,6 +2250,12 @@ header {
 
 /* HOME SECTION */
 
+.home-page .visions-entry {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
 .home-section {
     border-bottom: 1px solid #2c2c2c;
 }
