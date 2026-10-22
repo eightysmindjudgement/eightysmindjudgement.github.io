@@ -101,6 +101,15 @@
 
     </div>
 
+    <section class="todays-track" aria-labelledby="todays-track-heading">
+        <h2 id="todays-track-heading">TODAY'S TRACK <span lang="ja">今日の一曲</span></h2>
+        <p id="todays-track-status" class="todays-track-status" role="status" aria-live="polite">Today's track is being prepared. / 今日の一曲を準備しています。</p>
+        <a id="todays-track-link" class="todays-track-link" hidden>
+            <img id="todays-track-thumbnail" class="todays-track-thumbnail" alt="" loading="lazy" decoding="async">
+            <span id="todays-track-title" class="todays-track-title"></span>
+        </a>
+    </section>
+
 </section>
 
         <aside class="apostrophe-note">
@@ -116,6 +125,8 @@
         Based in Japan | Active since November 8, 2025</p>
         <p class="footer-sitemap"><a href="sitemap.html">SITEMAP</a></p>
     </footer>
+
+    <script src="todays-track.js" defer></script>
 
 </body>
 

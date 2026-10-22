@@ -1,0 +1,44 @@
+name: Update today's track
+
+on:
+  schedule:
+    - cron: '5 15 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-todays-track
+  cancel-in-progress: false
+
+jobs:
+  update-track:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Fetch public channel videos and freeze today's selection
+        run: node scripts/update-todays-track.mjs
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+
+      - name: Commit changed track data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/todays-track.json
+          if git diff --cached --quiet; then
+            echo "Track data has not changed."
+          else
+            git commit -m "Update today's track data"
+            git push
+          fi
