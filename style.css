@@ -14,6 +14,26 @@ body {
     line-height: 1.7;
 }
 
+/* Keep site copy limits within page content and leave interactive controls usable. */
+main {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+main a,
+main form,
+main button,
+main input,
+main select,
+main textarea,
+main output,
+main [contenteditable="true"],
+main [role="button"],
+main [role="textbox"] {
+    -webkit-user-select: text;
+    user-select: text;
+}
+
 /* HEADER */
 
 .home-page,

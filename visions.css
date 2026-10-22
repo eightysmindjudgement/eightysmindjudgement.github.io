@@ -29,7 +29,7 @@ body {
 .visions-header a, .visions-footer a { color: #d0d0d0; text-decoration: none; }
 .visions-header a:hover, .visions-footer a:hover { color: #fff; }
 .return-link, .visions-footer { font-size: .72rem; letter-spacing: .12em; }
-main { flex: 1; min-height: 0; display: grid; place-items: center; }
+main { flex: 1; min-height: 0; display: grid; place-items: center; -webkit-user-select: none; user-select: none; }
 .visions-viewer {
     width: 100%;
     min-height: min(78vh, 900px);

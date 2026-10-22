@@ -5,16 +5,16 @@
         { src: "First Meltdown.JPEG", alt: "First Meltdown" },
         { src: "Edge of the Knife.JPEG", alt: "Edge of the Knife" },
         { src: "Heavy Duty.JPEG", alt: "Heavy Duty" },
-        { src: "Mission of Humanity.JPEG", alt: "Mission of Humanity" },
-        { src: "Mighty Souls.JPEG", alt: "Mighty Souls" },
         { src: "Awakening of Recognition.JPEG", alt: "Awakening of Recognition" },
+        { src: "Mighty Souls.JPEG", alt: "Mighty Souls" },
+        { src: "Mission of Humanity.JPEG", alt: "Mission of Humanity" },
         { src: "We Become What We See.JPEG", alt: "We Become What We See" },
         { src: "Primal Pulse.JPEG", alt: "Primal Pulse" },
         { src: "Shred Wars.JPEG", alt: "Shred Wars" },
         { src: "Mind Wall Resistance.jpg", alt: "Mind Wall Resistance" },
         { src: "EMJ-logo1.png", alt: "Eighty's Mind Judgement original logo" }
     ];
-    const durations = slides.map((_, i) => i === 0 ? 3000 : i === slides.length - 1 ? 3000 : 2000);
+    const durations = slides.map((_, i) => i === 0 ? 3500 : i === slides.length - 1 ? 3000 : 2000);
     const images = [...document.querySelectorAll(".visions-slide")];
     let index = 0, activeSlot = 0, playing = true, timer = 0, deadline = 0, remaining = durations[0], transitionToken = 0;
 
