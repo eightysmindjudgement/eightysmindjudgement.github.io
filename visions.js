@@ -14,7 +14,7 @@
         { src: "Mind Wall Resistance.jpg", alt: "Mind Wall Resistance" },
         { src: "EMJ-logo1.png", alt: "Eighty's Mind Judgement original logo" }
     ];
-    const durations = slides.map((_, i) => i === 0 ? 3500 : i === slides.length - 1 ? 3000 : 2000);
+    const durations = slides.map((_, i) => i === 0 ? 3000 : i === slides.length - 1 ? 2500 : 1500);
     const images = [...document.querySelectorAll(".visions-slide")];
     let index = 0, activeSlot = 0, playing = true, timer = 0, deadline = 0, remaining = durations[0], transitionToken = 0;
 

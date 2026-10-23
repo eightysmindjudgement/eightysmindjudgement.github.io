@@ -2420,6 +2420,56 @@ header {
 
 /* HOME LINKS */
 
+.digital-philosophy {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 48px 28px 60px;
+    line-height: 1.85;
+}
+
+.digital-philosophy h2 {
+    margin: 0 0 12px;
+    text-align: center;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    letter-spacing: 0.12em;
+}
+
+.digital-philosophy h3 {
+    margin: 0 0 16px;
+    color: #ffffff;
+    font-size: clamp(1.1rem, 2.2vw, 1.45rem);
+}
+
+.digital-philosophy article p {
+    margin: 0 0 1em;
+}
+
+.digital-philosophy article {
+    padding: 0;
+    border: 0;
+}
+
+.digital-philosophy-nav {
+    position: static;
+    top: auto;
+    z-index: auto;
+    display: flex;
+    justify-content: flex-start;
+    gap: 0.45em;
+    margin: 10px 0 0;
+    padding: 0;
+    background: transparent;
+    border: 0;
+}
+
+.digital-philosophy-nav span {
+    color: #999;
+}
+
+.digital-philosophy h3[id] {
+    scroll-margin-top: 24px;
+}
+
 .home-section a {
     color: #ffffff;
     font-weight: bold;
