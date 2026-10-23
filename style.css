@@ -129,6 +129,16 @@ header img {
     object-fit: contain;
 }
 
+header > a[aria-label="Home"] {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+header > a[aria-label="Home"] img {
+    margin-inline: auto;
+}
+
 .visually-hidden {
     position: absolute;
     width: 1px;
