@@ -11,6 +11,7 @@
         const trackText = trackParagraph.cloneNode(true);
         trackText.querySelectorAll('br').forEach(lineBreak => lineBreak.replaceWith('\n'));
         return {
+            release: headings[0].textContent.trim(),
             title: headings[1].textContent.trim(),
             image,
             tracks: trackText.textContent.split('\n').map(line => line.trim()).filter(Boolean)
@@ -44,12 +45,12 @@
     const information = document.createElement('div');
     information.className = 'studio-album-information';
     information.setAttribute('aria-live', 'polite');
+    const release = document.createElement('p');
+    release.className = 'studio-album-release';
     const title = document.createElement('h3');
-    const trackHeading = document.createElement('h4');
-    trackHeading.textContent = 'TRACKLIST';
     const trackList = document.createElement('ol');
     trackList.className = 'studio-album-tracklist';
-    information.append(title, trackHeading, trackList);
+    information.append(release, title, trackList);
     experience.append(carousel, information);
 
     let rotation = 0;
@@ -63,6 +64,7 @@
     function showTracks(index) {
         if (activeIndex === index && trackList.childElementCount) return;
         activeIndex = index;
+        release.textContent = albums[index].release;
         title.textContent = albums[index].title;
         trackList.replaceChildren(...albums[index].tracks.map(track => {
             const item = document.createElement('li');

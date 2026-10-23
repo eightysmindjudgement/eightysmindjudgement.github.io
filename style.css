@@ -2202,16 +2202,18 @@ article img {
 
 .studio-albums-page .studio-album-experience {
     display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
-    align-items: center;
-    gap: clamp(24px, 5vw, 64px);
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    gap: 0;
     margin: 20px 0 44px;
 }
 
 .studio-albums-page .studio-album-carousel {
     position: relative;
-    min-width: 0;
-    height: clamp(330px, 42vw, 510px);
+    width: 100%;
+    max-width: 1200px;
+    height: clamp(340px, 38vw, 500px);
+    margin-inline: auto;
     perspective: 1100px;
     touch-action: pan-y;
     cursor: grab;
@@ -2235,16 +2237,16 @@ article img {
 
 .studio-albums-page .studio-album-card {
     position: absolute;
-    top: 50%;
+    top: 38%;
     left: 50%;
-    width: clamp(145px, 21vw, 245px);
+    width: clamp(130px, 16vw, 200px);
     aspect-ratio: 1;
     padding: 0;
     overflow: hidden;
     border: 1px solid rgba(255, 255, 255, 0.28);
     background: #111;
     box-shadow: 0 12px 28px rgba(0, 0, 0, 0.56);
-    transform: translate(-50%, -50%) rotateY(var(--album-angle)) translateZ(clamp(175px, 25vw, 310px)) scale(var(--album-scale, 0.72));
+    transform: translate(-50%, -50%) rotateY(var(--album-angle)) translateZ(clamp(300px, 36vw, 470px)) scale(var(--album-scale, 0.72));
     opacity: var(--album-opacity, 0.55);
     transition: transform 580ms cubic-bezier(.2,.7,.2,1), opacity 420ms ease, border-color 200ms ease;
     cursor: pointer;
@@ -2274,10 +2276,21 @@ article img {
     max-width: 520px;
     width: 100%;
     margin-inline: auto;
+    padding: 14px 18px;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.68);
+    text-align: center;
+}
+
+.studio-albums-page .studio-album-release {
+    margin: 0 0 4px;
+    color: #aaa;
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
 }
 
 .studio-albums-page .studio-album-information h3 {
-    margin: 0 0 14px;
+    margin: 0;
     font-size: clamp(1.3rem, 2.6vw, 2rem);
     letter-spacing: 0.08em;
     line-height: 1.25;
@@ -2293,12 +2306,15 @@ article img {
 .studio-albums-page .studio-album-tracklist {
     display: grid;
     gap: 3px;
-    margin: 0;
+    width: 100%;
+    max-width: none;
+    margin: 14px 0 0;
     padding: 0;
     list-style: none;
     color: #dedede;
     font-size: clamp(0.78rem, 1.05vw, 0.94rem);
     line-height: 1.55;
+    text-align: left;
 }
 
 .studio-albums-page .studio-album-tracklist li {
@@ -2316,25 +2332,50 @@ article img {
     display: none;
 }
 
+@media (min-width: 900px) {
+    .studio-albums-page .studio-album-experience {
+        grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.8fr);
+        column-gap: clamp(20px, 3vw, 48px);
+        align-items: center;
+    }
+
+    .studio-albums-page .studio-album-information {
+        position: relative;
+        z-index: 2;
+        grid-column: 2;
+    }
+
+    .studio-albums-page .studio-album-carousel {
+        grid-column: 1;
+    }
+
+    .studio-albums-page .studio-album-tracklist {
+        margin-top: 14px;
+    }
+}
+
 @media (max-width: 760px) {
     .studio-albums-page .studio-album-experience {
         grid-template-columns: minmax(0, 1fr);
-        gap: 8px;
+        gap: 0;
         margin-top: 0;
     }
 
     .studio-albums-page .studio-album-carousel {
-        height: clamp(300px, 88vw, 440px);
+        height: clamp(300px, 82vw, 380px);
     }
 
     .studio-albums-page .studio-album-card {
-        width: clamp(142px, 39vw, 210px);
-        transform: translate(-50%, -50%) rotateY(var(--album-angle)) translateZ(clamp(150px, 42vw, 220px)) scale(var(--album-scale, 0.72));
+        top: 36%;
+    }
+
+    .studio-albums-page .studio-album-card {
+        width: clamp(112px, 29vw, 150px);
+        transform: translate(-50%, -50%) rotateY(var(--album-angle)) translateZ(56vw) scale(var(--album-scale, 0.72));
     }
 
     .studio-albums-page .studio-album-information {
         max-width: 560px;
-        padding-top: 4px;
     }
 }
 
