@@ -1,17 +1,8 @@
-(async () => {
+(() => {
     const experience = document.querySelector('.studio-album-experience');
-    if (!experience) return;
-
-    let sourceAlbums;
-    try {
-        const response = await fetch('albums.html');
-        if (!response.ok) return;
-        const albumDocument = new DOMParser().parseFromString(await response.text(), 'text/html');
-        sourceAlbums = [...albumDocument.querySelectorAll('main section article')];
-        if (sourceAlbums.length !== 10) return;
-    } catch {
-        return;
-    }
+    const section = experience?.closest('section');
+    const sourceAlbums = section ? [...section.querySelectorAll(':scope > article')] : [];
+    if (!experience || sourceAlbums.length !== 10) return;
 
     const albums = sourceAlbums.map(article => {
         const headings = [...article.querySelectorAll('h3')];
@@ -157,4 +148,5 @@
         selectAlbum(nextIndex);
     });
 
+    sourceAlbums.forEach(article => { article.hidden = true; });
 })();
