@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0a0a0a">
-    <meta name="description" content="A visual journey through Eighty's Mind Judgement.">
+    <meta name="description" content="A spatial journey through ten albums by Eighty's Mind Judgement.">
     <title>VISIONS | Eighty's Mind Judgement Official Website</title>
     <link rel="stylesheet" href="visions.css">
-    <script src="visions.js" defer></script>
+    <script type="module" src="visions.js"></script>
 </head>
 <body>
     <header class="visions-header">
@@ -15,12 +15,30 @@
         <a class="return-link" href="index.html">EIGHTY'S MIND JUDGEMENT</a>
     </header>
     <main>
-        <section class="visions-viewer" aria-label="Eighty's Mind Judgement visual presentation">
-            <div class="visions-stage" aria-live="off">
-                <img class="visions-slide is-active is-intro" src="EMJ_logo2026.png" alt="Eighty's Mind Judgement" fetchpriority="high" decoding="async">
-                <img class="visions-slide" alt="" aria-hidden="true" decoding="async">
-            </div>
-        </section>
+        <div class="visions-scroll-track">
+            <section class="visions-stage" aria-label="Three-dimensional album journey">
+                <canvas class="visions-canvas" aria-label="Floating album cubes. Select a cube or use the album buttons to explore." role="img"></canvas>
+                <div class="visions-opening" aria-hidden="true">
+                    <img src="EMJ_logo2026.png" alt="">
+                    <span>ENTER THE SOUND</span>
+                </div>
+                <div class="visions-loading" role="status">Preparing the album space...</div>
+                <p class="visions-scroll-prompt">SCROLL TO TRAVEL <span aria-hidden="true">↓</span></p>
+                <nav class="visions-index" aria-label="Choose an album"></nav>
+                <section class="visions-details" aria-labelledby="visions-title" aria-live="polite" hidden>
+                    <button class="visions-close" type="button" aria-label="Close album details">×</button>
+                    <p class="visions-release"></p>
+                    <h2 class="visions-title" id="visions-title"></h2>
+                    <h3>TRACKLIST</h3>
+                    <ol class="visions-tracklist"></ol>
+                </section>
+                <div class="visions-fallback" hidden>
+                    <p>3D is unavailable on this device. Choose an album to explore.</p>
+                    <div class="visions-fallback-grid"></div>
+                </div>
+            </section>
+            <div class="visions-scroll-space" aria-hidden="true"></div>
+        </div>
     </main>
     <footer class="visions-footer" aria-label="Site navigation">
         <a href="index.html">HOME</a>
