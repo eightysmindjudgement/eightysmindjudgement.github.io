@@ -199,6 +199,7 @@ body.site-menu-ready > nav:not(.digital-philosophy-nav) .site-menu-close { posit
 
 .site-menu-toggle { position: fixed; top: 18px; left: 20px; z-index: 1202; display: flex; width: 46px; height: 46px; flex-direction: column; justify-content: center; align-items: center; gap: 6px; padding: 10px; border: 1px solid rgba(255,255,255,.45); border-radius: 3px; background: rgba(10,10,10,.72); cursor: pointer; }
 .site-menu-toggle span { display: block; width: 22px; height: 2px; background: #fff; }
+@media (max-width: 700px) { .site-menu-toggle { right: 20px; left: auto; } }
 .site-menu-backdrop { position: fixed; inset: 0; z-index: 1200; background: rgba(0,0,0,.58); opacity: 0; transition: opacity .24s ease; }
 .site-menu-backdrop.is-visible { opacity: 1; }
 body.site-menu-open { overflow: hidden; }
@@ -2452,6 +2453,7 @@ header {
 
 .album-grid-click-entry {
     grid-column: 1 / -1;
+    max-width: none;
     margin: 0;
     text-align: center;
 }
