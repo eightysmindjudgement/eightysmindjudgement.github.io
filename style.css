@@ -2826,6 +2826,7 @@ header {
     max-width: min(100%, 174px);
     max-height: 48px;
     object-fit: contain;
+    opacity: 0.88;
 }
 
 .service-logo--icon {
