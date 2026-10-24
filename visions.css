@@ -298,7 +298,7 @@ main {
     font-variant-numeric: tabular-nums;
 }
 
-.visions-scroll-space { height: 950vh; }
+.visions-scroll-space { height: 600vh; }
 
 .visions-fallback {
     position: absolute;
@@ -405,7 +405,7 @@ main {
         padding: 18px 18px 14px;
     }
     .visions-tracklist { max-height: min(32vh, 260px); }
-    .visions-scroll-space { height: 950vh; }
+    .visions-scroll-space { height: 600vh; }
     .visions-fallback-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 

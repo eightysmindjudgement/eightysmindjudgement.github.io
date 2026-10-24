@@ -185,24 +185,16 @@ import * as THREE from "./vendor/three.module.min.js";
             roughness: 0.52,
             emissiveIntensity: 0.18
         });
-        const metal = new THREE.MeshStandardMaterial({
-            color: 0x65727c,
-            metalness: 0.88,
-            roughness: 0.3,
-            emissive: 0x101c26,
-            emissiveIntensity: 0.2
-        });
         const mesh = new THREE.Mesh(
             new THREE.BoxGeometry(2.45, 2.45, 2.45),
-            [metal, metal, metal, metal, cover, cover]
+            [cover, cover, cover, cover, cover, cover]
         );
-        const side = albumIndex % 2 === 0 ? -1 : 1;
         const narrow = window.innerWidth <= 700;
         mesh.userData.baseScale = 0.94 + Math.random() * 0.18;
         mesh.position.set(
-            side * ((narrow ? 0.82 : 2.5) + Math.random() * (narrow ? 0.18 : 0.62)),
-            (Math.random() - 0.5) * (narrow ? 0.8 : 1.5),
-            -8 - albumIndex * 10
+            (albumIndex - (albums.length - 1) / 2) * 4.5,
+            Math.sin(albumIndex * Math.PI / 2) * 1.35 + (Math.random() - 0.5) * (narrow ? 0.2 : 0.35),
+            -14
         );
         mesh.scale.setScalar(mesh.userData.baseScale);
         mesh.rotation.set(
@@ -210,6 +202,10 @@ import * as THREE from "./vendor/three.module.min.js";
             (Math.random() - 0.5) * 0.2,
             (Math.random() - 0.5) * 0.11
         );
+        mesh.userData.baseRotationX = mesh.rotation.x;
+        mesh.userData.baseRotationY = mesh.rotation.y;
+        mesh.userData.dragRotationX = 0;
+        mesh.userData.dragRotationY = 0;
         mesh.userData.albumIndex = albumIndex;
         mesh.userData.baseY = mesh.position.y;
         scene.add(mesh);
@@ -291,21 +287,21 @@ import * as THREE from "./vendor/three.module.min.js";
     }
 
     function updateCamera() {
-        const travel = scrollProgress * 90;
+        const albumPosition = scrollProgress * (albums.length - 1);
         cameraTarget.set(
-            Math.sin(scrollProgress * Math.PI * 4) * (window.innerWidth <= 700 ? 0.35 : 0.78),
-            0.12 + Math.sin(scrollProgress * Math.PI * 2) * 0.14,
-            2 - travel
+            (albumPosition - (albums.length - 1) / 2) * 4.5,
+            Math.sin(albumPosition * Math.PI / 2) * 1.35,
+            2
         );
         cameraLookTarget.set(
-            cameraTarget.x + Math.sin(scrollProgress * Math.PI * 3) * 0.12,
+            cameraTarget.x,
             cameraTarget.y,
-            cameraTarget.z - 12
+            -14
         );
 
         if (selectedIndex >= 0 && cubes[selectedIndex]) {
             const selected = cubes[selectedIndex];
-            cameraTarget.set(selected.position.x * 0.55, selected.position.y * 0.25, selected.position.z + 7.5);
+            cameraTarget.set(selected.position.x, selected.position.y, selected.position.z + 8.5);
             cameraLookTarget.copy(selected.position);
         }
 
@@ -326,8 +322,14 @@ import * as THREE from "./vendor/three.module.min.js";
                 const selected = albumIndex === selectedIndex;
                 const float = Math.sin(time * 0.00065 + albumIndex * 1.7) * 0.075;
                 cube.position.y += (cube.userData.baseY + (selected ? 0 : float) - cube.position.y) * 0.035;
-                cube.rotation.y += ((selected ? 0 : Math.sin(time * 0.00018 + albumIndex) * 0.13) - cube.rotation.y) * 0.02;
-                cube.rotation.x += ((selected ? 0 : Math.sin(time * 0.00023 + albumIndex * 0.8) * 0.08) - cube.rotation.x) * 0.02;
+                cube.rotation.y = cube.userData.baseRotationY
+                    + scrollProgress * Math.PI * 2 * albums.length
+                    + cube.userData.dragRotationY
+                    + (selected ? 0 : Math.sin(time * 0.00018 + albumIndex) * 0.13);
+                cube.rotation.x = cube.userData.baseRotationX
+                    + scrollProgress * Math.PI * albums.length
+                    + cube.userData.dragRotationX
+                    + (selected ? 0 : Math.sin(time * 0.00023 + albumIndex * 0.8) * 0.08);
                 const targetScale = cube.userData.baseScale * (selected ? 1.14 : 1);
                 cube.scale.setScalar(cube.scale.x + (targetScale - cube.scale.x) * 0.06);
                 cube.userData.edgeMaterial.opacity = selected ? 0.95 : 0.58;
@@ -442,7 +444,13 @@ import * as THREE from "./vendor/three.module.min.js";
 
         const hitTargets = [];
         canvas.addEventListener("pointerdown", event => {
-            pointerDown = { x: event.clientX, y: event.clientY, pointerId: event.pointerId };
+            pointerDown = {
+                x: event.clientX,
+                y: event.clientY,
+                lastX: event.clientX,
+                lastY: event.clientY,
+                pointerId: event.pointerId
+            };
         }, { signal: abortController.signal });
         canvas.addEventListener("pointerup", event => {
             if (!pointerDown || pointerDown.pointerId !== event.pointerId) return;
@@ -462,6 +470,17 @@ import * as THREE from "./vendor/three.module.min.js";
         }, { signal: abortController.signal });
         canvas.addEventListener("pointercancel", () => { pointerDown = null; }, { signal: abortController.signal });
         canvas.addEventListener("pointermove", event => {
+            if (pointerDown?.pointerId === event.pointerId && !reduceMotion.matches) {
+                const deltaX = event.clientX - pointerDown.lastX;
+                const deltaY = event.clientY - pointerDown.lastY;
+                cubes.forEach(cube => {
+                    if (!cube) return;
+                    cube.userData.dragRotationY += deltaX * 0.025;
+                    cube.userData.dragRotationX += deltaY * 0.025;
+                });
+                pointerDown.lastX = event.clientX;
+                pointerDown.lastY = event.clientY;
+            }
             const rect = canvas.getBoundingClientRect();
             pointer.set(
                 ((event.clientX - rect.left) / rect.width) * 2 - 1,
