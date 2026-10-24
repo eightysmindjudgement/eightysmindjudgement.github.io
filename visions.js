@@ -178,11 +178,12 @@ import * as THREE from "./vendor/three.module.min.js";
         }
         const cover = new THREE.MeshStandardMaterial({
             map: texture,
+            emissiveMap: texture,
             color: 0xffffff,
+            emissive: 0xffffff,
             metalness: 0.16,
             roughness: 0.52,
-            emissive: 0x193248,
-            emissiveIntensity: 0.08
+            emissiveIntensity: 0.18
         });
         const metal = new THREE.MeshStandardMaterial({
             color: 0x65727c,
@@ -330,7 +331,7 @@ import * as THREE from "./vendor/three.module.min.js";
                 const targetScale = cube.userData.baseScale * (selected ? 1.14 : 1);
                 cube.scale.setScalar(cube.scale.x + (targetScale - cube.scale.x) * 0.06);
                 cube.userData.edgeMaterial.opacity = selected ? 0.95 : 0.58;
-                cube.userData.coverMaterial.emissiveIntensity = selected ? 0.28 : 0.08;
+                cube.userData.coverMaterial.emissiveIntensity = selected ? 0.32 : 0.18;
             });
         }
         renderer.render(scene, camera);
