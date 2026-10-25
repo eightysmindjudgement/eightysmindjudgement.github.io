@@ -2654,6 +2654,109 @@ header {
 
 /* HOME SECTION */
 
+/* A separate, document-scrolling layer below the header copy. */
+.home-page > header {
+    position: relative;
+    min-height: 70vh;
+    min-height: 70svh;
+    padding-bottom: 116px;
+}
+
+.home-page > header > .home-scroll-cue {
+    position: absolute;
+    z-index: 2;
+    bottom: 18px;
+    left: 50%;
+    display: flex;
+    width: 64px;
+    min-height: 80px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    transform: translateX(-50%);
+    color: #82c9d8;
+    text-decoration: none;
+    transition: opacity .35s ease, visibility .35s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.home-scroll-cue svg {
+    width: 36px;
+    height: 48px;
+    overflow: visible;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 0 4px #009cca80);
+}
+
+.home-scroll-cue span {
+    font-size: .56rem;
+    font-weight: bold;
+    letter-spacing: .22em;
+    padding-left: .22em;
+}
+
+.home-scroll-tube { stroke: #258ca9; stroke-width: 1.6; }
+.home-scroll-light {
+    stroke: #65e2ff;
+    stroke-width: 2.4;
+    stroke-dasharray: 24 176;
+    stroke-dashoffset: 24;
+    opacity: 0;
+    animation: home-scroll-flow 3.2s linear infinite;
+}
+.home-scroll-light--core {
+    stroke: #ecfdff;
+    stroke-width: 2;
+    stroke-dasharray: 5 195;
+    animation-name: home-scroll-core;
+}
+.home-scroll-light--head { animation-name: home-scroll-tip; }
+
+@keyframes home-scroll-flow {
+    0%, 8% { stroke-dashoffset: 24; opacity: 0; }
+    14% { opacity: .85; }
+    52% { stroke-dashoffset: -100; opacity: 1; }
+    62%, 100% { stroke-dashoffset: -125; opacity: 0; }
+}
+
+@keyframes home-scroll-tip {
+    0%, 38% { stroke-dashoffset: 24; opacity: 0; }
+    44% { opacity: .9; }
+    64% { stroke-dashoffset: -100; opacity: 1; }
+    74%, 100% { stroke-dashoffset: -125; opacity: 0; }
+}
+
+@keyframes home-scroll-core {
+    0%, 8% { stroke-dashoffset: 5; opacity: 0; }
+    14% { opacity: .9; }
+    52% { stroke-dashoffset: -119; opacity: 1; }
+    62%, 100% { stroke-dashoffset: -144; opacity: 0; }
+}
+
+.home-scroll-cue:hover { color: #c6f5ff; }
+.home-scroll-cue:focus-visible { outline: 2px solid #82dff2; outline-offset: 4px; border-radius: 4px; }
+.home-page > header > .home-scroll-cue.is-dismissed,
+.site-menu-open .home-scroll-cue { opacity: 0; visibility: hidden; pointer-events: none; }
+.home-scroll-cue.is-dismissed .home-scroll-light { animation-play-state: paused; }
+.home-page #home-mission { scroll-margin-top: 24px; }
+
+@media (max-width: 700px) {
+    .home-page > header {
+        min-height: 0;
+    }
+    .home-page > header > .home-scroll-cue { bottom: 10px; }
+    .home-scroll-cue svg { width: 32px; height: 44px; filter: drop-shadow(0 0 3px #009cca60); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html:has(.home-scroll-cue) { scroll-behavior: auto; }
+    .home-scroll-light { animation: none; opacity: 0; }
+    .home-page > header > .home-scroll-cue { transition: none; }
+}
+
 .home-page .visions-entry {
     margin: 0 auto 102px;
     text-align: center;
@@ -2795,6 +2898,10 @@ header {
 
     :is(.home-page, .biography-page, .discography-page, .videos-page, .market-page) > header {
         padding-bottom: 0;
+    }
+
+    .home-page > header {
+        padding-bottom: 100px;
     }
 
     :is(.home-page, .biography-page, .discography-page, .videos-page, .market-page) > header > p:last-child {
