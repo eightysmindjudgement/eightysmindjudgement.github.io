@@ -32,9 +32,31 @@ import * as THREE from "./vendor/three.module.min.js";
     const cameraTarget = new THREE.Vector3();
     const cameraLookTarget = new THREE.Vector3();
     const cameraLookCurrent = new THREE.Vector3();
+    const particlePointer = new THREE.Vector3();
+    const previousParticlePointer = new THREE.Vector3();
     const cubes = [];
     const endOfSpaceZ = -120;
     const cameraEndZ = endOfSpaceZ + 12;
+    const narrowViewport = window.innerWidth <= 700;
+    const ambientParticleCount = reduceMotion.matches
+        ? (narrowViewport ? 28 : 48)
+        : (narrowViewport ? 64 : 140);
+    const interactionParticleCount = reduceMotion.matches
+        ? (narrowViewport ? 14 : 24)
+        : (narrowViewport ? 32 : 72);
+    const particleVelocities = [];
+    const particleLifetimes = [];
+    const particleAges = [];
+    const particleCapacity = ambientParticleCount + interactionParticleCount;
+    let particlePositions;
+    let particleAlphas;
+    let particleSizes;
+    let particleGeometry;
+    let particleMaterial;
+    let particleCursor = 0;
+    let previousParticleTime = 0;
+    let lastParticleEmission = 0;
+    let hasPreviousParticlePointer = false;
     let renderer;
     let scene;
     let camera;
@@ -263,24 +285,137 @@ import * as THREE from "./vendor/three.module.min.js";
         scene.add(grid);
         sceneObjects.push(grid);
 
-        const starCount = window.innerWidth <= 700 ? 110 : 240;
-        const starPositions = new Float32Array(starCount * 3);
-        for (let i = 0; i < starCount; i += 1) {
-            starPositions[i * 3] = (Math.random() - 0.5) * 18;
-            starPositions[i * 3 + 1] = (Math.random() - 0.5) * 11;
-            starPositions[i * 3 + 2] = 3 - Math.random() * (3 - endOfSpaceZ);
+        particlePositions = new Float32Array(particleCapacity * 3);
+        particleAlphas = new Float32Array(particleCapacity);
+        particleSizes = new Float32Array(particleCapacity);
+        particleGeometry = new THREE.BufferGeometry();
+        particleGeometry.setAttribute("position", new THREE.BufferAttribute(particlePositions, 3));
+        particleGeometry.setAttribute("aAlpha", new THREE.BufferAttribute(particleAlphas, 1));
+        particleGeometry.setAttribute("aSize", new THREE.BufferAttribute(particleSizes, 1));
+
+        for (let i = 0; i < ambientParticleCount; i += 1) {
+            const offset = i * 3;
+            particlePositions[offset] = (Math.random() - 0.5) * 18;
+            particlePositions[offset + 1] = (Math.random() - 0.5) * 11;
+            particlePositions[offset + 2] = 3 - Math.random() * (3 - endOfSpaceZ);
+            particleAlphas[i] = 0.12 + Math.random() * 0.2;
+            particleSizes[i] = 0.014 + Math.random() * 0.017;
+            particleVelocities[i] = new THREE.Vector3(
+                (Math.random() - 0.5) * 0.025,
+                (Math.random() - 0.5) * 0.025,
+                0.16 + Math.random() * 0.3
+            );
         }
-        const starsGeometry = new THREE.BufferGeometry();
-        starsGeometry.setAttribute("position", new THREE.BufferAttribute(starPositions, 3));
-        const stars = new THREE.Points(starsGeometry, new THREE.PointsMaterial({
-            color: 0xa8d8f1,
-            size: 0.026,
+
+        for (let i = ambientParticleCount; i < particleCapacity; i += 1) {
+            particleAlphas[i] = 0;
+            particleLifetimes[i] = 0;
+            particleAges[i] = 0;
+            particleVelocities[i] = new THREE.Vector3();
+        }
+
+        particleMaterial = new THREE.ShaderMaterial({
+            uniforms: { uPixelScale: { value: 1 } },
+            vertexShader: `
+                attribute float aAlpha;
+                attribute float aSize;
+                uniform float uPixelScale;
+                varying float vAlpha;
+                void main() {
+                    vec4 viewPosition = modelViewMatrix * vec4(position, 1.0);
+                    vAlpha = aAlpha;
+                    gl_PointSize = clamp(aSize * uPixelScale / max(-viewPosition.z, 0.1), 1.0, 10.0);
+                    gl_Position = projectionMatrix * viewPosition;
+                }
+            `,
+            fragmentShader: `
+                varying float vAlpha;
+                void main() {
+                    float distanceFromCenter = length(gl_PointCoord - vec2(0.5));
+                    float edge = 1.0 - smoothstep(0.34, 0.5, distanceFromCenter);
+                    gl_FragColor = vec4(vec3(1.0), vAlpha * edge);
+                }
+            `,
             transparent: true,
-            opacity: 0.7,
-            sizeAttenuation: true
-        }));
-        scene.add(stars);
-        sceneObjects.push(stars);
+            depthWrite: false,
+            toneMapped: false
+        });
+        const particles = new THREE.Points(particleGeometry, particleMaterial);
+        scene.add(particles);
+        sceneObjects.push(particles);
+    }
+
+    function emitPointerParticles(position, movement, now) {
+        if (now - lastParticleEmission < (narrowViewport ? 28 : 16)) return;
+        lastParticleEmission = now;
+
+        const distance = movement.length();
+        const direction = distance > 0 ? movement.clone().multiplyScalar(1 / distance) : new THREE.Vector3();
+        const count = Math.min(narrowViewport ? 2 : 3, Math.max(1, Math.floor(distance / 0.16)));
+        for (let i = 0; i < count; i += 1) {
+            const index = ambientParticleCount + particleCursor;
+            particleCursor = (particleCursor + 1) % interactionParticleCount;
+
+            const offset = index * 3;
+            const trailDistance = Math.random() * Math.min(distance, 0.42);
+            particlePositions[offset] = position.x - direction.x * trailDistance;
+            particlePositions[offset + 1] = position.y - direction.y * trailDistance;
+            particlePositions[offset + 2] = position.z - direction.z * trailDistance;
+            particleAges[index] = 0;
+            particleLifetimes[index] = 0.7 + Math.random() * 0.55;
+            particleAlphas[index] = 0.58 + Math.random() * 0.3;
+            particleSizes[index] = 0.018 + Math.random() * 0.026;
+            particleVelocities[index].set(
+                -direction.x * 0.16 + (Math.random() - 0.5) * 0.12,
+                -direction.y * 0.16 + (Math.random() - 0.5) * 0.12,
+                0.06 + Math.random() * 0.16
+            );
+        }
+    }
+
+    function updateParticles(time) {
+        const delta = previousParticleTime
+            ? Math.min((time - previousParticleTime) / 1000, 0.05)
+            : 0;
+        previousParticleTime = time;
+        if (delta === 0) return;
+
+        for (let i = 0; i < ambientParticleCount; i += 1) {
+            const offset = i * 3;
+            const velocity = particleVelocities[i];
+            if (!reduceMotion.matches) {
+                particlePositions[offset] += velocity.x * delta;
+                particlePositions[offset + 1] += velocity.y * delta;
+                particlePositions[offset + 2] += velocity.z * delta;
+            }
+            if (particlePositions[offset + 2] > camera.position.z + 8) {
+                particlePositions[offset] = (Math.random() - 0.5) * 18;
+                particlePositions[offset + 1] = (Math.random() - 0.5) * 11;
+                particlePositions[offset + 2] = endOfSpaceZ + Math.random() * 8;
+            }
+        }
+
+        for (let i = ambientParticleCount; i < particleCapacity; i += 1) {
+            if (!particleLifetimes[i]) continue;
+            const age = particleAges[i] + delta;
+            particleAges[i] = age;
+            if (age >= particleLifetimes[i]) {
+                particleLifetimes[i] = 0;
+                particleAlphas[i] = 0;
+                continue;
+            }
+
+            const offset = i * 3;
+            const velocity = particleVelocities[i];
+            const movementScale = reduceMotion.matches ? 0.2 : 1;
+            particlePositions[offset] += velocity.x * delta * movementScale;
+            particlePositions[offset + 1] += velocity.y * delta * movementScale;
+            particlePositions[offset + 2] += velocity.z * delta * movementScale;
+            particleAlphas[i] = (1 - age / particleLifetimes[i]) * 0.78;
+        }
+
+        particleGeometry.attributes.position.needsUpdate = true;
+        particleGeometry.attributes.aAlpha.needsUpdate = true;
     }
 
     function addEndLogo() {
@@ -358,6 +493,7 @@ import * as THREE from "./vendor/three.module.min.js";
         animationFrame = requestAnimationFrame(animate);
         if (!renderer || !scene || !camera) return;
         updateCamera();
+        updateParticles(time);
         if (!reduceMotion.matches) {
             cubes.forEach((cube, albumIndex) => {
                 if (!cube) return;
@@ -449,6 +585,8 @@ import * as THREE from "./vendor/three.module.min.js";
             camera.fov = window.innerWidth <= 700 ? 54 : 48;
             camera.updateProjectionMatrix();
             renderer.setSize(width, height, false);
+            particleMaterial.uniforms.uPixelScale.value =
+                height * renderer.getPixelRatio() / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)));
         };
         window.addEventListener("resize", resize, { signal: abortController.signal });
         window.addEventListener("scroll", updateScrollProgress, { passive: true, signal: abortController.signal });
@@ -482,6 +620,7 @@ import * as THREE from "./vendor/three.module.min.js";
         const hitTargets = [];
         canvas.addEventListener("pointerdown", event => {
             pointerDown = { x: event.clientX, y: event.clientY, pointerId: event.pointerId };
+            hasPreviousParticlePointer = false;
         }, { signal: abortController.signal });
         canvas.addEventListener("pointerup", event => {
             if (!pointerDown || pointerDown.pointerId !== event.pointerId) return;
@@ -501,6 +640,29 @@ import * as THREE from "./vendor/three.module.min.js";
         }, { signal: abortController.signal });
         canvas.addEventListener("pointercancel", () => { pointerDown = null; }, { signal: abortController.signal });
         canvas.addEventListener("pointermove", event => {
+            const touchInProgress = event.pointerType === "touch"
+                && pointerDown?.pointerId === event.pointerId;
+            if (event.pointerType !== "touch" || touchInProgress) {
+                const rect = canvas.getBoundingClientRect();
+                pointer.set(
+                    ((event.clientX - rect.left) / rect.width) * 2 - 1,
+                    -((event.clientY - rect.top) / rect.height) * 2 + 1
+                );
+                raycaster.setFromCamera(pointer, camera);
+                const planeZ = camera.position.z - 9;
+                const distance = (planeZ - raycaster.ray.origin.z) / raycaster.ray.direction.z;
+                if (distance > 0) {
+                    raycaster.ray.at(distance, particlePointer);
+                    if (hasPreviousParticlePointer) {
+                        const movement = particlePointer.clone().sub(previousParticlePointer);
+                        if (movement.length() > 0.025) {
+                            emitPointerParticles(particlePointer, movement, performance.now());
+                        }
+                    }
+                    previousParticlePointer.copy(particlePointer);
+                    hasPreviousParticlePointer = true;
+                }
+            }
             const rect = canvas.getBoundingClientRect();
             pointer.set(
                 ((event.clientX - rect.left) / rect.width) * 2 - 1,
