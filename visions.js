@@ -41,9 +41,7 @@ import * as THREE from "./vendor/three.module.min.js";
     const ambientParticleCount = reduceMotion.matches
         ? (narrowViewport ? 900 : 1600)
         : (narrowViewport ? 1800 : 3600);
-    const interactionParticleCount = reduceMotion.matches
-        ? (narrowViewport ? 160 : 240)
-        : (narrowViewport ? 700 : 1200);
+    const interactionParticleCount = (reduceMotion.matches ? 240 : 1200) * 5;
     const particleVelocities = [];
     const particleLifetimes = [];
     const particleAges = [];
@@ -349,12 +347,12 @@ import * as THREE from "./vendor/three.module.min.js";
     }
 
     function emitPointerParticles(position, movement, now, burst = false) {
-        if (!burst && now - lastParticleEmission < (narrowViewport ? 28 : 16)) return;
+        if (!burst && now - lastParticleEmission < 16) return;
         lastParticleEmission = now;
 
         const distance = movement.length();
         const direction = distance > 0 ? movement.clone().multiplyScalar(1 / distance) : new THREE.Vector3();
-        const count = (burst ? (narrowViewport ? 200 : 320) : (narrowViewport ? 12 : 20))
+        const count = (burst ? 320 : 20) * 5
             * (reduceMotion.matches ? 0.4 : 1);
         for (let i = 0; i < count; i += 1) {
             const index = ambientParticleCount + particleCursor;
@@ -662,9 +660,39 @@ import * as THREE from "./vendor/three.module.min.js";
             }
         });
 
+        // Touch events continue during native scrolling after pointercancel.
+        function emitTouchParticles(event, burst) {
+            const touch = event.touches[0];
+            if (!touch) return;
+            const rect = canvas.getBoundingClientRect();
+            pointer.set(
+                ((touch.clientX - rect.left) / rect.width) * 2 - 1,
+                -((touch.clientY - rect.top) / rect.height) * 2 + 1
+            );
+            raycaster.setFromCamera(pointer, camera);
+            const distance = (camera.position.z - 9 - raycaster.ray.origin.z) / raycaster.ray.direction.z;
+            if (distance <= 0) return;
+            raycaster.ray.at(distance, particlePointer);
+            const movement = hasPreviousParticlePointer && !burst
+                ? particlePointer.clone().sub(previousParticlePointer)
+                : new THREE.Vector3();
+            emitPointerParticles(particlePointer, movement, performance.now(), burst);
+            previousParticlePointer.copy(particlePointer);
+            hasPreviousParticlePointer = true;
+        }
+        canvas.addEventListener("touchstart", event => emitTouchParticles(event, true),
+            { passive: true, signal: abortController.signal });
+        canvas.addEventListener("touchmove", event => emitTouchParticles(event, false),
+            { passive: true, signal: abortController.signal });
+        for (const type of ["touchend", "touchcancel", "pointerleave"]) {
+            canvas.addEventListener(type, () => { hasPreviousParticlePointer = false; },
+                { passive: true, signal: abortController.signal });
+        }
+
         const hitTargets = [];
         canvas.addEventListener("pointerdown", event => {
             pointerDown = { x: event.clientX, y: event.clientY, pointerId: event.pointerId };
+            if (event.pointerType === "touch") return;
             hasPreviousParticlePointer = false;
             const rect = canvas.getBoundingClientRect();
             pointer.set(
@@ -698,9 +726,7 @@ import * as THREE from "./vendor/three.module.min.js";
         }, { signal: abortController.signal });
         canvas.addEventListener("pointercancel", () => { pointerDown = null; }, { signal: abortController.signal });
         canvas.addEventListener("pointermove", event => {
-            const touchInProgress = event.pointerType === "touch"
-                && pointerDown?.pointerId === event.pointerId;
-            if (event.pointerType !== "touch" || touchInProgress) {
+            if (event.pointerType !== "touch") {
                 const rect = canvas.getBoundingClientRect();
                 pointer.set(
                     ((event.clientX - rect.left) / rect.width) * 2 - 1,
