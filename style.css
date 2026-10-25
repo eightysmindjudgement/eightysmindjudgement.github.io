@@ -2238,6 +2238,19 @@ article img {
     outline-offset: 4px;
 }
 
+@media (max-width: 760px) {
+    .detail-back-row .detail-back-button,
+    .detail-back-row .detail-back-button:visited,
+    .detail-back-row .detail-back-button:hover,
+    .detail-back-row .detail-back-button:active {
+        color: #fff;
+        font-size: .85rem;
+        font-weight: normal;
+        border: 0;
+        background: none;
+    }
+}
+
 /* INTERACTIVE STUDIO ALBUMS */
 
 .studio-albums-page .studio-album-experience {
