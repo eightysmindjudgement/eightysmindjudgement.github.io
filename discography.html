@@ -9,6 +9,7 @@
     <title>Discography | Eighty's Mind Judgement Official Website</title>
 
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="discography-layers.css">
 </head>
 
 <body class="discography-page">
@@ -35,10 +36,20 @@
     </nav>
 
     <main>
+        <div class="discography-tabs" role="tablist" aria-label="Discography categories" hidden>
+            <button type="button" role="tab" id="discography-tab-studio" aria-controls="discography-studio" aria-selected="true" tabindex="0">STUDIO ALBUMS</button>
+            <button type="button" role="tab" id="discography-tab-compilations" aria-controls="discography-compilations" aria-selected="false" tabindex="-1">COMPILATIONS</button>
+            <button type="button" role="tab" id="discography-tab-singles" aria-controls="discography-singles" aria-selected="false" tabindex="-1">SINGLES</button>
+            <button type="button" role="tab" id="discography-tab-collaborations" aria-controls="discography-collaborations" aria-selected="false" tabindex="-1">COLLABORATIONS</button>
+        </div>
+        <div class="discography-stage">
 
-        <section>
+        <section class="discography-layer" id="discography-studio">
 
-            <h2>STUDIO ALBUMS</h2>
+            <div class="discography-layer-heading">
+                <h2>STUDIO ALBUMS</h2>
+                <a class="discography-details" href="albums.html" aria-label="View details: STUDIO ALBUMS">VIEW DETAILS</a>
+            </div>
 
             <div class="music-grid">
 
@@ -94,16 +105,16 @@
 
             </div>
 
-            <p>
-                <a href="albums.html">VIEW ALL ALBUMS</a>
-            </p>
 
         </section>
 
 
-        <section>
+        <section class="discography-layer" id="discography-compilations">
 
-            <h2>COMPILATIONS</h2>
+            <div class="discography-layer-heading">
+                <h2>COMPILATIONS</h2>
+                <a class="discography-details" href="compilations.html" aria-label="View details: COMPILATIONS">VIEW DETAILS</a>
+            </div>
 
             <div class="music-grid compilation-grid">
 
@@ -124,31 +135,31 @@
 
             </div>
 
-            <p>
-                <a href="compilations.html">VIEW ALL COMPILATIONS</a>
-            </p>
 
         </section>
 
 
-        <section>
+        <section class="discography-layer" id="discography-singles">
 
-            <h2>SINGLES</h2>
+            <div class="discography-layer-heading">
+                <h2>SINGLES</h2>
+                <a class="discography-details" href="singles.html" aria-label="View details: SINGLES">VIEW DETAILS</a>
+            </div>
 
             <p>
                 Individual releases by Eighty's Mind Judgement.
             </p>
 
-            <p>
-                <a href="singles.html">VIEW ALL SINGLES</a>
-            </p>
 
         </section>
 
 
-        <section>
+        <section class="discography-layer" id="discography-collaborations">
 
-            <h2>COLLABORATIONS</h2>
+            <div class="discography-layer-heading">
+                <h2>COLLABORATIONS</h2>
+                <a class="discography-details" href="collaborations.html" aria-label="View details: COLLABORATIONS">VIEW DETAILS</a>
+            </div>
 
             <div class="music-grid collaboration-grid">
 
@@ -159,12 +170,10 @@
 
             </div>
 
-            <p>
-                <a href="collaborations.html">VIEW ALL COLLABORATIONS</a>
-            </p>
 
         </section>
 
+        </div>
     </main>
 
     <footer>
@@ -175,6 +184,7 @@
     </footer>
 
     <script src="site-navigation.js" defer></script>
+    <script src="discography-layers.js" defer></script>
 </body>
 
 </html>

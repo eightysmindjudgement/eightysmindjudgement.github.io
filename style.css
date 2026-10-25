@@ -2361,6 +2361,19 @@ article img {
 }
 
 @media (max-width: 760px) {
+    .studio-albums-page > header {
+        min-height: auto;
+        padding-bottom: 0;
+    }
+
+    .studio-albums-page > header > p:last-child {
+        margin-bottom: 0;
+    }
+
+    .studio-albums-page > main > section:first-child {
+        padding-top: 0;
+    }
+
     .studio-albums-page .studio-album-experience {
         grid-template-columns: minmax(0, 1fr);
         gap: 0;
@@ -2368,11 +2381,11 @@ article img {
     }
 
     .studio-albums-page .studio-album-carousel {
-        height: clamp(300px, 82vw, 380px);
+        height: clamp(210px, 59vw, 340px);
     }
 
     .studio-albums-page .studio-album-card {
-        top: 36%;
+        top: 50%;
     }
 
     .studio-albums-page .studio-album-card {
@@ -2382,6 +2395,7 @@ article img {
 
     .studio-albums-page .studio-album-information {
         max-width: 560px;
+        padding-top: 4px;
     }
 }
 

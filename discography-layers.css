@@ -1,0 +1,116 @@
+.discography-page .discography-tabs:not([hidden]) {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    padding: 12px 40px 30px;
+}
+
+.discography-page .discography-tabs button {
+    min-height: 54px;
+    padding: 12px 8px;
+    border: 1px solid #555b60;
+    border-radius: 3px;
+    background: linear-gradient(175deg, #373b3e, #191b1d 48%, #101113 51%, #25282b);
+    box-shadow: inset 0 1px 0 #ffffff26, 0 4px 12px #0008;
+    color: #c9cdd0;
+    font: bold .78rem/1.5 Arial, Helvetica, sans-serif;
+    letter-spacing: .09em;
+    cursor: pointer;
+    transition: border-color .2s, color .2s, box-shadow .2s;
+}
+
+.discography-page .discography-tabs button:hover {
+    color: #fff;
+    border-color: #a6b3bb;
+}
+
+.discography-page .discography-tabs button[aria-selected="true"] {
+    color: #f1fbff;
+    border-color: #8cbdce;
+    box-shadow: inset 0 -2px 0 #ade5f5, inset 0 0 18px #a0d9ee12, 0 0 14px #86c8e02b;
+}
+
+.discography-page .discography-tabs button:focus-visible,
+.discography-page .discography-layer a:focus-visible,
+.discography-page .discography-layer:focus-visible {
+    outline: 2px solid #b4e7f7;
+    outline-offset: 4px;
+}
+
+.discography-page .discography-stage.is-enhanced {
+    position: relative;
+    overflow: hidden;
+    perspective: 1400px;
+    transition: height .65s cubic-bezier(.22, .65, .3, 1);
+}
+
+.discography-page .is-enhanced .discography-layer {
+    position: absolute;
+    inset: 0 0 auto;
+    width: 100%;
+    padding: 12px 40px 28px;
+    background: linear-gradient(135deg, #131619e8, #08090bea);
+    border-top: 1px solid #42474b;
+    box-shadow: inset 0 1px 0 #ffffff08;
+    transform: translateX(0) translateZ(0) scale(1);
+    opacity: 1;
+    filter: brightness(1);
+    transition: transform .65s cubic-bezier(.22, .65, .3, 1), opacity .65s ease, filter .65s ease;
+}
+
+.discography-page .discography-layer[hidden] { display: none; }
+.discography-page .discography-layer.is-entering {
+    transform: translateX(calc(var(--slide-direction) * 85%)) translateZ(-140px) scale(.94);
+    opacity: 0;
+    filter: brightness(.65);
+}
+.discography-page .discography-layer.is-leaving {
+    transform: translateX(calc(var(--slide-direction) * -85%)) translateZ(-240px) scale(.88);
+    opacity: 0;
+    filter: brightness(.45);
+    pointer-events: none;
+}
+.discography-page .discography-layer.is-current { z-index: 2; }
+
+.discography-page .discography-layer-heading {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    margin-bottom: 24px;
+}
+
+.discography-page .discography-layer h2 {
+    margin: 0;
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    letter-spacing: .1em;
+}
+
+.discography-page .discography-details {
+    display: inline-block;
+    padding: 8px 0;
+    color: #b5d4df;
+    font-size: .75rem;
+    letter-spacing: .12em;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+@media (max-width: 700px) {
+    .discography-page .discography-tabs:not([hidden]) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        padding: 1.7rem 18px 22px;
+    }
+    .discography-page .is-enhanced .discography-layer { padding: 18px 18px 24px; }
+    .discography-page .discography-layer-heading { flex-direction: column; align-items: flex-start; gap: 0; margin-bottom: 18px; }
+    .discography-page .discography-layer h2 { font-size: clamp(1.1rem, 4.5vw, 1.5rem); letter-spacing: .08em; }
+    .discography-page .discography-layer .music-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 24px 0; }
+    .discography-page .discography-layer .collaboration-grid { grid-template-columns: minmax(0, 240px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .discography-page .discography-stage.is-enhanced,
+    .discography-page .is-enhanced .discography-layer,
+    .discography-page .discography-tabs button { transition: none; }
+}
