@@ -2726,6 +2726,64 @@ header {
     }
 }
 
+/* Smartphone spacing: one body-text line on either side of dividers. */
+@media (max-width: 700px) {
+    body:is(.home-page, .biography-page, .discography-page, .videos-page, .market-page) {
+        --mobile-line-space: 1.7rem;
+    }
+
+    :is(.home-page, .biography-page, .discography-page, .videos-page, .market-page) > header {
+        padding-bottom: 0;
+    }
+
+    :is(.home-page, .biography-page, .discography-page, .videos-page, .market-page) > header > p:last-child {
+        margin-bottom: 0;
+    }
+
+    :is(.home-page, .biography-page, .discography-page, .videos-page, .market-page) > main > section:first-child {
+        padding-top: var(--mobile-line-space);
+    }
+
+    .market-page > main > section:first-child > p:first-child,
+    .videos-page > main > section:first-child > h3:first-child {
+        margin-top: 0;
+    }
+
+    .home-page .home-mission-content {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    .home-page .home-mission {
+        padding-bottom: var(--mobile-line-space);
+    }
+
+    .home-page .home-mission + .home-section {
+        padding-top: var(--mobile-line-space);
+        padding-bottom: var(--mobile-line-space);
+    }
+
+    .home-page .visions-entry {
+        margin-bottom: var(--mobile-line-space);
+        padding-bottom: var(--mobile-line-space);
+        border-bottom: 1px solid #2c2c2c;
+    }
+
+    .home-page .album-grid {
+        margin-top: 0;
+    }
+
+    .home-page .todays-track {
+        min-height: 0;
+        padding-bottom: 0;
+        border-bottom: 0;
+    }
+
+    .home-page .digital-philosophy {
+        padding-top: var(--mobile-line-space);
+    }
+}
+
 /* HOME LINKS */
 
 .digital-philosophy {
