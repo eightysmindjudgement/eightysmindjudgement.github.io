@@ -7,6 +7,13 @@
   document.querySelectorAll('[data-puzzle-name]').forEach(el=>el.textContent=C.name);
   const world=new World(),images=[],reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   let running=false,paused=false,aim=200,last=0,accumulator=0,best=0,drawnScore=-1,lastEvent=null;
+  let playMs=0,clockStarted=null;
+  function updateTime(){
+    const seconds=Math.floor((playMs+(clockStarted===null?0:performance.now()-clockStarted))/1000);
+    const text=`${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`;
+    if($('puzzle-time').textContent!==text)$('puzzle-time').textContent=text;
+  }
+  function stopClock(){if(clockStarted!==null){playMs+=performance.now()-clockStarted;clockStarted=null;}updateTime();}
   try{const n=Number(localStorage.getItem('emj-puzzle-best'));if(Number.isFinite(n)&&n>=0)best=n;}catch{}
   $('puzzle-best').textContent=best;
   function tile(level){const spec=C.pieces[level],el=document.createElement('span');el.className='puzzle-tile';el.style.setProperty('--tile',spec.color);const img=new Image();img.alt=spec.name;img.src=spec.image;img.onerror=()=>{img.remove();el.textContent=String(level+1);};el.append(img);return el;}
@@ -31,9 +38,9 @@
   }
   function score(){if(drawnScore===world.score)return;drawnScore=world.score;$('puzzle-score').textContent=world.score;if(world.score>best){best=world.score;$('puzzle-best').textContent=best;try{localStorage.setItem('emj-puzzle-best',String(best));}catch{}}}
   function overlay(title,text,button){$('puzzle-overlay').hidden=false;$('puzzle-overlay-title').textContent=title;$('puzzle-overlay-copy').textContent=text;$('puzzle-start').textContent=button;}
-  function start(){if(paused){paused=false;}else{world.reset();drawnScore=-1;aim=200;$('puzzle-aim').value=200;lastEvent=null;score();previews();}running=true;last=0;accumulator=0;$('puzzle-overlay').hidden=true;$('puzzle-pause').disabled=false;$('puzzle-status').textContent='同じタイルをくっつけよう！';canvas.focus();paint();}
+  function start(){if(running)return;if(paused){paused=false;}else{world.reset();playMs=0;drawnScore=-1;aim=200;$('puzzle-aim').value=200;lastEvent=null;score();previews();}clockStarted=performance.now();updateTime();running=true;last=0;accumulator=0;$('puzzle-overlay').hidden=true;$('puzzle-pause').disabled=false;$('puzzle-status').textContent='同じタイルをくっつけよう！';canvas.focus();paint();}
   function drop(){if(!running||paused)return;if(world.drop(aim))previews();paint();}
-  function pause(){if(!running||world.over)return;running=false;paused=true;overlay('ひとやすみ','つづきから遊べるよ。','つづける');}
+  function pause(){if(!running||world.over)return;stopClock();running=false;paused=true;overlay('ひとやすみ','つづきから遊べるよ。','つづける');}
   $('puzzle-start').addEventListener('click',start);$('puzzle-drop').addEventListener('click',drop);$('puzzle-pause').addEventListener('click',pause);
   $('puzzle-aim').addEventListener('input',e=>{aim=Number(e.target.value);paint();});
   function point(e){const rect=canvas.getBoundingClientRect();aim=Math.max(0,Math.min(C.width,(e.clientX-rect.left)*C.width/rect.width));$('puzzle-aim').value=aim;paint();}
@@ -43,7 +50,7 @@
     const index=Number(button.dataset.stage);if(index===world.stageIndex)return;
     const direction=index>world.stageIndex?1:-1;
     running=false;paused=false;pointer=null;last=0;accumulator=0;lastEvent=null;
-    world.reset(index);drawnScore=-1;aim=200;$('puzzle-aim').value=200;score();previews();
+    world.reset(index);playMs=0;clockStarted=null;updateTime();drawnScore=-1;aim=200;$('puzzle-aim').value=200;score();previews();
     $('puzzle-pause').disabled=true;
     $('puzzle-stage-label').textContent=`${world.stage.name} · ${world.stage.description}`;
     $('puzzle-status').textContent='';
@@ -62,6 +69,6 @@
   canvas.addEventListener('pointercancel',()=>{pointer=null;});canvas.addEventListener('lostpointercapture',()=>{pointer=null;});
   canvas.addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight',' ','Enter'].includes(e.key)){e.preventDefault();if(e.key==='ArrowLeft')aim=Math.max(0,aim-12);else if(e.key==='ArrowRight')aim=Math.min(400,aim+12);else drop();$('puzzle-aim').value=aim;paint();}});
   document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});
-  function frame(now){if(running){if(last)accumulator+=Math.min((now-last)/1000,.08);while(accumulator>=1/120){world.step(1/120);accumulator-=1/120;}score();const event=world.events.at(-1);if(event&&event!==lastEvent){lastEvent=event;$('puzzle-status').textContent=event.final?'METAL SHOGUN！ メタルの頂点！':event.combo>1?`${event.combo}連鎖！ +${event.points}`:`合体！ +${event.points}`;}if(world.over){running=false;paused=false;pointer=null;$('puzzle-pause').disabled=true;overlay('GAME OVER',`スコア ${world.score} / 自己ベスト ${best}`,'もういちど');$('puzzle-start').focus();}paint();}last=now;requestAnimationFrame(frame);}
+  function frame(now){if(running){updateTime();if(last)accumulator+=Math.min((now-last)/1000,.08);while(accumulator>=1/120){world.step(1/120);accumulator-=1/120;}score();const event=world.events.at(-1);if(event&&event!==lastEvent){lastEvent=event;$('puzzle-status').textContent=event.final?'METAL SHOGUN！ メタルの頂点！':event.combo>1?`${event.combo}連鎖！ +${event.points}`:`合体！ +${event.points}`;}if(world.over){stopClock();running=false;paused=false;pointer=null;$('puzzle-pause').disabled=true;overlay('GAME OVER',`スコア ${world.score} / 自己ベスト ${best}`,'もういちど');$('puzzle-start').focus();}paint();}last=now;requestAnimationFrame(frame);}
   previews();paint();requestAnimationFrame(frame);
 })();
