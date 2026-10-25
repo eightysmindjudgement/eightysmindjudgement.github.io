@@ -39,11 +39,11 @@ import * as THREE from "./vendor/three.module.min.js";
     const cameraEndZ = endOfSpaceZ + 12;
     const narrowViewport = window.innerWidth <= 700;
     const ambientParticleCount = reduceMotion.matches
-        ? (narrowViewport ? 28 : 48)
-        : (narrowViewport ? 64 : 140);
+        ? (narrowViewport ? 900 : 1600)
+        : (narrowViewport ? 1800 : 3600);
     const interactionParticleCount = reduceMotion.matches
-        ? (narrowViewport ? 14 : 24)
-        : (narrowViewport ? 32 : 72);
+        ? (narrowViewport ? 160 : 240)
+        : (narrowViewport ? 700 : 1200);
     const particleVelocities = [];
     const particleLifetimes = [];
     const particleAges = [];
@@ -296,11 +296,11 @@ import * as THREE from "./vendor/three.module.min.js";
 
         for (let i = 0; i < ambientParticleCount; i += 1) {
             const offset = i * 3;
-            particlePositions[offset] = (Math.random() - 0.5) * 18;
-            particlePositions[offset + 1] = (Math.random() - 0.5) * 11;
+            particlePositions[offset] = (Math.random() - 0.5) * 60;
+            particlePositions[offset + 1] = (Math.random() - 0.5) * 40;
             particlePositions[offset + 2] = 3 - Math.random() * (3 - endOfSpaceZ);
-            particleAlphas[i] = 0.12 + Math.random() * 0.2;
-            particleSizes[i] = 0.014 + Math.random() * 0.017;
+            particleAlphas[i] = 0.3 + Math.random() * 0.6;
+            particleSizes[i] = 0.018 + Math.random() * 0.045;
             particleVelocities[i] = new THREE.Vector3(
                 (Math.random() - 0.5) * 0.025,
                 (Math.random() - 0.5) * 0.025,
@@ -325,7 +325,7 @@ import * as THREE from "./vendor/three.module.min.js";
                 void main() {
                     vec4 viewPosition = modelViewMatrix * vec4(position, 1.0);
                     vAlpha = aAlpha;
-                    gl_PointSize = clamp(aSize * uPixelScale / max(-viewPosition.z, 0.1), 1.0, 10.0);
+                    gl_PointSize = clamp(aSize * uPixelScale / max(-viewPosition.z, 0.1), 1.4, 3.5);
                     gl_Position = projectionMatrix * viewPosition;
                 }
             `,
@@ -342,34 +342,40 @@ import * as THREE from "./vendor/three.module.min.js";
             toneMapped: false
         });
         const particles = new THREE.Points(particleGeometry, particleMaterial);
+        // Positions move throughout the journey; the initial bounds become stale.
+        particles.frustumCulled = false;
         scene.add(particles);
         sceneObjects.push(particles);
     }
 
-    function emitPointerParticles(position, movement, now) {
-        if (now - lastParticleEmission < (narrowViewport ? 28 : 16)) return;
+    function emitPointerParticles(position, movement, now, burst = false) {
+        if (!burst && now - lastParticleEmission < (narrowViewport ? 28 : 16)) return;
         lastParticleEmission = now;
 
         const distance = movement.length();
         const direction = distance > 0 ? movement.clone().multiplyScalar(1 / distance) : new THREE.Vector3();
-        const count = Math.min(narrowViewport ? 2 : 3, Math.max(1, Math.floor(distance / 0.16)));
+        const count = (burst ? (narrowViewport ? 200 : 320) : (narrowViewport ? 12 : 20))
+            * (reduceMotion.matches ? 0.4 : 1);
         for (let i = 0; i < count; i += 1) {
             const index = ambientParticleCount + particleCursor;
             particleCursor = (particleCursor + 1) % interactionParticleCount;
 
             const offset = index * 3;
             const trailDistance = Math.random() * Math.min(distance, 0.42);
-            particlePositions[offset] = position.x - direction.x * trailDistance;
-            particlePositions[offset + 1] = position.y - direction.y * trailDistance;
-            particlePositions[offset + 2] = position.z - direction.z * trailDistance;
+            const angle = Math.random() * Math.PI * 2;
+            const spread = Math.sqrt(Math.random()) * (burst ? 0.16 : 0.07);
+            particlePositions[offset] = position.x - direction.x * trailDistance + Math.cos(angle) * spread;
+            particlePositions[offset + 1] = position.y - direction.y * trailDistance + Math.sin(angle) * spread;
+            particlePositions[offset + 2] = position.z - direction.z * trailDistance + (Math.random() - 0.5) * 0.12;
             particleAges[index] = 0;
-            particleLifetimes[index] = 0.7 + Math.random() * 0.55;
+            particleLifetimes[index] = 0.9 + Math.random() * 0.9;
             particleAlphas[index] = 0.58 + Math.random() * 0.3;
-            particleSizes[index] = 0.018 + Math.random() * 0.026;
+            particleSizes[index] = 0.009 + Math.random() * 0.016;
+            const speed = (burst ? 0.25 : 0.08) + Math.random() * (burst ? 1.1 : 0.35);
             particleVelocities[index].set(
-                -direction.x * 0.16 + (Math.random() - 0.5) * 0.12,
-                -direction.y * 0.16 + (Math.random() - 0.5) * 0.12,
-                0.06 + Math.random() * 0.16
+                Math.cos(angle) * speed - direction.x * 0.12,
+                Math.sin(angle) * speed - direction.y * 0.12,
+                (Math.random() - 0.5) * speed
             );
         }
     }
@@ -385,13 +391,16 @@ import * as THREE from "./vendor/three.module.min.js";
             const offset = i * 3;
             const velocity = particleVelocities[i];
             if (!reduceMotion.matches) {
+                particleAlphas[i] = 0.35 + 0.5 * (0.5 + 0.5 * Math.sin(time * 0.0007 + i * 2.399));
+            }
+            if (!reduceMotion.matches) {
                 particlePositions[offset] += velocity.x * delta;
                 particlePositions[offset + 1] += velocity.y * delta;
                 particlePositions[offset + 2] += velocity.z * delta;
             }
             if (particlePositions[offset + 2] > camera.position.z + 8) {
-                particlePositions[offset] = (Math.random() - 0.5) * 18;
-                particlePositions[offset + 1] = (Math.random() - 0.5) * 11;
+                particlePositions[offset] = (Math.random() - 0.5) * 60;
+                particlePositions[offset + 1] = (Math.random() - 0.5) * 40;
                 particlePositions[offset + 2] = endOfSpaceZ + Math.random() * 8;
             }
         }
@@ -417,6 +426,7 @@ import * as THREE from "./vendor/three.module.min.js";
 
         particleGeometry.attributes.position.needsUpdate = true;
         particleGeometry.attributes.aAlpha.needsUpdate = true;
+        particleGeometry.attributes.aSize.needsUpdate = true;
     }
 
     function addEndLogo() {
@@ -656,6 +666,19 @@ import * as THREE from "./vendor/three.module.min.js";
         canvas.addEventListener("pointerdown", event => {
             pointerDown = { x: event.clientX, y: event.clientY, pointerId: event.pointerId };
             hasPreviousParticlePointer = false;
+            const rect = canvas.getBoundingClientRect();
+            pointer.set(
+                ((event.clientX - rect.left) / rect.width) * 2 - 1,
+                -((event.clientY - rect.top) / rect.height) * 2 + 1
+            );
+            raycaster.setFromCamera(pointer, camera);
+            const distance = (camera.position.z - 9 - raycaster.ray.origin.z) / raycaster.ray.direction.z;
+            if (distance > 0) {
+                raycaster.ray.at(distance, particlePointer);
+                emitPointerParticles(particlePointer, new THREE.Vector3(), performance.now(), true);
+                previousParticlePointer.copy(particlePointer);
+                hasPreviousParticlePointer = true;
+            }
         }, { signal: abortController.signal });
         canvas.addEventListener("pointerup", event => {
             if (!pointerDown || pointerDown.pointerId !== event.pointerId) return;
