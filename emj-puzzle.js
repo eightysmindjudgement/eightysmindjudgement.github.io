@@ -10,7 +10,7 @@
   try{const n=Number(localStorage.getItem('emj-puzzle-best'));if(Number.isFinite(n)&&n>=0)best=n;}catch{}
   $('puzzle-best').textContent=best;
   function tile(level){const spec=C.pieces[level],el=document.createElement('span');el.className='puzzle-tile';el.style.setProperty('--tile',spec.color);const img=new Image();img.alt=spec.name;img.src=spec.image;img.onerror=()=>{img.remove();el.textContent=String(level+1);};el.append(img);return el;}
-  C.pieces.forEach((spec,i)=>{const img=new Image();images[i]=img;img.onload=()=>paint();img.onerror=()=>{$('puzzle-status').textContent='一部の画像は番号タイルで表示しています。';images[i]=null;paint();};img.src=spec.image;const li=document.createElement('li');li.append(tile(i),document.createTextNode(`${i+1}. ${spec.name}`));$('puzzle-evolution').append(li);});
+  C.pieces.forEach((spec,i)=>{const img=new Image();images[i]=img;img.onload=()=>paint();img.onerror=()=>{$('puzzle-status').textContent='一部の画像は番号タイルで表示しています。';images[i]=null;paint();};img.src=spec.image;const li=document.createElement('li'),label=document.createElement('span'),reading=document.createElement('small');reading.className='puzzle-reading';reading.lang='ja';reading.textContent=`（${spec.reading}）`;label.append(document.createTextNode(`${i+1}. ${spec.name}`),reading);li.append(tile(i),label);$('puzzle-evolution').append(li);});
   function previews(){const next=$('puzzle-next');next.replaceChildren(tile(world.next),document.createTextNode(C.pieces[world.next].name));$('puzzle-current').textContent=C.pieces[world.current].name;}
   function polygon(points){ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.closePath();}
   function drawTile(b,alpha=1){const spec=C.pieces[b.level],v=vertices(b);ctx.save();ctx.globalAlpha=alpha;polygon(v);ctx.shadowColor=b.level===6?'#ffe18a':'#000';ctx.shadowBlur=b.level===6?16:7;ctx.shadowOffsetY=3;ctx.fillStyle=spec.color;ctx.fill();ctx.shadowBlur=0;ctx.shadowOffsetY=0;
@@ -19,6 +19,11 @@
     ctx.restore();polygon(v);ctx.lineWidth=b.level>=5?4:2.5;ctx.strokeStyle=spec.color;ctx.stroke();
     ctx.beginPath();ctx.moveTo(v[7].x,v[7].y);[v[0],v[1],v[2]].forEach(p=>ctx.lineTo(p.x,p.y));ctx.strokeStyle='#fff9';ctx.lineWidth=2;ctx.stroke();ctx.beginPath();ctx.moveTo(v[3].x,v[3].y);[v[4],v[5],v[6]].forEach(p=>ctx.lineTo(p.x,p.y));ctx.strokeStyle='#000a';ctx.lineWidth=3;ctx.stroke();ctx.restore();}
   function paint(){ctx.clearRect(0,0,C.width,C.height);ctx.fillStyle='#101923';ctx.fillRect(0,0,C.width,C.height);ctx.strokeStyle='#ffffff07';ctx.lineWidth=1;for(let x=20;x<C.width;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,C.height);ctx.stroke();}
+    // Render the exact same polylines used by collision detection.
+    for(const [side,edge] of [[world.stage.left,0],[world.stage.right,C.width]]){
+      polygon([{x:edge,y:0},...side.map(([x,y])=>({x,y})),{x:edge,y:C.height}]);ctx.fillStyle='#303c49';ctx.fill();
+      ctx.beginPath();side.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.strokeStyle='#99adbd';ctx.lineWidth=3;ctx.stroke();
+    }
     ctx.setLineDash([6,5]);ctx.strokeStyle=world.overflow?'#ff8c88':'#93a4b65c';ctx.beginPath();ctx.moveTo(0,C.deadline);ctx.lineTo(C.width,C.deadline);ctx.stroke();ctx.setLineDash([]);ctx.font='11px Arial';ctx.fillStyle='#a5b4c4';ctx.fillText(world.overflow?`あと ${Math.max(0,2.5-world.overflow).toFixed(1)} 秒`:'ここまで積むとピンチ！',10,C.deadline-7);
     if(running&&!world.over){const r=C.pieces[world.current].radius,x=Math.max(r+2,Math.min(C.width-r-2,aim));ctx.setLineDash([4,6]);ctx.strokeStyle='#b8d9ee55';ctx.beginPath();ctx.moveTo(x,r*2+8);ctx.lineTo(x,C.height);ctx.stroke();ctx.setLineDash([]);drawTile({level:world.current,r,x,y:r+5,angle:0},.6);}
     world.bodies.forEach(b=>drawTile(b));
@@ -33,6 +38,24 @@
   $('puzzle-aim').addEventListener('input',e=>{aim=Number(e.target.value);paint();});
   function point(e){const rect=canvas.getBoundingClientRect();aim=Math.max(0,Math.min(C.width,(e.clientX-rect.left)*C.width/rect.width));$('puzzle-aim').value=aim;paint();}
   let pointer=null;
+  let stageAnimation=null;
+  document.querySelectorAll('[data-stage]').forEach(button=>button.addEventListener('click',()=>{
+    const index=Number(button.dataset.stage);if(index===world.stageIndex)return;
+    const direction=index>world.stageIndex?1:-1;
+    running=false;paused=false;pointer=null;last=0;accumulator=0;lastEvent=null;
+    world.reset(index);drawnScore=-1;aim=200;$('puzzle-aim').value=200;score();previews();
+    $('puzzle-pause').disabled=true;
+    $('puzzle-stage-label').textContent=`${world.stage.name} · ${world.stage.description}`;
+    $('puzzle-status').textContent='';
+    overlay(world.stage.name,`${world.stage.description}。同じタイルをくっつけよう！`,'あそぶ');
+    document.querySelectorAll('[data-stage]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.stage)===index)));
+    if(stageAnimation)stageAnimation.cancel();
+    if(!reduced&&typeof $('puzzle-stage').animate==='function')stageAnimation=$('puzzle-stage').animate([
+      {transform:`translateX(${direction*100}%)`,opacity:.25},
+      {transform:'translateX(0)',opacity:1}
+    ],{duration:360,easing:'cubic-bezier(.2,.7,.2,1)'});
+    paint();
+  }));
   canvas.addEventListener('pointerdown',e=>{if(!running||pointer!==null||e.button>0)return;pointer=e.pointerId;canvas.setPointerCapture(pointer);point(e);});
   canvas.addEventListener('pointermove',e=>{if(e.pointerType==='mouse'||e.pointerId===pointer)point(e);});
   canvas.addEventListener('pointerup',e=>{if(e.pointerId!==pointer)return;point(e);pointer=null;drop();});

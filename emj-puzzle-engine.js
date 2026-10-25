@@ -3,14 +3,20 @@
   'use strict';
   const CONFIG = {
     name: 'EMJ PUZZLE', width: 400, height: 570, deadline: 76,
+    // Walls widen toward the top. Unequal segment lengths make each side distinct.
+    stages: [
+      { name: 'レベル1', description: 'いつもの広いステージ', left: [[0,0],[0,570]], right: [[400,0],[400,570]] },
+      { name: 'レベル2', description: '底がせまい、でこぼこ斜面', left: [[0,0],[0,110],[8,260],[32,420],[68,570]], right: [[400,0],[400,145],[388,300],[365,455],[336,570]] },
+      { name: 'レベル3', description: 'もっとせまい底と、急な斜面', left: [[0,0],[0,80],[12,215],[41,365],[105,570]], right: [[400,0],[400,105],[382,250],[347,405],[296,570]] }
+    ],
     pieces: [
-      { name: 'Corporate Warrior', image: 'BIO背景.PNG', radius: 19, color: '#b9c9d5', points: 0 },
-      { name: 'Cyborg Grandpa', image: 'DISCO背景.PNG', radius: 26, color: '#8bcddd', points: 10 },
-      { name: 'EMJ LADY', image: 'LINK背景.PNG', radius: 34, color: '#bda5f5', points: 30 },
-      { name: 'HARDROCK OJISAN', image: 'HARDROCKOJISAN.PNG', radius: 43, color: '#e1ad74', points: 80 },
-      { name: 'HEART', image: 'MAP背景.PNG', radius: 53, color: '#f37f94', points: 180 },
-      { name: 'BRAIN', image: 'BRAIN.PNG', radius: 64, color: '#75ebcc', points: 400 },
-      { name: 'METAL SHOGUN', image: 'profile-artwork.JPG', radius: 77, color: '#ffe49b', points: 900 }
+      { name: 'Corporate Warrior', reading: 'コーポレート ウォリア', image: 'BIO背景.PNG', radius: 19, color: '#b9c9d5', points: 0 },
+      { name: 'Cyborg Grandpa', reading: 'サイボーグ グランパ', image: 'DISCO背景.PNG', radius: 26, color: '#8bcddd', points: 10 },
+      { name: 'EMJ LADY', reading: 'イーエムジェイ レディ', image: 'LINK背景.PNG', radius: 34, color: '#bda5f5', points: 30 },
+      { name: 'HARDROCK OJISAN', reading: 'ハードロックおじさん', image: 'HARDROCKOJISAN.PNG', radius: 43, color: '#e1ad74', points: 80 },
+      { name: 'HEART', reading: 'ハート', image: 'MAP背景.PNG', radius: 53, color: '#f37f94', points: 180 },
+      { name: 'BRAIN', reading: 'ブレイン', image: 'BRAIN.PNG', radius: 64, color: '#75ebcc', points: 400 },
+      { name: 'METAL SHOGUN', reading: 'メタルショウグン', image: 'profile-artwork.JPG', radius: 77, color: '#ffe49b', points: 900 }
     ]
   };
   function vertices(b) {
@@ -34,7 +40,17 @@
   class World {
     constructor(random=Math.random) {this.random=random;this.reset();}
     pick() {const n=this.random(); return n<.58?0:n<.88?1:2;}
-    reset() {this.bodies=[];this.score=0;this.time=0;this.cooldown=0;this.overflow=0;this.over=false;this.current=this.pick();this.next=this.pick();this.events=[];this.lastMerge=-10;this.combo=0;this.serial=0;}
+    reset(stage=this.stageIndex || 0) {
+      this.stageIndex=Number.isInteger(stage)&&CONFIG.stages[stage]?stage:0;
+      this.stage=CONFIG.stages[this.stageIndex];
+      this.walls=[];
+      for(const [side,sign] of [[this.stage.left,1],[this.stage.right,-1]])for(let i=1;i<side.length;i++){
+        const [x,y]=side[i-1],dx=side[i][0]-x,dy=side[i][1]-y,len=Math.hypot(dx,dy);
+        this.walls.push({x,y,nx:sign*dy/len,ny:-sign*dx/len});
+      }
+      this.walls.push({x:0,y:CONFIG.height,nx:0,ny:-1});
+      this.bodies=[];this.score=0;this.time=0;this.cooldown=0;this.overflow=0;this.over=false;this.current=this.pick();this.next=this.pick();this.events=[];this.lastMerge=-10;this.combo=0;this.serial=0;
+    }
     add(level,x,y) {const r=CONFIG.pieces[level].radius;const b={id:++this.serial,level,r,x,y,vx:0,vy:0,angle:0,spin:0,born:this.time};this.bodies.push(b);return b;}
     drop(x) {if(this.over||this.cooldown>0||this.bodies.length>=110)return false;const r=CONFIG.pieces[this.current].radius;this.add(this.current,Math.max(r+2,Math.min(CONFIG.width-r-2,x)),r+5);this.current=this.next;this.next=this.pick();this.cooldown=.48;return true;}
     merge(a,b) {
@@ -47,10 +63,20 @@
       this.events.push({x,y,points,combo:this.combo,final:level>=5,time:this.time});
     }
     bounds(b) {
-      const vs=vertices(b), left=Math.min(...vs.map(v=>v.x)),right=Math.max(...vs.map(v=>v.x)),bottom=Math.max(...vs.map(v=>v.y));
-      if(left<0){b.x-=left;b.vx=Math.max(0,-b.vx*.12);b.spin*=.75;}
-      if(right>CONFIG.width){b.x-=right-CONFIG.width;b.vx=Math.min(0,-b.vx*.12);b.spin*=.75;}
-      if(bottom>CONFIG.height){b.y-=bottom-CONFIG.height;b.vy=Math.min(0,-b.vy*.08);b.vx*=.96;b.spin*=.9;}
+      // Project all eight corners against the actual sloping walls, never a bounding box.
+      for(let pass=0;pass<5;pass++){
+        let corrected=false;
+        for(const w of this.walls){
+          const distance=Math.min(...vertices(b).map(v=>(v.x-w.x)*w.nx+(v.y-w.y)*w.ny));
+          if(distance>=-.001)continue;
+          corrected=true;b.x-=distance*w.nx;b.y-=distance*w.ny;
+          const normalSpeed=b.vx*w.nx+b.vy*w.ny;
+          if(normalSpeed<0){b.vx-=normalSpeed*1.08*w.nx;b.vy-=normalSpeed*1.08*w.ny;}
+          const tangent=b.vx*-w.ny+b.vy*w.nx;
+          b.vx-=tangent*.025*-w.ny;b.vy-=tangent*.025*w.nx;b.spin*=.9;
+        }
+        if(!corrected)break;
+      }
     }
     step(dt) {
       if(this.over)return;
