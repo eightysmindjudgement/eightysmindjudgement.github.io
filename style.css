@@ -2613,6 +2613,27 @@ header {
     font-size: clamp(1.3rem, 2.7vw, 1.7rem);
 }
 
+.home-page .visions-description {
+    margin-top: 6px;
+    color: #c1c1c1;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.home-page .visions-description p {
+    max-width: none;
+    margin: 0;
+}
+
+.home-page .visions-description p + p {
+    margin-top: 2px;
+}
+
+.home-page .visions-description-en {
+    color: #999;
+    font-size: 0.82rem;
+}
+
 @keyframes visions-click-blink {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.2; }
