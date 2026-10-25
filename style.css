@@ -2675,7 +2675,8 @@ header {
     justify-content: center;
     gap: 3px;
     transform: translateX(-50%);
-    color: #82c9d8;
+    color: #ff8ae7;
+    text-shadow: 0 0 4px #ff39d4, 0 0 9px #b52aff99;
     text-decoration: none;
     transition: opacity .35s ease, visibility .35s;
     -webkit-tap-highlight-color: transparent;
@@ -2688,7 +2689,7 @@ header {
     fill: none;
     stroke-linecap: round;
     stroke-linejoin: round;
-    filter: drop-shadow(0 0 4px #009cca80);
+    filter: drop-shadow(0 0 2px #ff4edb) drop-shadow(0 0 6px #b52aff99);
 }
 
 .home-scroll-cue span {
@@ -2698,17 +2699,18 @@ header {
     padding-left: .22em;
 }
 
-.home-scroll-tube { stroke: #258ca9; stroke-width: 1.6; }
+.home-scroll-tube { stroke: #ff8ae7; stroke-width: 2.2; }
 .home-scroll-light {
-    stroke: #65e2ff;
-    stroke-width: 2.4;
+    stroke: #ce85ff;
+    stroke-width: 3;
+    filter: drop-shadow(0 0 3px #b52aff);
     stroke-dasharray: 24 176;
     stroke-dashoffset: 24;
     opacity: 0;
     animation: home-scroll-flow 3.2s linear infinite;
 }
 .home-scroll-light--core {
-    stroke: #ecfdff;
+    stroke: #f6dfff;
     stroke-width: 2;
     stroke-dasharray: 5 195;
     animation-name: home-scroll-core;
@@ -2736,8 +2738,8 @@ header {
     62%, 100% { stroke-dashoffset: -144; opacity: 0; }
 }
 
-.home-scroll-cue:hover { color: #c6f5ff; }
-.home-scroll-cue:focus-visible { outline: 2px solid #82dff2; outline-offset: 4px; border-radius: 4px; }
+.home-page > header > .home-scroll-cue:hover { color: #f0baff; }
+.home-scroll-cue:focus-visible { outline: 2px solid #ce85ff; outline-offset: 4px; border-radius: 4px; }
 .home-page > header > .home-scroll-cue.is-dismissed,
 .site-menu-open .home-scroll-cue { opacity: 0; visibility: hidden; pointer-events: none; }
 .home-scroll-cue.is-dismissed .home-scroll-light { animation-play-state: paused; }
@@ -2751,26 +2753,10 @@ header {
         bottom: 2px;
         min-height: 60px;
         gap: 0;
-        color: #a6f6ff;
-        text-shadow: 0 0 4px #37dfff, 0 0 9px #37dfff80;
     }
     .home-scroll-cue svg {
         width: 32px;
         height: 40px;
-        filter: drop-shadow(0 0 2px #ff4edb) drop-shadow(0 0 6px #ff2acb99);
-    }
-    .home-scroll-tube {
-        stroke: #ff8ae7;
-        stroke-width: 2.2;
-    }
-    .home-scroll-light {
-        stroke: #77f3ff;
-        stroke-width: 3;
-        filter: drop-shadow(0 0 3px #24ddff);
-    }
-    .home-scroll-light--core {
-        stroke: #f0ffff;
-        stroke-width: 2;
     }
 }
 
