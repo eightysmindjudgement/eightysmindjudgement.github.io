@@ -66,6 +66,7 @@ import * as THREE from "./vendor/three.module.min.js";
     let pointerDown = null;
     let disposed = false;
     let textureAnisotropy = 1;
+    let endLogo;
     const textures = [];
 
     if (!stage || !canvas || !track) return;
@@ -426,31 +427,62 @@ import * as THREE from "./vendor/three.module.min.js";
             }
 
             const logo = new THREE.Mesh(
-                new THREE.PlaneGeometry(9, 6.75),
-                new THREE.MeshBasicMaterial({
-                    map: texture,
-                    transparent: true,
-                    side: THREE.DoubleSide,
-                    depthWrite: false,
-                    toneMapped: false
+                new THREE.SphereGeometry(4.4, 64, 48),
+                new THREE.ShaderMaterial({
+                    uniforms: {
+                        uLogo: { value: texture },
+                        uAspect: { value: texture.image.width / texture.image.height }
+                    },
+                    vertexShader: `
+                        varying vec3 vSurface;
+                        varying vec3 vNormal;
+                        varying vec3 vView;
+                        void main() {
+                            vSurface = normalize(position);
+                            vNormal = normalize(normalMatrix * normal);
+                            vec4 viewPosition = modelViewMatrix * vec4(position, 1.0);
+                            vView = -viewPosition.xyz;
+                            gl_Position = projectionMatrix * viewPosition;
+                        }
+                    `,
+                    fragmentShader: `
+                        uniform sampler2D uLogo;
+                        uniform float uAspect;
+                        varying vec3 vSurface;
+                        varying vec3 vNormal;
+                        varying vec3 vView;
+                        void main() {
+                            vec3 surface = normalize(vSurface);
+                            // Wrap the complete artwork around the front of the globe.
+                            vec2 logoUV = vec2(
+                                atan(surface.x, surface.z) / 2.8 + 0.5,
+                                asin(clamp(surface.y, -1.0, 1.0)) * uAspect / 2.8 + 0.5
+                            );
+                            vec4 artwork = texture2D(uLogo, clamp(logoUV, 0.0, 1.0));
+                            float mask = step(0.0, logoUV.x) * step(logoUV.x, 1.0)
+                                * step(0.0, logoUV.y) * step(logoUV.y, 1.0);
+                            vec3 normal = normalize(vNormal);
+                            vec3 view = normalize(vView);
+                            vec3 light = normalize(vec3(-0.65, 0.8, 1.2));
+                            float diffuse = max(dot(normal, light), 0.0);
+                            float rim = pow(1.0 - max(dot(normal, view), 0.0), 3.0);
+                            float specular = pow(max(dot(normal, normalize(light + view)), 0.0), 48.0);
+                            vec3 base = vec3(0.018, 0.027, 0.043);
+                            base = mix(base, artwork.rgb, artwork.a * mask);
+                            vec3 color = base * (0.3 + 0.85 * diffuse)
+                                + vec3(0.24, 0.38, 0.52) * rim
+                                + vec3(0.25) * specular;
+                            gl_FragColor = vec4(color, 1.0);
+                            #include <tonemapping_fragment>
+                            #include <colorspace_fragment>
+                        }
+                    `
                 })
             );
             logo.position.z = endOfSpaceZ;
             scene.add(logo);
             sceneObjects.push(logo);
-
-            const frame = new THREE.Mesh(
-                new THREE.TorusGeometry(6.1, 0.04, 8, 96),
-                new THREE.MeshBasicMaterial({
-                    color: 0xeaf6ff,
-                    transparent: true,
-                    opacity: 0.7,
-                    toneMapped: false
-                })
-            );
-            frame.position.z = endOfSpaceZ + 0.2;
-            scene.add(frame);
-            sceneObjects.push(frame);
+            endLogo = logo;
         }).catch(error => {
             console.error("VISIONS could not load the end-of-space logo.", error);
         });
@@ -494,6 +526,9 @@ import * as THREE from "./vendor/three.module.min.js";
         if (!renderer || !scene || !camera) return;
         updateCamera();
         updateParticles(time);
+        if (endLogo) {
+            endLogo.rotation.y = reduceMotion.matches ? 0 : Math.sin(time * 0.00018) * 0.12;
+        }
         if (!reduceMotion.matches) {
             cubes.forEach((cube, albumIndex) => {
                 if (!cube) return;
