@@ -33,6 +33,8 @@ import * as THREE from "./vendor/three.module.min.js";
     const cameraLookTarget = new THREE.Vector3();
     const cameraLookCurrent = new THREE.Vector3();
     const cubes = [];
+    const endOfSpaceZ = -120;
+    const cameraEndZ = endOfSpaceZ + 12;
     let renderer;
     let scene;
     let camera;
@@ -176,13 +178,10 @@ import * as THREE from "./vendor/three.module.min.js";
             texture.dispose();
             return;
         }
-        const cover = new THREE.MeshStandardMaterial({
+        const cover = new THREE.MeshBasicMaterial({
             map: texture,
             color: 0xffffff,
-            metalness: 0.16,
-            roughness: 0.52,
-            emissive: 0x193248,
-            emissiveIntensity: 0.08
+            toneMapped: false
         });
         const metal = new THREE.MeshStandardMaterial({
             color: 0x65727c,
@@ -211,13 +210,16 @@ import * as THREE from "./vendor/three.module.min.js";
         );
         mesh.userData.albumIndex = albumIndex;
         mesh.userData.baseY = mesh.position.y;
+        mesh.userData.baseRotationX = mesh.rotation.x;
+        mesh.userData.baseRotationY = mesh.rotation.y;
+        mesh.userData.baseRotationZ = mesh.rotation.z;
         scene.add(mesh);
         sceneObjects.push(mesh);
         cubes[albumIndex] = mesh;
 
         const edges = new THREE.LineSegments(
             new THREE.EdgesGeometry(mesh.geometry),
-            new THREE.LineBasicMaterial({ color: 0x9bc9e0, transparent: true, opacity: 0.58 })
+            new THREE.LineBasicMaterial({ color: 0xb5d8e9, transparent: true, opacity: 0.68 })
         );
         mesh.add(edges);
         mesh.userData.edgeMaterial = edges.material;
@@ -245,9 +247,9 @@ import * as THREE from "./vendor/three.module.min.js";
         const cool = [0.13, 0.29, 0.4];
         const warm = [0.35, 0.13, 0.08];
         for (const x of [-5.5, -4.8, 4.8, 5.5]) {
-            addLine([x, -3.7, 2], [x, -3.7, -104], x < 0 ? cool : warm);
+            addLine([x, -3.7, 2], [x, -3.7, endOfSpaceZ], x < 0 ? cool : warm);
         }
-        for (let z = -4; z >= -104; z -= 4) {
+        for (let z = -4; z >= endOfSpaceZ; z -= 4) {
             addLine([-5.5, -3.7, z], [5.5, -3.7, z], cool);
         }
         const geometry = new THREE.BufferGeometry();
@@ -266,7 +268,7 @@ import * as THREE from "./vendor/three.module.min.js";
         for (let i = 0; i < starCount; i += 1) {
             starPositions[i * 3] = (Math.random() - 0.5) * 18;
             starPositions[i * 3 + 1] = (Math.random() - 0.5) * 11;
-            starPositions[i * 3 + 2] = 3 - Math.random() * 105;
+            starPositions[i * 3 + 2] = 3 - Math.random() * (3 - endOfSpaceZ);
         }
         const starsGeometry = new THREE.BufferGeometry();
         starsGeometry.setAttribute("position", new THREE.BufferAttribute(starPositions, 3));
@@ -281,6 +283,44 @@ import * as THREE from "./vendor/three.module.min.js";
         sceneObjects.push(stars);
     }
 
+    function addEndLogo() {
+        makeTexture("EMJ-logo1.png").then(texture => {
+            if (disposed || !scene) {
+                texture.dispose();
+                return;
+            }
+
+            const logo = new THREE.Mesh(
+                new THREE.PlaneGeometry(9, 6.75),
+                new THREE.MeshBasicMaterial({
+                    map: texture,
+                    transparent: true,
+                    side: THREE.DoubleSide,
+                    depthWrite: false,
+                    toneMapped: false
+                })
+            );
+            logo.position.z = endOfSpaceZ;
+            scene.add(logo);
+            sceneObjects.push(logo);
+
+            const frame = new THREE.Mesh(
+                new THREE.TorusGeometry(6.1, 0.04, 8, 96),
+                new THREE.MeshBasicMaterial({
+                    color: 0xeaf6ff,
+                    transparent: true,
+                    opacity: 0.7,
+                    toneMapped: false
+                })
+            );
+            frame.position.z = endOfSpaceZ + 0.2;
+            scene.add(frame);
+            sceneObjects.push(frame);
+        }).catch(error => {
+            console.error("VISIONS could not load the end-of-space logo.", error);
+        });
+    }
+
     function updateScrollProgress() {
         const maxScroll = Math.max(1, track.offsetHeight - stage.clientHeight);
         const travelled = Math.max(0, -track.getBoundingClientRect().top);
@@ -290,11 +330,10 @@ import * as THREE from "./vendor/three.module.min.js";
     }
 
     function updateCamera() {
-        const travel = scrollProgress * 90;
         cameraTarget.set(
             Math.sin(scrollProgress * Math.PI * 4) * (window.innerWidth <= 700 ? 0.35 : 0.78),
             0.12 + Math.sin(scrollProgress * Math.PI * 2) * 0.14,
-            2 - travel
+            2 + (cameraEndZ - 2) * scrollProgress
         );
         cameraLookTarget.set(
             cameraTarget.x + Math.sin(scrollProgress * Math.PI * 3) * 0.12,
@@ -324,13 +363,13 @@ import * as THREE from "./vendor/three.module.min.js";
                 if (!cube) return;
                 const selected = albumIndex === selectedIndex;
                 const float = Math.sin(time * 0.00065 + albumIndex * 1.7) * 0.075;
-                cube.position.y += (cube.userData.baseY + (selected ? 0 : float) - cube.position.y) * 0.035;
-                cube.rotation.y += ((selected ? 0 : Math.sin(time * 0.00018 + albumIndex) * 0.13) - cube.rotation.y) * 0.02;
-                cube.rotation.x += ((selected ? 0 : Math.sin(time * 0.00023 + albumIndex * 0.8) * 0.08) - cube.rotation.x) * 0.02;
+                cube.position.y += (cube.userData.baseY + float - cube.position.y) * 0.035;
+                cube.rotation.y = cube.userData.baseRotationY + time * 0.00008;
+                cube.rotation.x = cube.userData.baseRotationX + Math.sin(time * 0.00028 + albumIndex * 0.8) * 0.52;
+                cube.rotation.z = cube.userData.baseRotationZ + Math.sin(time * 0.00019 + albumIndex * 1.3) * 0.14;
                 const targetScale = cube.userData.baseScale * (selected ? 1.14 : 1);
                 cube.scale.setScalar(cube.scale.x + (targetScale - cube.scale.x) * 0.06);
                 cube.userData.edgeMaterial.opacity = selected ? 0.95 : 0.58;
-                cube.userData.coverMaterial.emissiveIntensity = selected ? 0.28 : 0.08;
             });
         }
         renderer.render(scene, camera);
@@ -400,6 +439,7 @@ import * as THREE from "./vendor/three.module.min.js";
         renderer.toneMappingExposure = 1.08;
         textureAnisotropy = Math.min(3, renderer.capabilities.getMaxAnisotropy());
         addSpaceDetails();
+        addEndLogo();
 
         const resize = () => {
             const width = stage.clientWidth;
