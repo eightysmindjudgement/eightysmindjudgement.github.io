@@ -1,0 +1,114 @@
+/* Keep the tagline close to the introduction at every viewport size. */
+.tools-page > header {
+    min-height: 0;
+    padding-bottom: 0;
+}
+.tools-page > header > p:last-child {
+    margin-bottom: 0;
+}
+.tools-page .tools-section {
+    padding-top: 1.7em;
+}
+.tools-page .tools-intro {
+    margin-top: 0;
+}
+
+/* Progressive enhancement: the existing tool list remains usable without JS. */
+.tools-page .tool-carousel {
+    --layer-step: clamp(18px, 3vw, 30px);
+    max-width: 470px;
+    margin: 18px auto 0;
+}
+.tools-page .tool-carousel .tool-list {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    padding: 8px calc(var(--layer-step) * 3 + 8px) 12px 4px;
+    isolation: isolate;
+    touch-action: pan-y pinch-zoom;
+}
+.tools-page .tool-carousel .tool-card {
+    grid-area: 1 / 1;
+    box-sizing: border-box;
+    min-width: 0;
+    min-height: 268px;
+    aspect-ratio: 1.25;
+    justify-content: center;
+    padding: 22px;
+    border: 1px solid #72767b;
+    border-radius: 3px;
+    background: linear-gradient(125deg, rgb(51 55 60 / .94) 0%, rgb(27 29 33 / .96) 24%, rgb(16 17 19 / .97) 72%, rgb(32 35 40 / .94));
+    box-shadow: inset 0 1px 0 #ffffff20, 0 12px 24px #0006;
+    transform-origin: right center;
+    transform: translateX(calc(var(--layer) * var(--layer-step))) scale(var(--scale));
+    filter: brightness(var(--brightness));
+    opacity: var(--opacity);
+    z-index: var(--depth);
+    transition: transform 380ms ease, filter 380ms ease, opacity 380ms ease, border-color 180ms ease;
+    overflow-wrap: anywhere;
+}
+.tools-page .tool-carousel .tool-card[data-active="false"] {
+    pointer-events: none;
+    background: linear-gradient(125deg, rgb(72 78 86 / .78), rgb(26 29 34 / .86));
+    border-color: #8b929c;
+}
+/* Translucent surfaces convey depth without ghosting the other cards' copy. */
+.tools-page .tool-carousel .tool-card > span {
+    transition: opacity 180ms ease;
+}
+.tools-page .tool-carousel .tool-card[data-active="false"] > span {
+    opacity: 0;
+}
+.tools-page .tool-carousel .tool-card[data-active="true"] {
+    color: #f5f6f8;
+    text-shadow: 0 1px 2px #000;
+}
+.tools-page .tool-carousel .tool-card-title {
+    font-size: 1.05rem;
+    line-height: 1.45;
+    letter-spacing: .09em;
+    margin-bottom: 16px;
+}
+.tools-page .tool-carousel .tool-card-title span {
+    display: block;
+    font-size: .78em;
+    letter-spacing: .04em;
+    margin-top: 6px;
+}
+.tools-page .tool-carousel .tool-card-description { font-size: .9rem; color: #e1e3e6; line-height: 1.6; }
+.tools-page .tool-carousel .tool-card-japanese { color: #c6c9ce; font-size: .82rem; line-height: 1.7; }
+.tools-page .tool-carousel .tool-card-coming-soon { border-style: dashed; }
+.tools-page .tool-carousel .tool-card:focus-visible,
+.tools-page .tool-carousel button:focus-visible {
+    outline: 3px solid #e1e8f0;
+    outline-offset: 4px;
+}
+.tools-page .tool-carousel-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 4px;
+}
+.tools-page .tool-carousel-controls button {
+    min-width: 46px;
+    min-height: 44px;
+    border: 1px solid #656b72;
+    border-radius: 2px;
+    background: linear-gradient(#2b2e33, #141519);
+    color: #eef0f3;
+    font-size: 1.35rem;
+    cursor: pointer;
+}
+.tools-page .tool-carousel-controls button:disabled { opacity: .3; cursor: default; }
+.tools-page .tool-carousel-position { color: #b6bac0; font-size: .78rem; letter-spacing: .15em; }
+.tools-page .tool-carousel-hint { color: #999; font-size: .7rem; text-align: center; margin: 8px 0 0; }
+@media (max-width: 480px) {
+    .tools-page .tool-carousel .tool-card { aspect-ratio: auto; min-height: 300px; padding: 20px 16px; }
+    .tools-page .tool-carousel .tool-card-title { font-size: 1rem; }
+    .tools-page .tool-carousel .tool-card-description { font-size: .9rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .tools-page .tool-carousel .tool-card,
+    .tools-page .tool-carousel .tool-card > span { transition: none; }
+}
