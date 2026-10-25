@@ -1,13 +1,15 @@
 (() => {
     const list = document.querySelector('.tools-page .tool-list');
     if (!list) return;
+    const itemLabel = list.dataset.itemLabel || 'TOOL';
+    const itemName = itemLabel.toLowerCase();
     const cards = [...list.querySelectorAll('.tool-card')];
     if (!cards.length) return;
     const carousel = document.createElement('div');
     carousel.className = 'tool-carousel';
     carousel.setAttribute('role', 'region');
     carousel.setAttribute('aria-roledescription', 'carousel');
-    carousel.setAttribute('aria-label', 'Tool selector');
+    carousel.setAttribute('aria-label', itemLabel === 'GAME' ? 'Game selector' : 'Tool selector');
     carousel.tabIndex = 0;
     list.before(carousel);
     carousel.append(list);
@@ -16,11 +18,11 @@
     const previous = document.createElement('button');
     previous.type = 'button';
     previous.textContent = '←';
-    previous.setAttribute('aria-label', 'Previous tool');
+    previous.setAttribute('aria-label', 'Previous ' + itemName);
     const next = document.createElement('button');
     next.type = 'button';
     next.textContent = '→';
-    next.setAttribute('aria-label', 'Next tool');
+    next.setAttribute('aria-label', 'Next ' + itemName);
     const position = document.createElement('span');
     position.className = 'tool-carousel-position';
     position.setAttribute('role', 'status');
@@ -49,7 +51,7 @@
         });
         previous.disabled = selected === 0;
         next.disabled = selected === cards.length - 1;
-        position.textContent = `TOOL ${String(selected + 1).padStart(2, '0')} / ${String(cards.length).padStart(2, '0')}`;
+        position.textContent = `${itemLabel} ${String(selected + 1).padStart(2, '0')} / ${String(cards.length).padStart(2, '0')}`;
         if (focusWasInCard) {
             if (cards[selected].matches('a')) cards[selected].focus({ preventScroll: true });
             else carousel.focus({ preventScroll: true });
