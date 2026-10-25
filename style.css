@@ -2747,8 +2747,31 @@ header {
     .home-page > header {
         min-height: 0;
     }
-    .home-page > header > .home-scroll-cue { bottom: 10px; }
-    .home-scroll-cue svg { width: 32px; height: 44px; filter: drop-shadow(0 0 3px #009cca60); }
+    .home-page > header > .home-scroll-cue {
+        bottom: 2px;
+        min-height: 60px;
+        gap: 0;
+        color: #a6f6ff;
+        text-shadow: 0 0 4px #37dfff, 0 0 9px #37dfff80;
+    }
+    .home-scroll-cue svg {
+        width: 32px;
+        height: 40px;
+        filter: drop-shadow(0 0 2px #ff4edb) drop-shadow(0 0 6px #ff2acb99);
+    }
+    .home-scroll-tube {
+        stroke: #ff8ae7;
+        stroke-width: 2.2;
+    }
+    .home-scroll-light {
+        stroke: #77f3ff;
+        stroke-width: 3;
+        filter: drop-shadow(0 0 3px #24ddff);
+    }
+    .home-scroll-light--core {
+        stroke: #f0ffff;
+        stroke-width: 2;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2901,7 +2924,11 @@ header {
     }
 
     .home-page > header {
-        padding-bottom: 100px;
+        padding-bottom: 68px;
+    }
+
+    .home-page > header > p:nth-last-child(2) {
+        margin-bottom: 0;
     }
 
     :is(.home-page, .biography-page, .discography-page, .videos-page, .market-page) > header > p:last-child {
@@ -2923,6 +2950,7 @@ header {
     }
 
     .home-page .home-mission {
+        padding-top: 8px;
         padding-bottom: var(--mobile-line-space);
     }
 
