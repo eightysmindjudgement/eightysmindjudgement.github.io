@@ -2204,6 +2204,40 @@ article img {
     margin-bottom: 20px;
 }
 
+/* Return links on discography and tool detail pages. */
+.detail-back-row {
+    display: flex;
+    justify-content: center;
+    padding: 20px 16px 12px;
+}
+
+.detail-back-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+    min-height: 44px;
+    padding: 8px 18px;
+    border: 1px solid #50555a;
+    border-radius: 3px;
+    background: linear-gradient(#292c2f, #121315);
+    color: #cfd2d5;
+    font-size: .72rem;
+    font-weight: bold;
+    letter-spacing: .14em;
+    text-decoration: none;
+}
+
+.detail-back-button:hover {
+    color: #fff;
+    border-color: #a2acb4;
+}
+
+.detail-back-button:focus-visible {
+    outline: 2px solid #b4e7f7;
+    outline-offset: 4px;
+}
+
 /* INTERACTIVE STUDIO ALBUMS */
 
 .studio-albums-page .studio-album-experience {
