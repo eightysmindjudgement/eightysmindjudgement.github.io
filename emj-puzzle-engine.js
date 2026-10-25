@@ -5,9 +5,9 @@
     name: 'EMJ PUZZLE', width: 400, height: 570, deadline: 76,
     // Walls widen toward the top. Unequal segment lengths make each side distinct.
     stages: [
-      { name: 'レベル1', description: '底がせまい、でこぼこ斜面', left: [[0,0],[0,110],[8,260],[32,420],[68,570]], right: [[400,0],[400,145],[388,300],[365,455],[336,570]] },
-      { name: 'レベル2', description: 'もっとせまい底と、急な斜面', left: [[0,0],[0,80],[12,215],[41,365],[105,570]], right: [[400,0],[400,105],[382,250],[347,405],[296,570]] },
-      { name: 'レベル3', description: '大人も挑戦！ 極せまの底と左右非対称の急斜面', left: [[0,0],[0,60],[20,180],[61,330],[155,570]], right: [[400,0],[400,85],[372,205],[329,350],[255,570]] }
+      { name: 'レベル1', description: 'もっとせまい底と、急な斜面', left: [[0,0],[0,80],[12,215],[41,365],[105,570]], right: [[400,0],[400,105],[382,250],[347,405],[296,570]] },
+      { name: 'レベル2', description: '極せまの底と左右非対称の急斜面', left: [[0,0],[0,60],[20,180],[61,330],[155,570]], right: [[400,0],[400,85],[372,205],[329,350],[255,570]] },
+      { name: 'レベル3', description: '1分ごとに壁がせまる！ 空間が画面の3分の1でストップ', moving: true, left: [[0,0],[0,60],[20,180],[61,330],[155,570]], right: [[400,0],[400,85],[372,205],[329,350],[255,570]] }
     ],
     pieces: [
       { name: 'Corporate Warrior', reading: 'コーポレート ウォリア', image: 'BIO背景.PNG', radius: 19, color: '#b9c9d5', points: 0 },
@@ -42,17 +42,35 @@
     pick() {const n=this.random(); return n<.58?0:n<.88?1:2;}
     reset(stage=this.stageIndex || 0) {
       this.stageIndex=Number.isInteger(stage)&&CONFIG.stages[stage]?stage:0;
-      this.stage=CONFIG.stages[this.stageIndex];
+      this.baseStage=CONFIG.stages[this.stageIndex];
+      const integral=side=>side.slice(1).reduce((sum,p,i)=>sum+(p[0]+side[i][0])*.5*(p[1]-side[i][1]),0);
+      this.baseArea=integral(this.baseStage.right)-integral(this.baseStage.left);
+      this.minWallScale=Math.min(1,(CONFIG.width*CONFIG.height/3)/this.baseArea);
+      this.wallScale=1;this.wallRate=0;this.buildWalls();
+      this.bodies=[];this.score=0;this.time=0;this.cooldown=0;this.overflow=0;this.over=false;this.current=this.pick();this.next=this.pick();this.events=[];this.lastMerge=-10;this.combo=0;this.serial=0;
+    }
+    buildWalls(){
+      const transform=side=>side.map(([x,y])=>[CONFIG.width/2+(x-CONFIG.width/2)*this.wallScale,y]);
+      this.stage={...this.baseStage,left:transform(this.baseStage.left),right:transform(this.baseStage.right)};
       this.walls=[];
       for(const [side,sign] of [[this.stage.left,1],[this.stage.right,-1]])for(let i=1;i<side.length;i++){
         const [x,y]=side[i-1],dx=side[i][0]-x,dy=side[i][1]-y,len=Math.hypot(dx,dy);
         this.walls.push({x,y,nx:sign*dy/len,ny:-sign*dx/len});
       }
       this.walls.push({x:0,y:CONFIG.height,nx:0,ny:-1});
-      this.bodies=[];this.score=0;this.time=0;this.cooldown=0;this.overflow=0;this.over=false;this.current=this.pick();this.next=this.pick();this.events=[];this.lastMerge=-10;this.combo=0;this.serial=0;
     }
+    updateWalls(dt,elapsed){
+      this.wallRate=0;
+      if(!this.baseStage.moving)return;
+      // Each minute starts a four-second squeeze; clamp by actual polygon area.
+      const target=Math.max(this.minWallScale,1-Math.floor(Math.max(0,elapsed)/60)*.06);
+      const previous=this.wallScale;
+      this.wallScale=Math.max(target,previous-.015*dt);
+      if(this.wallScale!==previous){this.wallRate=(this.wallScale-previous)/dt;this.buildWalls();}
+    }
+    aimX(x,r){return Math.max(this.stage.left[0][0]+r+2,Math.min(this.stage.right[0][0]-r-2,x));}
     add(level,x,y) {const r=CONFIG.pieces[level].radius;const b={id:++this.serial,level,r,x,y,vx:0,vy:0,angle:0,spin:0,born:this.time};this.bodies.push(b);return b;}
-    drop(x) {if(this.over||this.cooldown>0||this.bodies.length>=110)return false;const r=CONFIG.pieces[this.current].radius;this.add(this.current,Math.max(r+2,Math.min(CONFIG.width-r-2,x)),r+5);this.current=this.next;this.next=this.pick();this.cooldown=.48;return true;}
+    drop(x) {if(this.over||this.cooldown>0||this.bodies.length>=110)return false;const r=CONFIG.pieces[this.current].radius;this.add(this.current,this.aimX(x,r),r+5);this.current=this.next;this.next=this.pick();this.cooldown=.48;return true;}
     merge(a,b) {
       const level=a.level, x=(a.x+b.x)/2,y=(a.y+b.y)/2;
       this.bodies=this.bodies.filter(v=>v!==a&&v!==b);
@@ -70,7 +88,9 @@
           const distance=Math.min(...vertices(b).map(v=>(v.x-w.x)*w.nx+(v.y-w.y)*w.ny));
           if(distance>=-.001)continue;
           corrected=true;b.x-=distance*w.nx;b.y-=distance*w.ny;
-          const normalSpeed=b.vx*w.nx+b.vy*w.ny;
+          const wallX=w.nx===0?CONFIG.width/2:w.x-(b.y-w.y)*w.ny/w.nx;
+          const wallVx=(wallX-CONFIG.width/2)*this.wallRate/this.wallScale;
+          const normalSpeed=(b.vx-wallVx)*w.nx+b.vy*w.ny;
           if(normalSpeed<0){b.vx-=normalSpeed*1.08*w.nx;b.vy-=normalSpeed*1.08*w.ny;}
           const tangent=b.vx*-w.ny+b.vy*w.nx;
           b.vx-=tangent*.025*-w.ny;b.vy-=tangent*.025*w.nx;b.spin*=.9;
@@ -78,9 +98,10 @@
         if(!corrected)break;
       }
     }
-    step(dt) {
+    step(dt,elapsed) {
       if(this.over)return;
       dt=Math.min(dt,1/60);this.time+=dt;this.cooldown=Math.max(0,this.cooldown-dt);
+      this.updateWalls(dt,elapsed===undefined?this.time:elapsed);
       for(const b of this.bodies){b.vy=Math.min(b.vy+800*dt,650);b.x+=b.vx*dt;b.y+=b.vy*dt;b.angle+=b.spin*dt;b.spin*=.99;b.vx*=.999;this.bounds(b);}
       for(let pass=0;pass<7;pass++) {
         let merged=false;
