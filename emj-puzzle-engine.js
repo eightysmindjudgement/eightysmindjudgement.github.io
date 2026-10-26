@@ -67,6 +67,7 @@
     constructor(random=Math.random) {this.random=random;this.reset();}
     pick() {const n=this.random(); return n>=.9?-1:n/.9<.58?0:n/.9<.88?1:2;}
     reset(stage=this.stageIndex || 0) {
+      this.water={height:0,target:Math.min(...CONFIG.pieces.map(p=>p.radius))*3,raining:false,elapsed:0,drainRate:0,waves:[]};
       this.stageIndex=Number.isInteger(stage)&&CONFIG.stages[stage]?stage:0;
       this.baseStage=CONFIG.stages[this.stageIndex];
       const integral=side=>side.slice(1).reduce((sum,p,i)=>sum+(p[0]+side[i][0])*.5*(p[1]-side[i][1]),0);
@@ -138,12 +139,42 @@
         if(!corrected)break;
       }
     }
+    // Split the pause-aware play clock at rain boundaries, including delayed frames.
+    updateWater(dt,elapsed){
+      const w=this.water;if(this.stageIndex>2){w.height=0;w.raining=false;w.waves=[];return;}
+      const end=Math.max(w.elapsed,elapsed);let t=w.elapsed;
+      while(t<end-1e-9){
+        const cycle=Math.floor((t+1e-9)/180),phase=t-cycle*180,rain=cycle>=1&&phase<4;
+        const boundary=rain?cycle*180+4:(cycle+1)*180,span=Math.min(end,boundary)-t;if(span<=0)break;
+        w.height=Math.max(0,Math.min(w.target,w.height+span*((rain?w.target/4:0)-w.drainRate)));t+=span;
+        if(rain&&t>=boundary-1e-9)w.drainRate=w.height/120;
+        if(w.height===0&&!rain)w.drainRate=0;
+      }
+      w.elapsed=end;w.raining=end>=180&&end%180<4;if(w.height<1e-8)w.height=0;
+      w.waves=w.waves.filter(v=>end-v.time<3);
+    }
+    waterSurface(x){
+      const w=this.water;if(!w.height)return CONFIG.height;
+      let offset=Math.sin(x*.035+w.elapsed*2.1)*.8+Math.sin(x*.067-w.elapsed*1.6)*.5;
+      for(const v of w.waves){const age=w.elapsed-v.time;offset+=v.strength*Math.exp(-age*1.8-Math.abs(x-v.x)/100)*Math.sin(Math.abs(x-v.x)*.07-age*9);}
+      return CONFIG.height-w.height+Math.max(-3,Math.min(3,offset))*Math.min(1,w.height/5);
+    }
+    applyWater(b,dt){
+      const w=this.water;if(!w.height||this.stageIndex>2)return;
+      const depth=b.y+b.r-this.waterSurface(b.x);
+      if(depth>0&&b.waterDepth!==undefined&&b.waterDepth<=0&&Math.abs(b.vy)>25){w.waves.push({x:b.x,time:w.elapsed,strength:Math.min(3,Math.abs(b.vy)/150)});if(w.waves.length>24)w.waves.shift();}
+      b.waterDepth=depth;const fraction=Math.max(0,Math.min(1,depth/(2*b.r)));if(!fraction)return;
+      // Rocks retain gravity; tiles balance at partial immersion. Contacts are unchanged.
+      if(!b.rock)b.vy-=800*2.4*fraction*dt;
+      b.vy*=Math.exp(-(b.rock?.9:2.4)*fraction*dt);b.vx*=Math.exp(-1.5*fraction*dt);b.spin*=Math.exp(-fraction*dt);
+    }
     step(dt,elapsed) {
       if(this.over)return;
       dt=Math.min(dt,1/60);this.time+=dt;this.cooldown=Math.max(0,this.cooldown-dt);
       this.updateWalls(dt,elapsed===undefined?this.time:elapsed);
       this.updateDrill(dt);
-      for(const b of this.bodies){b.vy=Math.min(b.vy+800*dt,650);b.x+=b.vx*dt;b.y+=b.vy*dt;b.angle+=b.spin*dt;b.spin*=.99;b.vx*=.999;this.bounds(b);}
+      this.updateWater(dt,elapsed===undefined?this.time:elapsed);
+      for(const b of this.bodies){b.vy=Math.min(b.vy+800*dt,650);this.applyWater(b,dt);b.x+=b.vx*dt;b.y+=b.vy*dt;b.angle+=b.spin*dt;b.spin*=.99;b.vx*=.999;this.bounds(b);}
       for(let pass=0;pass<7;pass++) {
         let merged=false;
         outer:for(let i=0;i<this.bodies.length;i++)for(let j=i+1;j<this.bodies.length;j++) {

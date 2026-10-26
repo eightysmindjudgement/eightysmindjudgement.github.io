@@ -13,3 +13,5 @@
 @keyframes puzzle-combo-fade{0%,65%{opacity:1}100%{opacity:0}}
 
 .puzzle-combo strong{font-size:var(--combo-size,26px)}.puzzle-combo span[hidden]{display:none}.puzzle-overlay>div{max-height:100%;overflow:auto}.puzzle-overlay p{font-size:clamp(12px,3.4vw,16px);line-height:1.6}
+
+.puzzle-rock-guide{width:48px;height:48px;margin-right:10px;vertical-align:middle}
