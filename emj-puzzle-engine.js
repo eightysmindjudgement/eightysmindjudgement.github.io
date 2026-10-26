@@ -73,7 +73,7 @@
       this.baseArea=integral(this.baseStage.right)-integral(this.baseStage.left);
       this.minWallScale=Math.min(1,(CONFIG.width*CONFIG.height/3)/this.baseArea);
       this.wallScale=1;this.wallRate=0;this.buildWalls();
-      this.discharges=[];this.comboCue=null;this.lasers=[];this.shatters=[];this.shotsFired=0;this.rocksDestroyed=0;this.bodies=[];this.score=0;this.time=0;this.cooldown=0;this.overflow=0;this.over=false;this.current=this.pick();this.next=this.pick();this.events=[];this.lastMerge=-10;this.combo=0;this.serial=0;
+      this.effectQueue=[];this.activeEffect=null;this.drill=null;this.discharges=[];this.comboCue=null;this.lasers=[];this.shatters=[];this.shotsFired=0;this.rocksDestroyed=0;this.bodies=[];this.score=0;this.time=0;this.cooldown=0;this.overflow=0;this.over=false;this.current=this.pick();this.next=this.pick();this.events=[];this.lastMerge=-10;this.combo=0;this.serial=0;
     }
     buildWalls(){
       const transform=side=>side.map(([x,y])=>[CONFIG.width/2+(x-CONFIG.width/2)*this.wallScale,y]);
@@ -95,18 +95,25 @@
       if(this.wallScale!==previous){this.wallRate=(this.wallScale-previous)/dt;this.buildWalls();}
     }
     aimX(x,r){return Math.max(this.stage.left[0][0]+r+2,Math.min(this.stage.right[0][0]-r-2,x));}
-    add(level,x,y) {const r=level===-1?CONFIG.pieces[0].radius*2/3:CONFIG.pieces[level].radius;const b={rock:level===-1,id:++this.serial,level,r,x,y,vx:0,vy:0,angle:0,spin:0,born:this.time};this.bodies.push(b);return b;}
-    drop(x) {if(this.over||this.cooldown>0||this.bodies.length>=110)return false;const r=this.current===-1?CONFIG.pieces[0].radius*2/3:CONFIG.pieces[this.current].radius;this.add(this.current,this.aimX(x,r),r+5);this.current=this.next;this.next=this.pick();this.cooldown=.48;return true;}
+    add(level,x,y) {const r=level===-1?CONFIG.pieces[0].radius*2/3:CONFIG.pieces[level].radius;const b={rock:level===-1,id:++this.serial,level,r,x,y,vx:0,vy:0,angle:0,spin:0,born:this.time};this.bodies.push(b);if([5,6,7,8].includes(level))this.enqueueEffect(b);return b;}
+    drop(x) {if(this.over||this.cooldown>0||this.bodies.length>=110)return false;const r=this.current===-1?CONFIG.pieces[0].radius*2/3:CONFIG.pieces[this.current].radius;this.add(this.current,this.aimX(x,r),r+5);if(this.current!==-1&&!this.drill&&this.random()<.03)this.drill={x:this.aimX(x,26),y:-260,width:52,length:260,angle:0};this.current=this.next;this.next=this.pick();this.cooldown=.48;return true;}
     merge(a,b) {
       const level=a.level, x=(a.x+b.x)/2,y=(a.y+b.y)/2;
       this.bodies=this.bodies.filter(v=>v!==a&&v!==b);
       this.combo=this.time-this.lastMerge<1.2?Math.min(this.combo+1,8):1;this.lastMerge=this.time;
       const points=(level===CONFIG.pieces.length-1?2400:CONFIG.pieces[level+1].points)*this.combo;
       this.score+=points;
-      if(level<CONFIG.pieces.length-1) {const n=this.add(level+1,x,y);n.vx=(a.vx+b.vx)*.25;n.vy=Math.min(0,(a.vy+b.vy)*.2);n.angle=(a.angle+b.angle)/2;if(n.level===5||n.level===CONFIG.pieces.length-1)this.discharges.push({body:n,time:this.time,seed:n.id,final:n.level===CONFIG.pieces.length-1});this.discharges=this.discharges.slice(-6);}
+      if(level<CONFIG.pieces.length-1) {const n=this.add(level+1,x,y);n.vx=(a.vx+b.vx)*.25;n.vy=Math.min(0,(a.vy+b.vy)*.2);n.angle=(a.angle+b.angle)/2;}
       this.fireCombo(this.combo);this.events.push({x,y,points,combo:this.combo,final:level>=CONFIG.pieces.length-2,time:this.time});
     }
 
+    // One presentation owns the screen; waiting events retain their insertion order.
+    enqueueEffect(body){this.effectQueue.push({body,seed:body.id,final:body.level===8,kind:body.level===6?'heart':body.level===7?'brain':'discharge',duration:[6,7].includes(body.level)?2:1.6});this.updateEffects();}
+    clearEffects(){this.effectQueue=[];this.activeEffect=null;this.discharges=[];this.drill=null;}
+    updateEffects(){if(this.activeEffect&&this.time-this.activeEffect.time>=this.activeEffect.duration-1e-9){this.activeEffect=null;this.discharges=[];}if(!this.activeEffect&&this.effectQueue.length){this.activeEffect=this.effectQueue.shift();this.activeEffect.time=this.time;this.discharges=this.activeEffect.kind==='discharge'?[this.activeEffect]:[];}}
+    // An independent moving field adds velocity/spin; existing contacts transfer the impulse.
+    // It never enters bodies, wall contacts, laser targets, or scoring.
+    updateDrill(dt){const d=this.drill;if(!d)return;d.y+=220*dt;d.angle+=3*dt;for(const b of this.bodies){const near=Math.max(d.y,Math.min(d.y+d.length,b.y)),dx=b.x-d.x,dist=Math.hypot(dx,b.y-near),reach=b.r+d.width/2;if(dist<reach){const side=dx===0?(b.id%2?1:-1):Math.sign(dx),force=1800*(1-dist/reach);b.vx=Math.max(-360,Math.min(360,b.vx+side*force*dt));b.vy-=force*.18*dt;b.spin+=side*dt*4;}}if(d.y>CONFIG.height+30)this.drill=null;}
     fireCombo(combo){if(combo===1){this.comboCue={start:this.time,combo};return;}const rocks=this.bodies.filter(b=>b.rock),count=combo*2,start=Math.max(this.time,...this.lasers.map(l=>l.start+.055)),offset=this.random();for(let i=0;i<count;i++)this.lasers.push({start:start+i*.055,y:30+((offset+i*.61803398875)%1)*510,direction:(this.shotsFired+i)%2?-1:1,previous:null,targetId:rocks[i%Math.max(1,rocks.length)]?.id});this.shotsFired+=count;this.comboCue={start,combo};}
     updateLasers(){for(const l of this.lasers){const age=this.time-l.start;if(age<0)continue;
       // Track a rock until the beam reaches it; swept polygon collision remains authoritative.
@@ -135,6 +142,7 @@
       if(this.over)return;
       dt=Math.min(dt,1/60);this.time+=dt;this.cooldown=Math.max(0,this.cooldown-dt);
       this.updateWalls(dt,elapsed===undefined?this.time:elapsed);
+      this.updateDrill(dt);
       for(const b of this.bodies){b.vy=Math.min(b.vy+800*dt,650);b.x+=b.vx*dt;b.y+=b.vy*dt;b.angle+=b.spin*dt;b.spin*=.99;b.vx*=.999;this.bounds(b);}
       for(let pass=0;pass<7;pass++) {
         let merged=false;
@@ -154,7 +162,7 @@
       }
       this.updateLasers();const danger=this.bodies.some(b=>this.time-b.born>1.5&&Math.min(...vertices(b).map(v=>v.y))<CONFIG.deadline);
       this.overflow=danger?this.overflow+dt:0;if(this.overflow>=2.5)this.over=true;
-      this.discharges=this.discharges.filter(e=>this.time-e.time<1.6);
+      if(this.over)this.clearEffects();else this.updateEffects();
       this.events=this.events.filter(e=>this.time-e.time<1);
     }
   }
