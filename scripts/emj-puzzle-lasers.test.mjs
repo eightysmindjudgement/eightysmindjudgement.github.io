@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import * as engine from '../emj-puzzle-engine.js';
+const {World}=engine.default || globalThis.EMJPuzzle;
+function test(name,run){run();console.log('PASS '+name);}
+
+test('rock probability, size and non merging',()=>{const w=new World(()=>.95);assert.equal(w.current,-1);const a=w.add(-1,190,400),b=w.add(-1,205,400);assert.equal(a.r,19*2/3);w.step(1/120);assert.equal(w.bodies.length,2);assert.equal(w.score,0);});
+test('combo emits exactly twice its count, alternating distributed shots',()=>{const w=new World(()=>.3);for(let c=1;c<=8;c++){w.lasers=[];w.fireCombo(c);assert.equal(w.lasers.length,c*2);assert(new Set(w.lasers.map(l=>l.y)).size===c*2);for(let i=1;i<w.lasers.length;i++){assert.notEqual(w.lasers[i].direction,w.lasers[i-1].direction);assert(w.lasers[i].start>w.lasers[i-1].start);}}});
+test('swept laser destroys every intersected rock only once',()=>{for(const direction of [1,-1]){const w=new World(()=>.2);w.add(-1,100,300);w.add(-1,200,300);const off=w.add(-1,200,340);const normal=w.add(0,250,300);w.lasers=[{start:0,y:300,direction,previous:null}];for(let i=0;i<30;i++){w.time=i/120;w.updateLasers(1/120);}assert.equal(w.rocksDestroyed,2);assert.equal(w.shatters.length,2);assert(w.bodies.includes(off));assert(w.bodies.includes(normal));assert.equal(w.lasers.length,0);w.time=1;w.updateLasers(1/120);assert.equal(w.shatters.length,0);}});
+test('empty board shots cross and clean up',()=>{const w=new World(()=>.5);w.fireCombo(3);for(let i=0;i<120;i++)w.step(1/120);assert.equal(w.shotsFired,6);assert.equal(w.lasers.length,0);assert.equal(w.rocksDestroyed,0);});
+test('destroying a support releases the piece to gravity',()=>{const w=new World(()=>.5);w.add(-1,200,545);const b=w.add(0,200,510);w.lasers=[{start:0,y:545,direction:1,previous:null}];for(let i=0;i<90;i++)w.step(1/120);assert.equal(w.rocksDestroyed,1);assert(b.y>540);});
+test('shatter effect cap and reset cleanup',()=>{const w=new World(()=>.5);for(let i=0;i<60;i++)w.add(-1,200,300);w.lasers=[{start:0,y:300,direction:1,previous:null}];w.time=.2;w.updateLasers(.2);assert.equal(w.rocksDestroyed,60);assert(w.shatters.length<=24);w.reset();assert.equal(w.lasers.length,0);assert.equal(w.shatters.length,0);assert.equal(w.rocksDestroyed,0);});
