@@ -1,13 +1,21 @@
-/* Original, dependency-free octagonal rigid-body solver. Also usable in Node tests. */
+/* Original, dependency-free circle / rock rigid-body solver. Also usable in Node tests. */
 (function (root) {
   'use strict';
+  // Open upper third, followed by the lower arc of an ellipse (380px high).
+  function ovalSide(right) {
+    return [[right?400:0,0], ...Array.from({length:25},(_,i)=>{
+      const t=i/24*.95;
+      const half=200*Math.sqrt(1-t*t);
+      return [200+(right?half:-half),190+i/24*380];
+    })];
+  }
   const CONFIG = {
     name: 'EMJ PUZZLE', width: 400, height: 570, deadline: 76,
     // Walls widen toward the top. Unequal segment lengths make each side distinct.
     stages: [
-      { name: 'レベル1', description: 'もっとせまい底と、急な斜面', left: [[0,0],[0,80],[12,215],[41,365],[105,570]], right: [[400,0],[400,105],[382,250],[347,405],[296,570]] },
-      { name: 'レベル2', description: '極せまの底と左右非対称の急斜面', left: [[0,0],[0,60],[20,180],[61,330],[155,570]], right: [[400,0],[400,85],[372,205],[329,350],[255,570]] },
-      { name: 'レベル3', description: '1分ごとに壁がせまる！ 空間が画面の3分の1でストップ', moving: true, left: [[0,0],[0,60],[20,180],[61,330],[155,570]], right: [[400,0],[400,85],[372,205],[329,350],[255,570]] }
+      { name: 'レベル1', description: '四角い器の基本ステージ', descriptionEn: 'A rectangular container: the basic stage.', left: [[0,0],[0,570]], right: [[400,0],[400,570]] },
+      { name: 'レベル2', description: '急斜面と狭い底。配置と安定性がカギ', descriptionEn: 'Steep slopes and a narrow base challenge placement and balance.', left: [[0,0],[0,60],[20,180],[61,330],[155,570]], right: [[400,0],[400,85],[372,205],[329,350],[255,570]] },
+      { name: 'レベル3', description: '下側約3分の2が楕円。転がりと積み方が変化／1分ごとに壁が縮小', descriptionEn: 'An oval lower two-thirds changes rolling and stacking. Walls squeeze each minute.', moving: true, left: ovalSide(false), right: ovalSide(true) }
     ],
     pieces: [
       { name: 'Corporate Warrior', reading: 'コーポレート ウォリア', image: 'BIO背景.PNG', radius: 19, color: '#b9c9d5', points: 0 },
@@ -20,16 +28,32 @@
     ]
   };
   function vertices(b) {
+    if(!b.rock)return Array.from({length:64},(_,i)=>({x:b.x+b.r*Math.cos(i*Math.PI/32),y:b.y+b.r*Math.sin(i*Math.PI/32)}));
     const r = b.r, k = r * .45, c = Math.cos(b.angle), s = Math.sin(b.angle);
-    return [[-k,-r],[k,-r],[r,-k],[r,k],[k,r],[-k,r],[-r,k],[-r,-k]].map(([x,y]) => ({ x:b.x+x*c-y*s, y:b.y+x*s+y*c }));
+    return (b.rock?[[-k,-r],[k,-r*.88],[r,-k],[r*.85,k],[k,r],[-k,r*.82],[-r,k],[-r*.9,-k]]:[[-k,-r],[k,-r],[r,-k],[r,k],[k,r],[-k,r],[-r,k],[-r,-k]]).map(([x,y]) => ({ x:b.x+x*c-y*s, y:b.y+x*s+y*c }));
   }
   function contact(a,b) {
     if (Math.abs(a.x-b.x)>1.42*(a.r+b.r) || Math.abs(a.y-b.y)>1.42*(a.r+b.r)) return null;
-    const av=vertices(a), bv=vertices(b); let depth=Infinity, normal;
-    for (const poly of [av,bv]) for(let i=0;i<8;i++) {
-      const p=poly[i], q=poly[(i+1)%8], len=Math.hypot(q.x-p.x,q.y-p.y);
-      const n={x:-(q.y-p.y)/len,y:(q.x-p.x)/len};
-      const ap=av.map(v=>v.x*n.x+v.y*n.y), bp=bv.map(v=>v.x*n.x+v.y*n.y);
+    if(!a.rock&&!b.rock){
+      const dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy),depth=a.r+b.r-d;
+      return depth<0?null:{x:d?dx/d:1,y:d?dy/d:0,depth};
+    }
+    const av=a.rock?vertices(a):null, bv=b.rock?vertices(b):null;
+    let depth=Infinity, normal;
+    const axes=[];
+    for(const poly of [av,bv].filter(Boolean))for(let i=0;i<poly.length;i++){
+      const p=poly[i],q=poly[(i+1)%poly.length],len=Math.hypot(q.x-p.x,q.y-p.y);
+      axes.push({x:-(q.y-p.y)/len,y:(q.x-p.x)/len});
+    }
+    if(!av||!bv){
+      const circle=av?b:a,poly=av||bv;
+      const closest=poly.reduce((p,q)=>Math.hypot(q.x-circle.x,q.y-circle.y)<Math.hypot(p.x-circle.x,p.y-circle.y)?q:p);
+      const dx=closest.x-circle.x,dy=closest.y-circle.y,len=Math.hypot(dx,dy);
+      if(len)axes.push({x:dx/len,y:dy/len});
+    }
+    for (const n of axes) {
+      const project=(poly,body)=>poly?poly.map(v=>v.x*n.x+v.y*n.y):[body.x*n.x+body.y*n.y-body.r,body.x*n.x+body.y*n.y+body.r];
+      const ap=project(av,a), bp=project(bv,b);
       const overlap=Math.min(Math.max(...ap),Math.max(...bp))-Math.max(Math.min(...ap),Math.min(...bp));
       if(overlap<0) return null;
       if(overlap<depth) {depth=overlap;normal=n;}
@@ -39,7 +63,7 @@
   }
   class World {
     constructor(random=Math.random) {this.random=random;this.reset();}
-    pick() {const n=this.random(); return n<.58?0:n<.88?1:2;}
+    pick() {const n=this.random(); return n>=.9?-1:n/.9<.58?0:n/.9<.88?1:2;}
     reset(stage=this.stageIndex || 0) {
       this.stageIndex=Number.isInteger(stage)&&CONFIG.stages[stage]?stage:0;
       this.baseStage=CONFIG.stages[this.stageIndex];
@@ -47,7 +71,7 @@
       this.baseArea=integral(this.baseStage.right)-integral(this.baseStage.left);
       this.minWallScale=Math.min(1,(CONFIG.width*CONFIG.height/3)/this.baseArea);
       this.wallScale=1;this.wallRate=0;this.buildWalls();
-      this.bodies=[];this.score=0;this.time=0;this.cooldown=0;this.overflow=0;this.over=false;this.current=this.pick();this.next=this.pick();this.events=[];this.lastMerge=-10;this.combo=0;this.serial=0;
+      this.discharges=[];this.comboCue=null;this.lasers=[];this.shatters=[];this.shotsFired=0;this.rocksDestroyed=0;this.bodies=[];this.score=0;this.time=0;this.cooldown=0;this.overflow=0;this.over=false;this.current=this.pick();this.next=this.pick();this.events=[];this.lastMerge=-10;this.combo=0;this.serial=0;
     }
     buildWalls(){
       const transform=side=>side.map(([x,y])=>[CONFIG.width/2+(x-CONFIG.width/2)*this.wallScale,y]);
@@ -69,23 +93,26 @@
       if(this.wallScale!==previous){this.wallRate=(this.wallScale-previous)/dt;this.buildWalls();}
     }
     aimX(x,r){return Math.max(this.stage.left[0][0]+r+2,Math.min(this.stage.right[0][0]-r-2,x));}
-    add(level,x,y) {const r=CONFIG.pieces[level].radius;const b={id:++this.serial,level,r,x,y,vx:0,vy:0,angle:0,spin:0,born:this.time};this.bodies.push(b);return b;}
-    drop(x) {if(this.over||this.cooldown>0||this.bodies.length>=110)return false;const r=CONFIG.pieces[this.current].radius;this.add(this.current,this.aimX(x,r),r+5);this.current=this.next;this.next=this.pick();this.cooldown=.48;return true;}
+    add(level,x,y) {const r=level===-1?CONFIG.pieces[0].radius*2/3:CONFIG.pieces[level].radius;const b={rock:level===-1,id:++this.serial,level,r,x,y,vx:0,vy:0,angle:0,spin:0,born:this.time};this.bodies.push(b);return b;}
+    drop(x) {if(this.over||this.cooldown>0||this.bodies.length>=110)return false;const r=this.current===-1?CONFIG.pieces[0].radius*2/3:CONFIG.pieces[this.current].radius;this.add(this.current,this.aimX(x,r),r+5);this.current=this.next;this.next=this.pick();this.cooldown=.48;return true;}
     merge(a,b) {
       const level=a.level, x=(a.x+b.x)/2,y=(a.y+b.y)/2;
       this.bodies=this.bodies.filter(v=>v!==a&&v!==b);
       this.combo=this.time-this.lastMerge<1.2?Math.min(this.combo+1,8):1;this.lastMerge=this.time;
       const points=(level===6?2400:CONFIG.pieces[level+1].points)*this.combo;
       this.score+=points;
-      if(level<6) {const n=this.add(level+1,x,y);n.vx=(a.vx+b.vx)*.25;n.vy=Math.min(0,(a.vy+b.vy)*.2);n.angle=(a.angle+b.angle)/2;}
-      this.events.push({x,y,points,combo:this.combo,final:level>=5,time:this.time});
+      if(level<6) {const n=this.add(level+1,x,y);n.vx=(a.vx+b.vx)*.25;n.vy=Math.min(0,(a.vy+b.vy)*.2);n.angle=(a.angle+b.angle)/2;if(n.level===CONFIG.pieces.length-1)this.discharges.push({body:n,time:this.time,seed:n.id});this.discharges=this.discharges.slice(-6);}
+      this.fireCombo(this.combo);this.events.push({x,y,points,combo:this.combo,final:level>=5,time:this.time});
     }
+
+    fireCombo(combo){const count=combo*2,start=Math.max(this.time,...this.lasers.map(l=>l.start+.055)),offset=this.random();for(let i=0;i<count;i++)this.lasers.push({start:start+i*.055,y:30+((offset+i*.61803398875)%1)*510,direction:(this.shotsFired+i)%2?-1:1,previous:null});this.shotsFired+=count;this.comboCue={start,combo};}
+    updateLasers(){for(const l of this.lasers){const age=this.time-l.start;if(age<0)continue;const x=l.direction===1?-65+530*Math.min(1,age/.22):465-530*Math.min(1,age/.22),prev=l.previous===null?(l.direction===1?-65:465):l.previous;for(const b of this.bodies.slice()){if(!b.rock||b.destroyed)continue;const v=vertices(b),hits=[];for(let i=0;i<8;i++){const a=v[i],c=v[(i+1)%8];if((a.y<=l.y&&c.y>=l.y)||(c.y<=l.y&&a.y>=l.y)){if(a.y===c.y)hits.push(a.x,c.x);else hits.push(a.x+(c.x-a.x)*(l.y-a.y)/(c.y-a.y));}}if(hits.length&&Math.max(prev,x)>=Math.min(...hits)&&Math.min(prev,x)<=Math.max(...hits)){b.destroyed=true;this.bodies.splice(this.bodies.indexOf(b),1);this.rocksDestroyed++;this.shatters.push({x:b.x,y:b.y,time:this.time,seed:this.random()});}}l.previous=x;}this.lasers=this.lasers.filter(l=>this.time-l.start<.22);this.shatters=this.shatters.filter(e=>this.time-e.time<.7).slice(-24);}
     bounds(b) {
       // Project all eight corners against the actual sloping walls, never a bounding box.
       for(let pass=0;pass<5;pass++){
         let corrected=false;
         for(const w of this.walls){
-          const distance=Math.min(...vertices(b).map(v=>(v.x-w.x)*w.nx+(v.y-w.y)*w.ny));
+          const distance=b.rock?Math.min(...vertices(b).map(v=>(v.x-w.x)*w.nx+(v.y-w.y)*w.ny)):(b.x-w.x)*w.nx+(b.y-w.y)*w.ny-b.r;
           if(distance>=-.001)continue;
           corrected=true;b.x-=distance*w.nx;b.y-=distance*w.ny;
           const wallX=w.nx===0?CONFIG.width/2:w.x-(b.y-w.y)*w.ny/w.nx;
@@ -107,20 +134,21 @@
         let merged=false;
         outer:for(let i=0;i<this.bodies.length;i++)for(let j=i+1;j<this.bodies.length;j++) {
           const a=this.bodies[i],b=this.bodies[j],n=contact(a,b);if(!n)continue;
-          if(a.level===b.level){this.merge(a,b);merged=true;break outer;}
+          if(!a.rock&&!b.rock&&a.level===b.level){this.merge(a,b);merged=true;break outer;}
           const ia=1/(a.r*a.r),ib=1/(b.r*b.r),sum=ia+ib,correction=Math.max(0,n.depth-.015)*.92;
           a.x-=n.x*correction*ia/sum;a.y-=n.y*correction*ia/sum;b.x+=n.x*correction*ib/sum;b.y+=n.y*correction*ib/sum;
           const relative=(b.vx-a.vx)*n.x+(b.vy-a.vy)*n.y;
           if(relative<0){const impulse=-relative*1.08/sum;a.vx-=impulse*n.x*ia;a.vy-=impulse*n.y*ia;b.vx+=impulse*n.x*ib;b.vy+=impulse*n.y*ib;
-            const tangent=(b.vx-a.vx)*-n.y+(b.vy-a.vy)*n.x,friction=Math.max(-impulse*.25,Math.min(impulse*.25,-tangent/sum));
+            const tangent=(b.vx-a.vx)*-n.y+(b.vy-a.vy)*n.x,mu=a.rock||b.rock?.25:.025,friction=Math.max(-impulse*mu,Math.min(impulse*mu,-tangent/sum));
             a.vx-=friction*-n.y*ia;a.vy-=friction*n.x*ia;b.vx+=friction*-n.y*ib;b.vy+=friction*n.x*ib;
             a.spin=Math.max(-1.5,Math.min(1.5,a.spin+tangent*.0009));b.spin=Math.max(-1.5,Math.min(1.5,b.spin-tangent*.0009));}
         }
         for(const b of this.bodies)this.bounds(b);
         if(merged)continue;
       }
-      const danger=this.bodies.some(b=>this.time-b.born>1.5&&Math.min(...vertices(b).map(v=>v.y))<CONFIG.deadline);
+      this.updateLasers();const danger=this.bodies.some(b=>this.time-b.born>1.5&&Math.min(...vertices(b).map(v=>v.y))<CONFIG.deadline);
       this.overflow=danger?this.overflow+dt:0;if(this.overflow>=2.5)this.over=true;
+      this.discharges=this.discharges.filter(e=>this.time-e.time<.7&&this.bodies.includes(e.body));
       this.events=this.events.filter(e=>this.time-e.time<1);
     }
   }
