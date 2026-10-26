@@ -110,7 +110,7 @@ test('circle rock contact uses closest corner axis',()=>{
  assert(contact(a,b));b.x=300;assert.equal(contact(a,b),null);assert.equal(vertices(a).length,8);
 });
 test('special evolutions expire and reset without changing body positions',()=>{
- for(const level of [5,8]){const w=new World(()=>0);w.merge(w.add(level-1,180,300),w.add(level-1,220,300));
+ for(const level of [5,8]){const w=new World(()=>0);const a=w.add(level-1,180,300),b=w.add(level-1,220,300);w.clearEffects();w.merge(a,b);
  assert.equal(w.discharges.length,1);assert.equal(w.discharges[0].body.level,level);
  assert.equal(w.discharges[0].final,level===8);
  w.time=1.59;w.step(1/120);assert.equal(w.discharges.length,1);
