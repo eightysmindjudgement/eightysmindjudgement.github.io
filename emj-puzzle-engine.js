@@ -30,6 +30,7 @@
     ]
   };
   function vertices(b) {
+    if(b.drillShape)return b.drillShape;
     if(!b.rock)return Array.from({length:64},(_,i)=>({x:b.x+b.r*Math.cos(i*Math.PI/32),y:b.y+b.r*Math.sin(i*Math.PI/32)}));
     const r = b.r, k = r * .45, c = Math.cos(b.angle), s = Math.sin(b.angle);
     return (b.rock?[[-k,-r],[k,-r*.88],[r,-k],[r*.85,k],[k,r],[-k,r*.82],[-r,k],[-r*.9,-k]]:[[-k,-r],[k,-r],[r,-k],[r,k],[k,r],[-k,r],[-r,k],[-r,-k]]).map(([x,y]) => ({ x:b.x+x*c-y*s, y:b.y+x*s+y*c }));
@@ -67,7 +68,7 @@
     constructor(random=Math.random) {this.random=random;this.reset();}
     pick() {const n=this.random(); return n>=.9?-1:n/.9<.58?0:n/.9<.88?1:2;}
     reset(stage=this.stageIndex || 0) {
-      this.water={height:0,target:Math.min(...CONFIG.pieces.map(p=>p.radius))*3,raining:false,elapsed:0,drainRate:0,waves:[]};
+      this.water={height:0,target:Math.min(...CONFIG.pieces.map(p=>p.radius))*9,raining:false,elapsed:0,drainRate:0,waves:[]};
       this.stageIndex=Number.isInteger(stage)&&CONFIG.stages[stage]?stage:0;
       this.baseStage=CONFIG.stages[this.stageIndex];
       const integral=side=>side.slice(1).reduce((sum,p,i)=>sum+(p[0]+side[i][0])*.5*(p[1]-side[i][1]),0);
@@ -112,9 +113,26 @@
     enqueueEffect(body){this.effectQueue.push({body,seed:body.id,final:body.level===8,kind:body.level===6?'heart':body.level===7?'brain':'discharge',duration:[6,7].includes(body.level)?2:1.6});this.updateEffects();}
     clearEffects(){this.effectQueue=[];this.activeEffect=null;this.discharges=[];this.drill=null;}
     updateEffects(){if(this.activeEffect&&this.time-this.activeEffect.time>=this.activeEffect.duration-1e-9){this.activeEffect=null;this.discharges=[];}if(!this.activeEffect&&this.effectQueue.length){this.activeEffect=this.effectQueue.shift();this.activeEffect.time=this.time;this.discharges=this.activeEffect.kind==='discharge'?[this.activeEffect]:[];}}
-    // An independent moving field adds velocity/spin; existing contacts transfer the impulse.
-    // It never enters bodies, wall contacts, laser targets, or scoring.
-    updateDrill(dt){const d=this.drill;if(!d)return;d.y+=220*dt;d.angle+=3*dt;for(const b of this.bodies){const near=Math.max(d.y,Math.min(d.y+d.length,b.y)),dx=b.x-d.x,dist=Math.hypot(dx,b.y-near),reach=b.r+d.width/2;if(dist<reach){const side=dx===0?(b.id%2?1:-1):Math.sign(dx),force=1800*(1-dist/reach);b.vx=Math.max(-360,Math.min(360,b.vx+side*force*dt));b.vy-=force*.18*dt;b.spin+=side*dt*4;}}if(d.y>CONFIG.height+30)this.drill=null;}
+    // A kinematic metal polygon: tile contacts share the rigid-body solver,
+    // but the drill itself ignores container walls, scoring and laser targeting.
+    updateDrill(dt){const d=this.drill;if(!d)return;d.y+=220*dt;d.angle+=3*dt;if(d.y>=CONFIG.height)this.drill=null;}
+    resolveDrill(b){
+      const d=this.drill;if(!d)return;
+      const h=d.width/2,shoulder=d.y+d.length-d.width;
+      const shape={rock:true,x:d.x,y:d.y+d.length/2,r:d.length,
+        drillShape:[{x:d.x-h,y:d.y},{x:d.x+h,y:d.y},{x:d.x+h,y:shoulder},{x:d.x,y:d.y+d.length},{x:d.x-h,y:shoulder}]};
+      const n=contact(shape,b);if(!n)return;
+      // At the bottom a tile cannot descend any farther: let it escape sideways
+      // around the bit rather than trapping it between two infinite-mass bodies.
+      if(n.y>0&&b.y+b.r+n.y*n.depth>CONFIG.height){
+        n.x=b.x===d.x?(b.id%2?1:-1):Math.sign(b.x-d.x);n.y=0;
+        n.depth=Math.max(0,h+b.r-Math.abs(b.x-d.x));
+      }
+      b.x+=n.x*(n.depth+.01);b.y+=n.y*(n.depth+.01);
+      const relative=b.vx*n.x+(b.vy-220)*n.y;
+      if(relative<0){b.vx-=relative*n.x;b.vy-=relative*n.y;}
+      b.spin=Math.max(-1.5,Math.min(1.5,b.spin+n.x*.08));
+    }
     fireCombo(combo){if(combo===1){this.comboCue={start:this.time,combo};return;}const rocks=this.bodies.filter(b=>b.rock),count=combo*2,start=Math.max(this.time,...this.lasers.map(l=>l.start+.055)),offset=this.random();for(let i=0;i<count;i++)this.lasers.push({start:start+i*.055,y:30+((offset+i*.61803398875)%1)*510,direction:(this.shotsFired+i)%2?-1:1,previous:null,targetId:rocks[i%Math.max(1,rocks.length)]?.id});this.shotsFired+=count;this.comboCue={start,combo};}
     updateLasers(){for(const l of this.lasers){const age=this.time-l.start;if(age<0)continue;
       // Track a rock until the beam reaches it; swept polygon collision remains authoritative.
@@ -144,13 +162,13 @@
       const w=this.water;if(this.stageIndex>2){w.height=0;w.raining=false;w.waves=[];return;}
       const end=Math.max(w.elapsed,elapsed);let t=w.elapsed;
       while(t<end-1e-9){
-        const cycle=Math.floor((t+1e-9)/180),phase=t-cycle*180,rain=cycle>=1&&phase<4;
-        const boundary=rain?cycle*180+4:(cycle+1)*180,span=Math.min(end,boundary)-t;if(span<=0)break;
+        const cycle=Math.floor((t+1e-9)/120),phase=t-cycle*120,rain=cycle>=1&&phase<4;
+        const boundary=rain?cycle*120+4:(cycle+1)*120,span=Math.min(end,boundary)-t;if(span<=0)break;
         w.height=Math.max(0,Math.min(w.target,w.height+span*((rain?w.target/4:0)-w.drainRate)));t+=span;
-        if(rain&&t>=boundary-1e-9)w.drainRate=w.height/120;
+        if(rain&&t>=boundary-1e-9)w.drainRate=w.height/60;
         if(w.height===0&&!rain)w.drainRate=0;
       }
-      w.elapsed=end;w.raining=end>=180&&end%180<4;if(w.height<1e-8)w.height=0;
+      w.elapsed=end;w.raining=end>=120&&end%120<4;if(w.height<1e-8)w.height=0;
       w.waves=w.waves.filter(v=>end-v.time<3);
     }
     waterSurface(x){
@@ -164,9 +182,11 @@
       const depth=b.y+b.r-this.waterSurface(b.x);
       if(depth>0&&b.waterDepth!==undefined&&b.waterDepth<=0&&Math.abs(b.vy)>25){w.waves.push({x:b.x,time:w.elapsed,strength:Math.min(3,Math.abs(b.vy)/150)});if(w.waves.length>24)w.waves.shift();}
       b.waterDepth=depth;const fraction=Math.max(0,Math.min(1,depth/(2*b.r)));if(!fraction)return;
-      // Rocks retain gravity; tiles balance at partial immersion. Contacts are unchanged.
+      // Acceleration (force / mass) is size independent: every tile balances at
+      // 1 / 2.4 immersion, including the largest tier. Drag damps surface oscillation.
+      // Rocks retain gravity and sink.
       if(!b.rock)b.vy-=800*2.4*fraction*dt;
-      b.vy*=Math.exp(-(b.rock?.9:2.4)*fraction*dt);b.vx*=Math.exp(-1.5*fraction*dt);b.spin*=Math.exp(-fraction*dt);
+      b.vy*=Math.exp(-(b.rock?.9:7)*fraction*dt);b.vx*=Math.exp(-1.5*fraction*dt);b.spin*=Math.exp(-fraction*dt);
     }
     step(dt,elapsed) {
       if(this.over)return;
@@ -175,7 +195,8 @@
       this.updateDrill(dt);
       this.updateWater(dt,elapsed===undefined?this.time:elapsed);
       for(const b of this.bodies){b.vy=Math.min(b.vy+800*dt,650);this.applyWater(b,dt);b.x+=b.vx*dt;b.y+=b.vy*dt;b.angle+=b.spin*dt;b.spin*=.99;b.vx*=.999;this.bounds(b);}
-      for(let pass=0;pass<7;pass++) {
+      for(let pass=0;pass<(this.drill?18:7);pass++) {
+        for(const b of this.bodies)this.resolveDrill(b);
         let merged=false;
         outer:for(let i=0;i<this.bodies.length;i++)for(let j=i+1;j<this.bodies.length;j++) {
           const a=this.bodies[i],b=this.bodies[j],n=contact(a,b);if(!n)continue;
