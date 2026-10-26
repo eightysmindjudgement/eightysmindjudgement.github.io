@@ -10,7 +10,7 @@
     })];
   }
   const CONFIG = {
-    name: 'EMJ PUZZLE', width: 400, height: 570, deadline: 76,
+    name: 'EMJ PUZZLE', width: 400, height: 570, deadline: 76, laserDuration: .33, shatterDuration: 1.1,
     // Walls widen toward the top. Unequal segment lengths make each side distinct.
     stages: [
       { name: 'レベル1', description: '四角い器の基本ステージ', descriptionEn: 'A rectangular container: the basic stage.', left: [[0,0],[0,570]], right: [[400,0],[400,570]] },
@@ -20,10 +20,12 @@
     pieces: [
       { name: 'Corporate Warrior', reading: 'コーポレート ウォリア', image: 'BIO背景.PNG', radius: 19, color: '#b9c9d5', points: 0 },
       { name: 'Cyborg Grandpa', reading: 'サイボーグ グランパ', image: 'DISCO背景.PNG', radius: 26, color: '#8bcddd', points: 10 },
-      { name: 'EMJ LADY', reading: 'イーエムジェイ レディ', image: 'LINK背景.PNG', radius: 34, color: '#bda5f5', points: 30 },
-      { name: 'HARDROCK OJISAN', reading: 'ハードロックおじさん', image: 'HARDROCKOJISAN.PNG', radius: 43, color: '#e1ad74', points: 80 },
-      { name: 'HEART', reading: 'ハート', image: 'MAP背景.PNG', radius: 53, color: '#f37f94', points: 180 },
-      { name: 'BRAIN', reading: 'ブレイン', image: 'BRAIN.PNG', radius: 64, color: '#75ebcc', points: 400 },
+      { name: 'Cyborg Grandma', reading: 'サイボーグ グランマ', image: 'Cyborg Grandma.png', radius: 32, color: '#a8d8ec', points: 20 },
+      { name: 'EMJ LADY', reading: 'イーエムジェイ レディ', image: 'LINK背景.PNG', radius: 39, color: '#bda5f5', points: 30 },
+      { name: 'HARDROCK OJISAN', reading: 'ハードロックおじさん', image: 'HARDROCKOJISAN.PNG', radius: 46, color: '#e1ad74', points: 80 },
+      { name: 'Metal Messiah', reading: 'メタルメサイア', image: 'MetalMessiah.png', radius: 53, color: '#9fdfff', points: 120 },
+      { name: 'HEART', reading: 'ハート', image: 'MAP背景.PNG', radius: 61, color: '#f37f94', points: 180 },
+      { name: 'BRAIN', reading: 'ブレイン', image: 'BRAIN.PNG', radius: 69, color: '#75ebcc', points: 400 },
       { name: 'METAL SHOGUN', reading: 'メタルショウグン', image: 'profile-artwork.JPG', radius: 77, color: '#ffe49b', points: 900 }
     ]
   };
@@ -99,14 +101,18 @@
       const level=a.level, x=(a.x+b.x)/2,y=(a.y+b.y)/2;
       this.bodies=this.bodies.filter(v=>v!==a&&v!==b);
       this.combo=this.time-this.lastMerge<1.2?Math.min(this.combo+1,8):1;this.lastMerge=this.time;
-      const points=(level===6?2400:CONFIG.pieces[level+1].points)*this.combo;
+      const points=(level===CONFIG.pieces.length-1?2400:CONFIG.pieces[level+1].points)*this.combo;
       this.score+=points;
-      if(level<6) {const n=this.add(level+1,x,y);n.vx=(a.vx+b.vx)*.25;n.vy=Math.min(0,(a.vy+b.vy)*.2);n.angle=(a.angle+b.angle)/2;if(n.level===CONFIG.pieces.length-1)this.discharges.push({body:n,time:this.time,seed:n.id});this.discharges=this.discharges.slice(-6);}
-      this.fireCombo(this.combo);this.events.push({x,y,points,combo:this.combo,final:level>=5,time:this.time});
+      if(level<CONFIG.pieces.length-1) {const n=this.add(level+1,x,y);n.vx=(a.vx+b.vx)*.25;n.vy=Math.min(0,(a.vy+b.vy)*.2);n.angle=(a.angle+b.angle)/2;if(n.level===5||n.level===CONFIG.pieces.length-1)this.discharges.push({body:n,time:this.time,seed:n.id,final:n.level===CONFIG.pieces.length-1});this.discharges=this.discharges.slice(-6);}
+      this.fireCombo(this.combo);this.events.push({x,y,points,combo:this.combo,final:level>=CONFIG.pieces.length-2,time:this.time});
     }
 
-    fireCombo(combo){const count=combo*2,start=Math.max(this.time,...this.lasers.map(l=>l.start+.055)),offset=this.random();for(let i=0;i<count;i++)this.lasers.push({start:start+i*.055,y:30+((offset+i*.61803398875)%1)*510,direction:(this.shotsFired+i)%2?-1:1,previous:null});this.shotsFired+=count;this.comboCue={start,combo};}
-    updateLasers(){for(const l of this.lasers){const age=this.time-l.start;if(age<0)continue;const x=l.direction===1?-65+530*Math.min(1,age/.22):465-530*Math.min(1,age/.22),prev=l.previous===null?(l.direction===1?-65:465):l.previous;for(const b of this.bodies.slice()){if(!b.rock||b.destroyed)continue;const v=vertices(b),hits=[];for(let i=0;i<8;i++){const a=v[i],c=v[(i+1)%8];if((a.y<=l.y&&c.y>=l.y)||(c.y<=l.y&&a.y>=l.y)){if(a.y===c.y)hits.push(a.x,c.x);else hits.push(a.x+(c.x-a.x)*(l.y-a.y)/(c.y-a.y));}}if(hits.length&&Math.max(prev,x)>=Math.min(...hits)&&Math.min(prev,x)<=Math.max(...hits)){b.destroyed=true;this.bodies.splice(this.bodies.indexOf(b),1);this.rocksDestroyed++;this.shatters.push({x:b.x,y:b.y,time:this.time,seed:this.random()});}}l.previous=x;}this.lasers=this.lasers.filter(l=>this.time-l.start<.22);this.shatters=this.shatters.filter(e=>this.time-e.time<.7).slice(-24);}
+    fireCombo(combo){if(combo===1){this.comboCue={start:this.time,combo};return;}const rocks=this.bodies.filter(b=>b.rock),count=combo*2,start=Math.max(this.time,...this.lasers.map(l=>l.start+.055)),offset=this.random();for(let i=0;i<count;i++)this.lasers.push({start:start+i*.055,y:30+((offset+i*.61803398875)%1)*510,direction:(this.shotsFired+i)%2?-1:1,previous:null,targetId:rocks[i%Math.max(1,rocks.length)]?.id});this.shotsFired+=count;this.comboCue={start,combo};}
+    updateLasers(){for(const l of this.lasers){const age=this.time-l.start;if(age<0)continue;
+      // Track a rock until the beam reaches it; swept polygon collision remains authoritative.
+      const target=this.bodies.find(b=>b.rock&&b.id===l.targetId);
+      if(target)l.y=target.y;
+      const x=l.direction===1?-65+530*Math.min(1,age/CONFIG.laserDuration):465-530*Math.min(1,age/CONFIG.laserDuration),prev=l.previous===null?(l.direction===1?-65:465):l.previous;for(const b of this.bodies.slice()){if(!b.rock||b.destroyed)continue;const v=vertices(b),hits=[];for(let i=0;i<8;i++){const a=v[i],c=v[(i+1)%8];if((a.y<=l.y&&c.y>=l.y)||(c.y<=l.y&&a.y>=l.y)){if(a.y===c.y)hits.push(a.x,c.x);else hits.push(a.x+(c.x-a.x)*(l.y-a.y)/(c.y-a.y));}}if(hits.length&&Math.max(prev,x)>=Math.min(...hits)&&Math.min(prev,x)<=Math.max(...hits)){b.destroyed=true;this.bodies.splice(this.bodies.indexOf(b),1);this.rocksDestroyed++;this.shatters.push({x:b.x,y:b.y,time:this.time,seed:this.random()});}}l.previous=x;}this.lasers=this.lasers.filter(l=>this.time-l.start<CONFIG.laserDuration);this.shatters=this.shatters.filter(e=>this.time-e.time<CONFIG.shatterDuration).slice(-24);}
     bounds(b) {
       // Project all eight corners against the actual sloping walls, never a bounding box.
       for(let pass=0;pass<5;pass++){
@@ -148,7 +154,7 @@
       }
       this.updateLasers();const danger=this.bodies.some(b=>this.time-b.born>1.5&&Math.min(...vertices(b).map(v=>v.y))<CONFIG.deadline);
       this.overflow=danger?this.overflow+dt:0;if(this.overflow>=2.5)this.over=true;
-      this.discharges=this.discharges.filter(e=>this.time-e.time<.7&&this.bodies.includes(e.body));
+      this.discharges=this.discharges.filter(e=>this.time-e.time<1.6);
       this.events=this.events.filter(e=>this.time-e.time<1);
     }
   }
