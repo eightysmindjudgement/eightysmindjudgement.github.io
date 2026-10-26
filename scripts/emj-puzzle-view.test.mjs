@@ -3,14 +3,14 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 const engine=fs.readFileSync(new URL('../emj-puzzle-engine.js',import.meta.url),'utf8');
 const view=fs.readFileSync(new URL('../emj-puzzle.js',import.meta.url),'utf8');
-for(const reduced of [false,true]){
+for(const viewportWidth of [320,400])for(const reduced of [false,true]){
  const nodes=new Map(),buttons=[],frames=[],audioStarts=[],imageDraws=[];
  const gradient={addColorStop(){}};
- const context=new Proxy({createLinearGradient:()=>gradient,drawImage(){imageDraws.push(this.globalAlpha);}},{get:(o,k)=>o[k]||(()=>{})});
+ const context=new Proxy({createLinearGradient:()=>gradient,createRadialGradient:()=>gradient,drawImage(){imageDraws.push(this.globalAlpha);}},{get:(o,k)=>o[k]||(()=>{})});
  class Element{
   constructor(){this.style={setProperty(){}};this.dataset={};this.listeners={};this.classList={remove(){},add(){}};}
   querySelector(k){this.children ||= new Map();if(!this.children.has(k))this.children.set(k,new Element());return this.children.get(k);} addEventListener(k,f){this.listeners[k]=f;} setAttribute(){} append(){} after(){} remove(){} replaceChildren(){} focus(){} setPointerCapture(){}
-  get parentElement(){return get("board");} getContext(){return context;} getBoundingClientRect(){return {left:0,width:400};}
+  get parentElement(){return get("board");} getContext(){return context;} getBoundingClientRect(){return {left:0,width:viewportWidth};}
  }
  const get=id=>{if(!nodes.has(id))nodes.set(id,new Element());return nodes.get(id);};
  for(let i=0;i<3;i++){const el=new Element();el.dataset.stage=String(i);buttons.push(el);}
@@ -33,5 +33,5 @@ for(const reduced of [false,true]){
 
  get('puzzle-pause').listeners.click();get('puzzle-start').listeners.click();
  for(const b of [buttons[1],buttons[2],buttons[0]]){b.listeners.click();assert.equal(world.stageIndex,Number(b.dataset.stage));assert.equal(world.discharges.length,0);}
- console.log('PASS view smoke: start, merge, effects, pause/resume, stage reset; reduced='+reduced);
+ console.log('PASS view smoke: start, merge, effects, pause/resume, stage reset; reduced='+reduced+' width='+viewportWidth);
 }
