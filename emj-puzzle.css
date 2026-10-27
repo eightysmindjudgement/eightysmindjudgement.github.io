@@ -24,4 +24,6 @@
 .puzzle-board .puzzle-fireworks{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}.puzzle-clear{z-index:2}
 
 .puzzle-evolution li:nth-child(9){color:#ffe49b}
-.puzzle-bomb-preview{display:inline-block;flex-shrink:0;width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 35% 30%,white,#ffb8b8 30%,#f33 65%,#720012);border:1px solid white}
+.puzzle-bomb-preview{position:relative;display:inline-block;flex-shrink:0;width:30px;height:30px;margin-top:9px;border-radius:50%;background:radial-gradient(circle at 32% 27%,#afb4ba,#626a73 16%,#30363e 40%,#161a20 76%,#07090d);border:1px solid #535a63;box-shadow:inset -2px -3px 4px #0008}
+.puzzle-bomb-preview::before{content:'';position:absolute;left:13px;top:-9px;width:7px;height:10px;border:2px solid #b49a6c;border-left:0;border-bottom:0;border-radius:0 80% 0 0;transform:rotate(-15deg)}
+.puzzle-bomb-preview::after{content:'';position:absolute;left:17px;top:-14px;width:6px;height:9px;border-radius:70% 30% 60% 40%;background:radial-gradient(ellipse at 45% 75%,#fffbd1,#ffe34d 35%,#ff9a16 65%,#ff4900);box-shadow:0 0 5px #ffac36;transform:rotate(12deg)}

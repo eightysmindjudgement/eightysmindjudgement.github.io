@@ -10,7 +10,7 @@
     })];
   }
   const CONFIG = {
-    name: 'EMJ PUZZLE', width: 400, height: 570, deadline: 76, laserDuration: .33, bombDuration: 20, rainDuration: 90, rainInterval: 60, drainDuration: 60, shatterDuration: 1.1,
+    name: 'EMJ PUZZLE', width: 400, height: 570, deadline: 76, laserDuration: .33, bombDuration: 20, rainDuration: 4, rainInterval: 180, drainDuration: 120, shatterDuration: 1.1,
     // Walls widen toward the top. Unequal segment lengths make each side distinct.
     stages: [
       { name: 'レベル1', description: '四角い器の基本ステージ', descriptionEn: 'A rectangular container: the basic stage.', left: [[0,0],[0,570]], right: [[400,0],[400,570]] },
@@ -169,19 +169,14 @@
     updateWater(dt,elapsed){
       const w=this.water;if(this.stageIndex>2){w.height=0;w.raining=false;w.waves=[];return;}
       const end=Math.max(w.elapsed,elapsed);let t=w.elapsed;
-      // Overlapping sessions renew rain, without multiplying its rate.
-      const first=CONFIG.rainInterval;
       while(t<end-1e-9){
-        const cycle=Math.floor((t+1e-9)/CONFIG.rainInterval),rain=cycle>=1;
-        const nextEnd=t<first+CONFIG.rainDuration?first+CONFIG.rainDuration:first+CONFIG.rainDuration+(Math.floor((t-first-CONFIG.rainDuration+1e-9)/CONFIG.rainInterval)+1)*CONFIG.rainInterval;
-        const boundary=Math.min((cycle+1)*CONFIG.rainInterval,nextEnd,w.drainEnd>t+1e-9?w.drainEnd:Infinity);
-        const span=Math.min(end,boundary)-t;if(span<=0)break;
-        w.height=Math.max(0,Math.min(CONFIG.height*2/3,w.height+span*((rain?w.target/4:0)-w.drainRate)));t+=span;
-        if(w.drainEnd&&t>=w.drainEnd-1e-9){w.drainRate=0;w.drainEnd=0;}
-        const ended=Math.floor((t-first-CONFIG.rainDuration+1e-9)/CONFIG.rainInterval);
-        if(t>=first+CONFIG.rainDuration&&ended!==w.lastDrain){w.drainRate=w.height/CONFIG.drainDuration;w.drainEnd=t+CONFIG.drainDuration;w.lastDrain=ended;}
+        const cycle=Math.floor((t+1e-9)/CONFIG.rainInterval),phase=t-cycle*CONFIG.rainInterval,rain=cycle>=1&&phase<CONFIG.rainDuration;
+        const boundary=rain?cycle*CONFIG.rainInterval+CONFIG.rainDuration:(cycle+1)*CONFIG.rainInterval,span=Math.min(end,boundary)-t;if(span<=0)break;
+        w.height=Math.max(0,Math.min(w.target,CONFIG.height*2/3,w.height+span*((rain?w.target/CONFIG.rainDuration:0)-w.drainRate)));t+=span;
+        if(rain&&t>=boundary-1e-9)w.drainRate=w.height/CONFIG.drainDuration;
+        if(w.height===0&&!rain)w.drainRate=0;
       }
-      w.elapsed=end;w.raining=end>=first;if(w.height<1e-8)w.height=0;
+      w.elapsed=end;w.raining=end>=CONFIG.rainInterval&&end%CONFIG.rainInterval<CONFIG.rainDuration;if(w.height<1e-8)w.height=0;
       w.waves=w.waves.filter(v=>end-v.time<3);
     }
     updateBombs(){
@@ -191,17 +186,18 @@
         if(age>=CONFIG.bombDuration){
           this.bodies.splice(this.bodies.indexOf(b),1);this.explosions++;
           const wet=this.water.height>0&&b.y>=this.waterSurface(b.x);
-          this.blasts.push({x:b.x,y:b.y,r:b.r,time:this.time,hits:new Set(),wet});
+          this.blasts.push({x:b.x,y:b.y,r:b.r,angle:this.random()*Math.PI/2,time:this.time,hits:new Set(),wet});
           if(wet){this.water.waves.push({x:b.x,time:this.water.elapsed,strength:36,blast:true});
             for(const v of this.bodies)if(v.y+v.r>this.waterSurface(v.x)-v.r){const f=Math.exp(-Math.abs(v.x-b.x)/180);v.vy-=180*f;v.vx+=Math.sign(v.x-b.x)*90*f;v.spin+=Math.sign(v.x-b.x)*3*f;}}
         }
       }
-      for(const e of this.blasts){const reach=(this.time-e.time)*530/CONFIG.laserDuration/2;
+      for(const e of this.blasts){const reach=(this.time-e.time)*530/CONFIG.laserDuration/2,c=Math.cos(e.angle||0),s=Math.sin(e.angle||0);
         for(const b of this.bodies){if(e.hits.has(b.id))continue;const dx=b.x-e.x,dy=b.y-e.y;
-          const horizontal=Math.abs(dy)<e.r+b.r&&Math.abs(dx)<reach+b.r,vertical=Math.abs(dx)<e.r+b.r&&Math.abs(dy)<reach+b.r;
+          const localX=dx*c+dy*s,localY=-dx*s+dy*c;
+          const horizontal=Math.abs(localY)<e.r+b.r&&Math.abs(localX)<reach+b.r,vertical=Math.abs(localX)<e.r+b.r&&Math.abs(localY)<reach+b.r;
           if(!horizontal&&!vertical)continue;e.hits.add(b.id);
-          b.vx+=horizontal?(Math.sign(dx)||1)*320:Math.sign(dx)*75;
-          b.vy+=vertical?(Math.sign(dy)||-1)*350:-130;b.spin+=(Math.sign(dx)||1)*8;
+          const pushX=horizontal?(Math.sign(localX)||1)*320:Math.sign(localX)*75,pushY=vertical?(Math.sign(localY)||-1)*350:-130;
+          b.vx+=pushX*c-pushY*s;b.vy+=pushX*s+pushY*c;b.spin+=(Math.sign(localX)||1)*8;
         }
       }
       this.blasts=this.blasts.filter(e=>this.time-e.time<Math.hypot(CONFIG.width,CONFIG.height)/(530/CONFIG.laserDuration/2)+.35);
