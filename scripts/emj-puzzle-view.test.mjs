@@ -4,6 +4,7 @@ import vm from 'node:vm';
 const engine=fs.readFileSync(new URL('../emj-puzzle-engine.js',import.meta.url),'utf8');
 const view=fs.readFileSync(new URL('../emj-puzzle.js',import.meta.url),'utf8');
 for(const viewportWidth of [320,400])for(const reduced of [false,true]){
+ const saved=new Map(),writes=[];
  const nodes=new Map(),buttons=[],frames=[],audioStarts=[],imageDraws=[];
  const gradient={addColorStop(){}};
  const context=new Proxy({createLinearGradient:()=>gradient,createRadialGradient:()=>gradient,drawImage(){imageDraws.push(this.globalAlpha);}},{get:(o,k)=>o[k]||(()=>{})});
@@ -14,9 +15,9 @@ for(const viewportWidth of [320,400])for(const reduced of [false,true]){
  }
  const get=id=>{if(!nodes.has(id))nodes.set(id,new Element());return nodes.get(id);};
  for(let i=0;i<3;i++){const el=new Element();el.dataset.stage=String(i);buttons.push(el);}
- const document={getElementById:get,querySelectorAll:s=>s==='[data-stage]'?buttons:[],createElement:()=>new Element(),createTextNode:x=>x,addEventListener(){}};
+ const document={querySelector:get,getElementById:get,querySelectorAll:s=>s==='[data-stage]'?buttons:[],createElement:()=>new Element(),createTextNode:x=>x,addEventListener(){}};
  let world;
- const env={document,matchMedia:()=>({matches:reduced,addEventListener(){}}),Image:class extends Element{complete=true;naturalWidth=400;naturalHeight=570;},AudioContext:class{state='running';currentTime=10;destination={};resume(){return Promise.resolve();}createOscillator(){return {frequency:{setValueAtTime(){},exponentialRampToValueAtTime(){}},connect(){},disconnect(){},start(t){audioStarts.push(t);},stop(){}};}createGain(){return {gain:{setValueAtTime(){},exponentialRampToValueAtTime(){}},connect(){},disconnect(){}};}},localStorage:{getItem:()=>0,setItem(){}},performance:{now:()=>1000},requestAnimationFrame:f=>frames.push(f)};
+ const env={document,matchMedia:()=>({matches:reduced,addEventListener(){}}),Image:class extends Element{complete=true;naturalWidth=400;naturalHeight=570;},AudioContext:class{state='running';currentTime=10;destination={};resume(){return Promise.resolve();}createOscillator(){return {frequency:{setValueAtTime(){},exponentialRampToValueAtTime(){}},connect(){},disconnect(){},start(t){audioStarts.push(t);},stop(){}};}createGain(){return {gain:{setValueAtTime(){},exponentialRampToValueAtTime(){}},connect(){},disconnect(){}};}},localStorage:{getItem:k=>saved.get(k)||0,setItem(k,v){saved.set(k,v);writes.push(k);}},performance:{now:()=>1000},requestAnimationFrame:f=>frames.push(f)};
  env.window=env;vm.createContext(env);vm.runInContext(engine,env);
  const Original=env.EMJPuzzle.World;env.EMJPuzzle.World=class extends Original{constructor(){super();world=this;}};
  vm.runInContext(view,env);get('puzzle-start').listeners.click();
@@ -33,5 +34,17 @@ for(const viewportWidth of [320,400])for(const reduced of [false,true]){
 
  get('puzzle-pause').listeners.click();get('puzzle-start').listeners.click();
  for(const b of [buttons[1],buttons[2],buttons[0]]){b.listeners.click();assert.equal(world.stageIndex,Number(b.dataset.stage));assert.equal(world.discharges.length,0);}
+ get('puzzle-start').listeners.click();
+ world.merge(world.add(8,150,400),world.add(8,250,400));assert(world.clear);
+ const frozen=JSON.stringify(world.bodies),finalScore=world.score;
+ frames.shift()(2000);assert.equal(get('puzzle-clears').textContent,0);
+ get('puzzle-canvas').listeners.keydown({key:'Enter',preventDefault(){}});assert.equal(JSON.stringify(world.bodies),frozen);
+ frames.shift()(6999);assert.equal(get('puzzle-clears').textContent,0);assert(!world.over);
+ frames.shift()(7000);assert.equal(get('puzzle-clears').textContent,1);assert(world.over);
+ assert.equal(world.score,finalScore);assert.equal(JSON.stringify(world.bodies),frozen);
+ frames.shift()(8000);assert.equal(writes.filter(k=>k==='emj-puzzle-clears').length,1);
+ assert.equal(saved.get('emj-puzzle-clears'),'1');
+ get('puzzle-start').listeners.click();assert.equal(world.clear,null);assert(!world.over);assert.equal(get('puzzle-clears').textContent,1);
+ console.log('PASS clear timing, frozen physics, one-time count, storage and restart');
  console.log('PASS view smoke: start, merge, effects, pause/resume, stage reset; reduced='+reduced+' width='+viewportWidth);
 }

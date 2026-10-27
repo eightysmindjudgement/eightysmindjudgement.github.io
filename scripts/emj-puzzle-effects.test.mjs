@@ -26,3 +26,24 @@ test('drill contacts displace tiles in all stages and exits through floor',()=>{
 test('game over and stage reset discard all special event state',()=>{
  const w=new World(()=>.5);w.add(6,200,300);w.add(7,200,400);w.drill={x:200,y:0,width:52,length:260,angle:0};w.reset(2);assert.equal(w.activeEffect,null);assert.equal(w.effectQueue.length,0);assert.equal(w.drill,null);const b=w.add(0,200,20);w.add(6,300,300);for(let i=0;i<600&&!w.over;i++){b.y=20;b.vy=0;w.step(1/120);}assert(w.over);assert.equal(w.activeEffect,null);assert.equal(w.effectQueue.length,0);
 });
+
+
+test('unsupported aligned circles fall and break unstable point balance',()=>{
+ const w=new World(()=>.5),lower=w.add(3,200,300),upper=w.add(1,200,235);
+ for(let i=0;i<30;i++)w.step(1/120);
+ assert(lower.y>310);assert(upper.y>245);assert(Math.abs(upper.x-lower.x)>.05);
+ for(let i=0;i<600;i++)w.step(1/120);
+ assert(Math.abs(upper.x-lower.x)>20);assert(Number.isFinite(upper.angle+lower.angle));
+});
+test('drill releases a mixed stack and contacts transfer motion',()=>{
+ const w=new World(()=>.5),a=w.add(3,200,480),b=w.add(2,201,408),c=w.add(1,200,350);
+ w.drill={x:200,y:70,width:52,length:260,angle:0};
+ const initial=[a,b,c].map(v=>({x:v.x,y:v.y}));
+ for(let i=0;i<480;i++)w.step(1/120);
+ for(const [i,v] of [a,b,c].entries()){
+  assert(Math.hypot(v.x-initial[i].x,v.y-initial[i].y)>10);
+  assert(Number.isFinite(v.x+v.y+v.angle));
+  for(const wall of w.walls)assert((v.x-wall.x)*wall.nx+(v.y-wall.y)*wall.ny-v.r>-.05);
+ }
+ assert([a,b,c].some(v=>Math.abs(v.angle)>.01));assert.equal(w.score,0);
+});

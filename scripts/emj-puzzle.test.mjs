@@ -4,8 +4,8 @@ import * as engine from '../emj-puzzle-engine.js';
 const {World, vertices, contact, CONFIG} = engine.default || globalThis.EMJPuzzle;
 let passed = 0;
 function test(name, run) { run(); console.log(`PASS ${name}`); passed++; }
-test('nine evolution stages preserve final size and image paths',()=>{
- assert.equal(CONFIG.pieces.length,9);assert.equal(CONFIG.pieces.at(-1).radius,77);
+test('ten evolution stages preserve normal tiers and secret size',()=>{
+ assert.equal(CONFIG.pieces.length,10);assert.equal(CONFIG.pieces.at(-1).radius,77*1.5);
  assert.equal(CONFIG.pieces[2].name,'Cyborg Grandma');assert.equal(CONFIG.pieces[2].image,'Cyborg Grandma.png');
  assert.equal(CONFIG.pieces[5].name,'Metal Messiah');assert.equal(CONFIG.pieces[5].image,'MetalMessiah.png');
  assert.equal(CONFIG.laserDuration,.22*1.5);
@@ -26,9 +26,9 @@ test('chain produces upper tier and bonus', () => {
   const w = new World(() => 0); w.add(0,190,400); w.add(0,210,400); w.add(1,230,400); w.step(1/120);
   assert.equal(w.bodies.length,1); assert.equal(w.bodies[0].level,2); assert.equal(w.score,50);
 });
-test('final tier removes both pieces without tier eight', () => {
+test('two shoguns generate the secret and freeze play', () => {
   const w = new World(() => 0); w.add(8,150,400); w.add(8,250,400); w.step(1/120);
-  assert.equal(w.bodies.length,0); assert.equal(w.score,2400);
+  assert.equal(w.bodies.length,1); assert.equal(w.bodies[0].level,9);assert(w.clear);assert.equal(w.score,2400);
 });
 test('rapid input is throttled', () => {
   const w = new World(() => 0); assert(w.drop(200));
@@ -48,7 +48,7 @@ test('seeded play remains finite and contained', () => {
     if(i%65===0) w.drop(rnd()*400); w.step(1/120);
     for(const b of w.bodies){
       assert(Number.isFinite(b.x+b.y+b.vx+b.vy+b.angle));
-      assert(b.rock ? b.level===-1 : b.level>=0&&b.level<CONFIG.pieces.length); assert(b.x>=0&&b.x<=400); assert(b.y<=570);
+      assert(b.bomb ? b.level===-2 : b.rock ? b.level===-1 : b.level>=0&&b.level<CONFIG.pieces.length); assert(b.x>=0&&b.x<=400); assert(b.y<=570);
     }
   }
 });
