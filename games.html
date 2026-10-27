@@ -10,6 +10,13 @@
 
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="tools-carousel.css">
+    <style>
+        .games-page .tool-list .games-puzzle-card{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;align-items:center}
+        .games-page .games-puzzle-copy{display:flex;flex-direction:column;min-width:0}
+        .games-page .games-puzzle-image{display:block;width:100%;height:auto;max-height:300px;object-fit:contain;margin:0 auto}
+        .games-page .games-puzzle-description{margin-top:28px}
+        .games-page .games-notice{font-size:.78rem;line-height:1.7;color:#b9c5ce}
+    </style>
 </head>
 
 <body class="tools-page games-page">
@@ -41,7 +48,22 @@
             <p class="tools-intro">Games from Eighty's Mind Judgement. Take a break and enjoy a new challenge.</p>
             <p class="tools-intro-japanese" lang="ja">Eighty's Mind Judgementのゲーム。ひと息ついて、新しいチャレンジを楽しもう。</p>
             <div class="tool-list" data-item-label="GAME">
-                <a class="tool-card" href="emj-puzzle.html"><span class="tool-card-title">EMJ PUZZLE<span lang="ja">落下・合体パズル</span></span><span class="tool-card-description">Drop. Merge. Become METAL SHOGUN.</span><span class="tool-card-japanese" lang="ja">同じタイルをくっつけて、7段階の進化に挑戦。無料で遊べます。</span></a>
+                <a class="tool-card games-puzzle-card" href="emj-puzzle.html">
+                    <span class="games-puzzle-copy">
+                    <span class="tool-card-title">EMJ PUZZLE<span lang="ja">落下・合体パズル</span></span>
+                    <span class="tool-card-description">Drop. Merge. Become METAL SHOGUN.</span>
+                    <span class="tool-card-japanese" lang="ja">同じタイルをくっつけて、メタル将軍への進化に挑戦。無料で遊べます。</span>
+                    </span>
+                    <span><img class="games-puzzle-image" src="PUZZLE画面.jpg" alt="EMJ PUZZLEのゲーム画面" width="400" loading="lazy"></span>
+                </a>
+                <div class="tool-card tool-card-coming-soon" aria-disabled="true">
+                    <span class="tool-card-title">MORE GAMES</span>
+                    <span class="tool-card-description">More games are in development.</span>
+                    <span class="tool-card-japanese" lang="ja">今後、ゲームを追加予定です。</span>
+                </div>
+            </div>
+            <div class="games-puzzle-description">
+                <div><p class="games-notice" lang="ja">本ゲームは予告なく改修・変更・公開停止する場合があります。改修に伴う不具合やゲームデータ消失の可能性について、あらかじめご了承ください。</p><p class="games-notice" lang="en">This game may be updated, modified, or discontinued without prior notice. Updates may cause bugs or loss of game data.</p></div>
             </div>
         </section>
     </main>

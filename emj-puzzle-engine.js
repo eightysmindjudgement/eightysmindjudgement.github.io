@@ -10,7 +10,7 @@
     })];
   }
   const CONFIG = {
-    name: 'EMJ PUZZLE', width: 400, height: 570, deadline: 76, laserDuration: .33, shatterDuration: 1.1,
+    name: 'EMJ PUZZLE', width: 400, height: 570, deadline: 76, laserDuration: .33, bombDuration: 20, rainDuration: 90, rainInterval: 60, drainDuration: 60, shatterDuration: 1.1,
     // Walls widen toward the top. Unequal segment lengths make each side distinct.
     stages: [
       { name: 'レベル1', description: '四角い器の基本ステージ', descriptionEn: 'A rectangular container: the basic stage.', left: [[0,0],[0,570]], right: [[400,0],[400,570]] },
@@ -26,7 +26,8 @@
       { name: 'Metal Messiah', reading: 'メタルメサイア', image: 'MetalMessiah.png', radius: 53, color: '#9fdfff', points: 120 },
       { name: 'HEART', reading: 'ハート', image: 'MAP背景.PNG', radius: 61, color: '#f37f94', points: 180 },
       { name: 'BRAIN', reading: 'ブレイン', image: 'BRAIN.PNG', radius: 69, color: '#75ebcc', points: 400 },
-      { name: 'METAL SHOGUN', reading: 'メタルショウグン', image: 'profile-artwork.JPG', radius: 77, color: '#ffe49b', points: 900 }
+      { name: 'METAL SHOGUN', reading: 'メタルショウグン', image: 'profile-artwork.JPG', radius: 77, color: '#ffe49b', points: 900 },
+      { name: 'メタル大将軍', reading: 'メタルだいしょうぐん', image: 'MARKET背景.JPEG', radius: 77*1.5, color: '#ffe49b', points: 2400 }
     ]
   };
   function vertices(b) {
@@ -66,16 +67,17 @@
   }
   class World {
     constructor(random=Math.random) {this.random=random;this.reset();}
-    pick() {const n=this.random(); return n>=.9?-1:n/.9<.58?0:n/.9<.88?1:2;}
+    pick() {const n=this.random(); return n>=.9?-1:n>=.85?-2:n/.85<.58?0:n/.85<.88?1:2;}
     reset(stage=this.stageIndex || 0) {
-      this.water={height:0,target:Math.min(...CONFIG.pieces.map(p=>p.radius))*9,raining:false,elapsed:0,drainRate:0,waves:[]};
+      this.clear=null;
+      this.water={height:0,target:Math.min(...CONFIG.pieces.map(p=>p.radius))*3,raining:false,elapsed:0,drainRate:0,waves:[]};
       this.stageIndex=Number.isInteger(stage)&&CONFIG.stages[stage]?stage:0;
       this.baseStage=CONFIG.stages[this.stageIndex];
       const integral=side=>side.slice(1).reduce((sum,p,i)=>sum+(p[0]+side[i][0])*.5*(p[1]-side[i][1]),0);
       this.baseArea=integral(this.baseStage.right)-integral(this.baseStage.left);
       this.minWallScale=Math.min(1,(CONFIG.width*CONFIG.height/3)/this.baseArea);
       this.wallScale=1;this.wallRate=0;this.buildWalls();
-      this.effectQueue=[];this.activeEffect=null;this.drill=null;this.discharges=[];this.comboCue=null;this.lasers=[];this.shatters=[];this.shotsFired=0;this.rocksDestroyed=0;this.bodies=[];this.score=0;this.time=0;this.cooldown=0;this.overflow=0;this.over=false;this.current=this.pick();this.next=this.pick();this.events=[];this.lastMerge=-10;this.combo=0;this.serial=0;
+      this.effectQueue=[];this.activeEffect=null;this.drill=null;this.discharges=[];this.comboCue=null;this.lasers=[];this.shatters=[];this.blasts=[];this.explosions=0;this.shotsFired=0;this.rocksDestroyed=0;this.bodies=[];this.score=0;this.time=0;this.cooldown=0;this.overflow=0;this.over=false;this.current=this.pick();this.next=this.pick();this.events=[];this.lastMerge=-10;this.combo=0;this.serial=0;
     }
     buildWalls(){
       const transform=side=>side.map(([x,y])=>[CONFIG.width/2+(x-CONFIG.width/2)*this.wallScale,y]);
@@ -97,16 +99,18 @@
       if(this.wallScale!==previous){this.wallRate=(this.wallScale-previous)/dt;this.buildWalls();}
     }
     aimX(x,r){return Math.max(this.stage.left[0][0]+r+2,Math.min(this.stage.right[0][0]-r-2,x));}
-    add(level,x,y) {const r=level===-1?CONFIG.pieces[0].radius*2/3:CONFIG.pieces[level].radius;const b={rock:level===-1,id:++this.serial,level,r,x,y,vx:0,vy:0,angle:0,spin:0,born:this.time};this.bodies.push(b);if([5,6,7,8].includes(level))this.enqueueEffect(b);return b;}
-    drop(x) {if(this.over||this.cooldown>0||this.bodies.length>=110)return false;const r=this.current===-1?CONFIG.pieces[0].radius*2/3:CONFIG.pieces[this.current].radius;this.add(this.current,this.aimX(x,r),r+5);if(this.current!==-1&&!this.drill&&this.random()<.03)this.drill={x:this.aimX(x,26),y:-260,width:52,length:260,angle:0};this.current=this.next;this.next=this.pick();this.cooldown=.48;return true;}
+    add(level,x,y) {const r=level<0?CONFIG.pieces[0].radius*2/3:CONFIG.pieces[level].radius;const b={bomb:level===-2,rock:level===-1,id:++this.serial,level,r,x,y,vx:0,vy:0,angle:0,spin:0,born:this.time};this.bodies.push(b);if([5,6,7,8].includes(level))this.enqueueEffect(b);return b;}
+    drop(x) {if(this.over||this.clear||this.cooldown>0||this.bodies.length>=110)return false;const r=this.current<0?CONFIG.pieces[0].radius*2/3:CONFIG.pieces[this.current].radius;this.add(this.current,this.aimX(x,r),r+5);if(this.current>=0&&!this.drill&&this.random()<.03)this.drill={x:this.aimX(x,26),y:-260,width:52,length:260,angle:0};this.current=this.next;this.next=this.pick();this.cooldown=.48;return true;}
     merge(a,b) {
+      if(this.clear||a.level>=9)return;
       const level=a.level, x=(a.x+b.x)/2,y=(a.y+b.y)/2;
       this.bodies=this.bodies.filter(v=>v!==a&&v!==b);
       this.combo=this.time-this.lastMerge<1.2?Math.min(this.combo+1,8):1;this.lastMerge=this.time;
-      const points=(level===CONFIG.pieces.length-1?2400:CONFIG.pieces[level+1].points)*this.combo;
+      const points=(level===8?2400:CONFIG.pieces[level+1].points)*this.combo;
       this.score+=points;
       if(level<CONFIG.pieces.length-1) {const n=this.add(level+1,x,y);n.vx=(a.vx+b.vx)*.25;n.vy=Math.min(0,(a.vy+b.vy)*.2);n.angle=(a.angle+b.angle)/2;}
-      this.fireCombo(this.combo);this.events.push({x,y,points,combo:this.combo,final:level>=CONFIG.pieces.length-2,time:this.time});
+      if(level===8){this.clearEffects();this.comboCue=null;this.lasers=[];this.clear={body:this.bodies.at(-1)};return;}
+      this.fireCombo(this.combo);this.events.push({x,y,points,combo:this.combo,final:level>=7,time:this.time});
     }
 
     // One presentation owns the screen; waiting events retain their insertion order.
@@ -152,7 +156,11 @@
           const normalSpeed=(b.vx-wallVx)*w.nx+b.vy*w.ny;
           if(normalSpeed<0){b.vx-=normalSpeed*1.08*w.nx;b.vy-=normalSpeed*1.08*w.ny;}
           const tangent=b.vx*-w.ny+b.vy*w.nx;
-          b.vx-=tangent*.025*-w.ny;b.vy-=tangent*.025*w.nx;b.spin*=.9;
+          if(b.rock){b.vx-=tangent*.025*-w.ny;b.vy-=tangent*.025*w.nx;b.spin*=.9;}
+          else {
+            const slip=tangent-b.spin*b.r,change=Math.max(-Math.abs(normalSpeed)*.06,Math.min(Math.abs(normalSpeed)*.06,slip/3));
+            b.vx-=change*-w.ny;b.vy-=change*w.nx;b.spin+=2*change/b.r;
+          }
         }
         if(!corrected)break;
       }
@@ -161,53 +169,98 @@
     updateWater(dt,elapsed){
       const w=this.water;if(this.stageIndex>2){w.height=0;w.raining=false;w.waves=[];return;}
       const end=Math.max(w.elapsed,elapsed);let t=w.elapsed;
+      // Overlapping sessions renew rain, without multiplying its rate.
+      const first=CONFIG.rainInterval;
       while(t<end-1e-9){
-        const cycle=Math.floor((t+1e-9)/120),phase=t-cycle*120,rain=cycle>=1&&phase<4;
-        const boundary=rain?cycle*120+4:(cycle+1)*120,span=Math.min(end,boundary)-t;if(span<=0)break;
-        w.height=Math.max(0,Math.min(w.target,w.height+span*((rain?w.target/4:0)-w.drainRate)));t+=span;
-        if(rain&&t>=boundary-1e-9)w.drainRate=w.height/60;
-        if(w.height===0&&!rain)w.drainRate=0;
+        const cycle=Math.floor((t+1e-9)/CONFIG.rainInterval),rain=cycle>=1;
+        const nextEnd=t<first+CONFIG.rainDuration?first+CONFIG.rainDuration:first+CONFIG.rainDuration+(Math.floor((t-first-CONFIG.rainDuration+1e-9)/CONFIG.rainInterval)+1)*CONFIG.rainInterval;
+        const boundary=Math.min((cycle+1)*CONFIG.rainInterval,nextEnd,w.drainEnd>t+1e-9?w.drainEnd:Infinity);
+        const span=Math.min(end,boundary)-t;if(span<=0)break;
+        w.height=Math.max(0,Math.min(CONFIG.height*2/3,w.height+span*((rain?w.target/4:0)-w.drainRate)));t+=span;
+        if(w.drainEnd&&t>=w.drainEnd-1e-9){w.drainRate=0;w.drainEnd=0;}
+        const ended=Math.floor((t-first-CONFIG.rainDuration+1e-9)/CONFIG.rainInterval);
+        if(t>=first+CONFIG.rainDuration&&ended!==w.lastDrain){w.drainRate=w.height/CONFIG.drainDuration;w.drainEnd=t+CONFIG.drainDuration;w.lastDrain=ended;}
       }
-      w.elapsed=end;w.raining=end>=120&&end%120<4;if(w.height<1e-8)w.height=0;
+      w.elapsed=end;w.raining=end>=first;if(w.height<1e-8)w.height=0;
       w.waves=w.waves.filter(v=>end-v.time<3);
+    }
+    updateBombs(){
+      for(const b of this.bodies.slice())if(b.bomb){
+        const age=this.time-b.born;
+        b.r=CONFIG.pieces[0].radius*2/3+(CONFIG.pieces[1].radius-CONFIG.pieces[0].radius*2/3)*Math.min(1,age/CONFIG.bombDuration);
+        if(age>=CONFIG.bombDuration){
+          this.bodies.splice(this.bodies.indexOf(b),1);this.explosions++;
+          const wet=this.water.height>0&&b.y>=this.waterSurface(b.x);
+          this.blasts.push({x:b.x,y:b.y,r:b.r,time:this.time,hits:new Set(),wet});
+          if(wet){this.water.waves.push({x:b.x,time:this.water.elapsed,strength:36,blast:true});
+            for(const v of this.bodies)if(v.y+v.r>this.waterSurface(v.x)-v.r){const f=Math.exp(-Math.abs(v.x-b.x)/180);v.vy-=180*f;v.vx+=Math.sign(v.x-b.x)*90*f;v.spin+=Math.sign(v.x-b.x)*3*f;}}
+        }
+      }
+      for(const e of this.blasts){const reach=(this.time-e.time)*530/CONFIG.laserDuration/2;
+        for(const b of this.bodies){if(e.hits.has(b.id))continue;const dx=b.x-e.x,dy=b.y-e.y;
+          const horizontal=Math.abs(dy)<e.r+b.r&&Math.abs(dx)<reach+b.r,vertical=Math.abs(dx)<e.r+b.r&&Math.abs(dy)<reach+b.r;
+          if(!horizontal&&!vertical)continue;e.hits.add(b.id);
+          b.vx+=horizontal?(Math.sign(dx)||1)*320:Math.sign(dx)*75;
+          b.vy+=vertical?(Math.sign(dy)||-1)*350:-130;b.spin+=(Math.sign(dx)||1)*8;
+        }
+      }
+      this.blasts=this.blasts.filter(e=>this.time-e.time<Math.hypot(CONFIG.width,CONFIG.height)/(530/CONFIG.laserDuration/2)+.35);
     }
     waterSurface(x){
       const w=this.water;if(!w.height)return CONFIG.height;
       let offset=Math.sin(x*.035+w.elapsed*2.1)*.8+Math.sin(x*.067-w.elapsed*1.6)*.5;
-      for(const v of w.waves){const age=w.elapsed-v.time;offset+=v.strength*Math.exp(-age*1.8-Math.abs(x-v.x)/100)*Math.sin(Math.abs(x-v.x)*.07-age*9);}
-      return CONFIG.height-w.height+Math.max(-3,Math.min(3,offset))*Math.min(1,w.height/5);
+      let blastOffset=0;
+      for(const v of w.waves){const age=w.elapsed-v.time,value=v.strength*Math.exp(-age*1.8-Math.abs(x-v.x)/100)*Math.sin(Math.abs(x-v.x)*.07-age*9);if(v.blast)blastOffset+=value;else offset+=value;}
+      return CONFIG.height-w.height+(Math.max(-3,Math.min(3,offset))+Math.max(-37,Math.min(37,blastOffset)))*Math.min(1,w.height/5);
     }
     applyWater(b,dt){
       const w=this.water;if(!w.height||this.stageIndex>2)return;
       const depth=b.y+b.r-this.waterSurface(b.x);
       if(depth>0&&b.waterDepth!==undefined&&b.waterDepth<=0&&Math.abs(b.vy)>25){w.waves.push({x:b.x,time:w.elapsed,strength:Math.min(3,Math.abs(b.vy)/150)});if(w.waves.length>24)w.waves.shift();}
-      b.waterDepth=depth;const fraction=Math.max(0,Math.min(1,depth/(2*b.r)));if(!fraction)return;
-      // Acceleration (force / mass) is size independent: every tile balances at
-      // 1 / 2.4 immersion, including the largest tier. Drag damps surface oscillation.
+      b.waterDepth=depth;const fraction=Math.max(0,Math.min(1,depth/Math.min(2*b.r,w.target)));if(!fraction)return;
+      // Scale effective displacement to the shallow basin so even large tiles
+      // float without requiring more water. Drag damps surface oscillation.
       // Rocks retain gravity and sink.
       if(!b.rock)b.vy-=800*2.4*fraction*dt;
       b.vy*=Math.exp(-(b.rock?.9:7)*fraction*dt);b.vx*=Math.exp(-1.5*fraction*dt);b.spin*=Math.exp(-fraction*dt);
     }
+    // Break only near-motionless, centered single-point balances. All bodies remain
+    // dynamic; gravity and the existing contact solver carry the resulting motion.
+    releaseUnstableContacts(dt){
+      for(const a of this.bodies){
+        if(a.rock||Math.abs(a.vx)>2||Math.abs(a.vy)>10)continue;
+        if(this.water.height&&a.y+a.r>CONFIG.height-this.water.height)continue;
+        const supported=this.walls.some(w=>w.ny<-.15&&(a.x-w.x)*w.nx+(a.y-w.y)*w.ny-a.r<.15);
+        if(supported)continue;
+        const below=this.bodies.filter(b=>b!==a&&b.y>a.y&&Math.hypot(b.x-a.x,b.y-a.y)<a.r+b.r+.2);
+        if(below.length!==1||below[0].rock)continue;
+        const b=below[0];if(Math.abs(a.x-b.x)>1)continue;
+        const direction=Math.sign(a.x-b.x)||(a.id%2?1:-1),dv=direction*18*dt;
+        a.vx+=dv;b.vx-=dv*a.r*a.r/(b.r*b.r);
+      }
+    }
     step(dt,elapsed) {
-      if(this.over)return;
+      if(this.over||this.clear)return;
       dt=Math.min(dt,1/60);this.time+=dt;this.cooldown=Math.max(0,this.cooldown-dt);
       this.updateWalls(dt,elapsed===undefined?this.time:elapsed);
       this.updateDrill(dt);
+      this.releaseUnstableContacts(dt);
       this.updateWater(dt,elapsed===undefined?this.time:elapsed);
+      this.updateBombs();
       for(const b of this.bodies){b.vy=Math.min(b.vy+800*dt,650);this.applyWater(b,dt);b.x+=b.vx*dt;b.y+=b.vy*dt;b.angle+=b.spin*dt;b.spin*=.99;b.vx*=.999;this.bounds(b);}
       for(let pass=0;pass<(this.drill?18:7);pass++) {
         for(const b of this.bodies)this.resolveDrill(b);
         let merged=false;
         outer:for(let i=0;i<this.bodies.length;i++)for(let j=i+1;j<this.bodies.length;j++) {
           const a=this.bodies[i],b=this.bodies[j],n=contact(a,b);if(!n)continue;
-          if(!a.rock&&!b.rock&&a.level===b.level){this.merge(a,b);merged=true;break outer;}
+          if(!a.rock&&!b.rock&&!a.bomb&&!b.bomb&&a.level===b.level){this.merge(a,b);if(this.clear)return;merged=true;break outer;}
           const ia=1/(a.r*a.r),ib=1/(b.r*b.r),sum=ia+ib,correction=Math.max(0,n.depth-.015)*.92;
           a.x-=n.x*correction*ia/sum;a.y-=n.y*correction*ia/sum;b.x+=n.x*correction*ib/sum;b.y+=n.y*correction*ib/sum;
           const relative=(b.vx-a.vx)*n.x+(b.vy-a.vy)*n.y;
           if(relative<0){const impulse=-relative*1.08/sum;a.vx-=impulse*n.x*ia;a.vy-=impulse*n.y*ia;b.vx+=impulse*n.x*ib;b.vy+=impulse*n.y*ib;
-            const tangent=(b.vx-a.vx)*-n.y+(b.vy-a.vy)*n.x,mu=a.rock||b.rock?.25:.025,friction=Math.max(-impulse*mu,Math.min(impulse*mu,-tangent/sum));
+            const tangent=(b.vx-a.vx)*-n.y+(b.vy-a.vy)*n.x-a.spin*a.r-b.spin*b.r,mu=a.rock||b.rock?.25:.06,friction=Math.max(-impulse*mu,Math.min(impulse*mu,-tangent/(3*sum)));
             a.vx-=friction*-n.y*ia;a.vy-=friction*n.x*ia;b.vx+=friction*-n.y*ib;b.vy+=friction*n.x*ib;
-            a.spin=Math.max(-1.5,Math.min(1.5,a.spin+tangent*.0009));b.spin=Math.max(-1.5,Math.min(1.5,b.spin-tangent*.0009));}
+            a.spin-=2*friction*ia/a.r;b.spin-=2*friction*ib/b.r;}
         }
         for(const b of this.bodies)this.bounds(b);
         if(merged)continue;
