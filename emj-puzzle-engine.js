@@ -10,7 +10,7 @@
     })];
   }
   const CONFIG = {
-    name: 'EMJ PUZZLE', width: 400, height: 570, deadline: 76, laserDuration: .33, bombDuration: 20, rainDuration: 4, rainInterval: 90, drainDuration: 120, shatterDuration: 1.1,
+    name: 'EMJ PUZZLE', width: 400, height: 570, deadline: 76, laserDuration: .33, bombDuration: 20, rainDuration: 4, rainInterval: 30, rainAmount: 80, drainDuration: 180, shatterDuration: 1.1,
     // Walls widen toward the top. Unequal segment lengths make each side distinct.
     stages: [
       { name: 'レベル1', description: '四角い器の基本ステージ', descriptionEn: 'A rectangular container: the basic stage.', left: [[0,0],[0,570]], right: [[400,0],[400,570]] },
@@ -172,8 +172,8 @@
       while(t<end-1e-9){
         const cycle=Math.floor((t+1e-9)/CONFIG.rainInterval),phase=t-cycle*CONFIG.rainInterval,rain=cycle>=1&&phase<CONFIG.rainDuration;
         const boundary=rain?cycle*CONFIG.rainInterval+CONFIG.rainDuration:(cycle+1)*CONFIG.rainInterval,span=Math.min(end,boundary)-t;if(span<=0)break;
-        // Each shower supplies 57 depth units; accumulated water is capped at one third.
-        w.height=Math.max(0,Math.min(CONFIG.height/3,w.height+span*((rain?w.target/CONFIG.rainDuration:0)-w.drainRate)));t+=span;
+        // Rain supply is independent of the existing buoyancy reference depth.
+        w.height=Math.max(0,Math.min(CONFIG.height/3,w.height+span*((rain?CONFIG.rainAmount/CONFIG.rainDuration:0)-w.drainRate)));t+=span;
         if(rain&&t>=boundary-1e-9)w.drainRate=w.height/CONFIG.drainDuration;
         if(w.height===0&&!rain)w.drainRate=0;
       }
