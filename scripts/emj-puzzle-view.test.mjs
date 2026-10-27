@@ -21,6 +21,13 @@ for(const viewportWidth of [320,400])for(const reduced of [false,true]){
  env.window=env;vm.createContext(env);vm.runInContext(engine,env);
  const Original=env.EMJPuzzle.World;env.EMJPuzzle.World=class extends Original{constructor(){super();world=this;}};
  vm.runInContext(view,env);get('puzzle-start').listeners.click();
+ // Exercise the procedural bomb and all four flame arms without changing physics.
+ const visualBomb=world.add(-2,200,350);
+ for(const wet of [false,true])for(const angle of [0,Math.PI/6,Math.PI/4]){
+  world.blasts=[{x:200,y:350,r:26,angle,time:0,wet,hits:new Set()}];
+  for(const age of [.02,.15,.4,.9,1.18,1.3]){world.time=age;get('puzzle-canvas').listeners.pointermove({pointerType:'mouse',clientX:viewportWidth/2});}
+ }
+ world.blasts=[];world.bodies=world.bodies.filter(b=>b!==visualBomb);world.time=0;
  world.add(6,200,300);world.add(7,200,400);get('puzzle-canvas').listeners.pointermove({pointerType:'mouse',clientX:viewportWidth/2});assert.equal(audioStarts.length,6);assert(imageDraws.includes(.5));assert.equal(!!get('board').style.transform,!reduced);
  world.time=2;world.updateEffects();get('puzzle-canvas').listeners.pointermove({pointerType:'mouse',clientX:viewportWidth/2});assert.equal(world.activeEffect.kind,'brain');if(!reduced)assert(get('board').style.transform.startsWith('translateX'));world.time=4;world.updateEffects();get('puzzle-canvas').listeners.pointermove({pointerType:'mouse',clientX:viewportWidth/2});assert.equal(get('board').style.transform,'');assert.equal(get('board').style.transformOrigin,'');world.reset();
  const a=world.add(7,170,350),b=world.add(7,230,350);world.clearEffects();world.merge(a,b);
