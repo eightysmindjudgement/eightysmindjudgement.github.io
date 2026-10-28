@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="IRON FORTRESS — 無料の3Dレールシューティング。宇宙艦隊を突破し機械要塞を攻略。">
+
+    <title>IRON FORTRESS | Eighty's Mind Judgement Official Website</title>
+
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../../emj-puzzle.css">
+    <link rel="stylesheet" href="game.css">
+</head>
+
+<body class="puzzle-page">
+
+    <header>
+        <a href="../../index.html" aria-label="Home">
+            <img src="../../EMJ_logo2026.png" alt="Eighty's Mind Judgement">
+        </a>
+        <h1 data-puzzle-name>IRON FORTRESS</h1>
+        <p class="site-name">Eighty's Mind Judgement Official Website<br><small>エイティズマインドジャッジメント オフィシャルウェブサイト</small></p>
+        <p>WORKING PEOPLE'S HEAVY METAL</p>
+        <section data-share-url="https://eightysmindjudgement.github.io/games/iron-fortress/iron-fortness.html" data-share-title="IRON FORTRESS" data-share-text="無料の3Dレールシューティング IRON FORTRESS" class="puzzle-sharing" aria-label="ゲームを共有">
+            <div class="puzzle-share-buttons">
+                <button type="button" id="puzzle-link-copy" aria-label="リンクをコピー" title="リンクをコピー"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg></button>
+                <button type="button" id="puzzle-share" aria-label="共有する" title="共有する"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"/></svg></button>
+                <button type="button" id="puzzle-qr-toggle" aria-label="QRコードを表示" title="QRコードを表示" aria-haspopup="dialog" aria-expanded="false" aria-controls="puzzle-qr-panel"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h3v3h-3zM21 14v3h-4v4h4M14 20v1"/></svg></button>
+            </div>
+            <p id="puzzle-share-status" role="status" aria-live="polite"></p>
+            <div id="puzzle-copy-fallback" hidden>
+                <label for="puzzle-share-url">URLを選択してコピーしてください</label>
+                <input id="puzzle-share-url" type="url" readonly spellcheck="false">
+            </div>
+            <dialog id="puzzle-qr-panel" aria-labelledby="puzzle-qr-title">
+                <div class="puzzle-qr-heading"><h2 id="puzzle-qr-title">QR CODE</h2><button type="button" id="puzzle-qr-close" aria-label="QRコードを閉じる" title="閉じる" autofocus>×</button></div>
+                <canvas id="puzzle-qr" width="246" height="246" role="img" aria-label="IRON FORTRESSのURLのQRコード"></canvas>
+                <a href="https://eightysmindjudgement.github.io/games/iron-fortress/iron-fortness.html">https://eightysmindjudgement.github.io/games/iron-fortress/iron-fortness.html</a>
+            </dialog>
+        </section>
+    </header>
+
+    <nav>
+        <a href="../../index.html">HOME</a>
+        <a href="../../visions.html">VISIONS</a>
+        <a href="../../biography.html">BIOGRAPHY</a>
+        <a href="../../discography.html">DISCOGRAPHY</a>
+        <a href="../../videos.html">VIDEOS</a>
+        <a href="../../tools.html">TOOLS</a>
+        <a href="../../market.html">MARKET</a>
+        <a href="../../games.html" aria-current="page">GAMES</a>
+        <a href="../../links.html">LINKS</a>
+        <a href="../../sitemap.html">SITEMAP</a>
+    </nav>
+
+    <main id="iron-fortress" class="puzzle-main" lang="ja">
+<p class="puzzle-lead">鋼鉄の要塞へ、出撃。<br>宇宙を駆け抜ける、ローポリゴン3Dレールシューティング。<small class="puzzle-translation" lang="en">Launch into the Iron Fortress. An original low-poly 3D rail shooter.</small></p>
+<div class="if-layout"><section class="if-game" aria-label="IRON FORTRESS game">
+<div class="if-hud"><div>SCORE<strong id="if-score">0</strong></div><div>BEST<strong id="if-best">0</strong></div><div>LIFE<strong id="if-life">♥♥♥</strong></div><div>DESTROYED<strong id="if-kills">0</strong></div></div>
+<div class="if-route"><span id="if-sector">01 / APPROACH</span><progress id="if-progress" max="100" value="0" aria-label="ステージ進行"></progress></div>
+<div class="if-screen"><canvas id="if-canvas" tabindex="0" aria-label="ドラッグまたは矢印キー・WASDで移動。SpaceまたはFIREで射撃。Escapeでポーズ。">WebGL対応ブラウザで遊んでください。</canvas>
+<div id="if-boss" hidden><label for="if-boss-hp">IRON WARDEN</label><progress id="if-boss-hp" max="1" value="1"></progress></div><p id="if-warning" aria-live="polite"></p>
+<div id="if-overlay"><div><p class="if-eyebrow">EMJ ARCADE / 01</p><h2 id="if-title">IRON FORTRESS</h2><p id="if-copy">ゲームを読み込んでいます / Loading…</p><div id="if-difficulty" role="group" aria-label="難易度 / Difficulty"><button data-difficulty="EASY" aria-pressed="false">EASY</button><button data-difficulty="NORMAL" aria-pressed="true">NORMAL</button><button data-difficulty="HARD" aria-pressed="false">HARD</button></div><div class="if-help" aria-label="操作方法 / Controls"><div class="if-help-device"><h3>スマートフォン / Smartphone</h3><p><b>移動：</b>ゲーム画面を指で押したまま上下左右に動かす。<br><b>発射：</b>もう一方の指で <b>FIREボタンを長押し</b>（連射）。</p><small lang="en"><b>Move:</b> Touch and drag inside the game screen.<br><b>Shoot:</b> Hold the <b>FIRE button</b> with your other finger.</small></div><div class="if-help-device"><h3>PC / Computer</h3><p><b>移動：</b>矢印キー / WASD、または画面をマウスでドラッグ。<br><b>発射：</b><b>スペースキーを長押し</b>、またはFIREボタンを長押し。</p><small lang="en"><b>Move:</b> Arrow keys / WASD, or click and drag the game screen.<br><b>Shoot:</b> Hold <b>Space</b>, or click and hold the <b>FIRE button</b>.</small></div></div><p class="if-sound-note">START後に効果音が鳴ります。SOUND ON/OFFで切替。<br><span lang="en">Sound effects start after START. Toggle with SOUND ON/OFF.</span></p><button id="if-start" type="button">START</button><button id="if-home" type="button" hidden>TITLE</button></div></div></div>
+<div class="if-controls"><button id="if-pause" disabled type="button">PAUSE</button><button id="if-mute" aria-pressed="false" type="button">SOUND ON</button><button id="if-fire" type="button" aria-label="押している間射撃 / Hold to fire">FIRE</button></div></section>
+<aside class="if-aside"><h3>MISSION</h3><ol><li>APPROACH<small>敵艦隊を突破 / Break the fleet</small></li><li>FORTRESS<small>障害物を回避 / Dodge the structures</small></li><li>CORE<small>ボスを撃破 / Destroy the warden</small></li></ol><h3>HOW TO PLAY</h3><p>画面内をドラッグして照準を合わせ、FIREを押し続けて攻撃。赤い敵弾と金属柱を避けよう。ライフは3。被弾後は短時間無敵になります。<small lang="en">Drag to aim and hold FIRE. Dodge red bolts and metal pillars. Three lives, with a short shield after damage.</small></p><p>ボスの警告表示を見て回避。正面からレーザーを当てて要塞の核を破壊しよう。<small lang="en">Watch the boss warning, evade, and hit the core head-on.</small></p><p>完全無料・広告なし。難易度別の自己ベストをこの端末に保存します。登録・送信はありません。<small lang="en">Free, no ads. Best scores are saved on this device for each difficulty. No registration or data submission.</small></p><a href="../../games.html">← GAMESへもどる<small lang="en">Back to games</small></a></aside></div>
+<noscript><p>遊ぶにはJavaScriptを有効にしてください。 / Enable JavaScript to play.</p></noscript><p class="puzzle-note">本ゲームは予告なく改修・変更・公開停止する場合があります。改修に伴う不具合やゲームデータ消失の可能性について、あらかじめご了承ください。<small class="puzzle-translation" lang="en">This game may be updated, modified, or discontinued without prior notice. Updates may cause bugs or loss of game data.</small></p></main>
+    <footer>
+        <p>℗ 2025 Eighty's Mind Judgement<br>
+        © 2025 Eighty's Mind Judgement<br>
+        Based in Japan | Active since November 8, 2025</p>
+        <p class="footer-sitemap"><a href="../../sitemap.html">SITEMAP</a></p>
+    </footer>
+
+    <script src="../../site-navigation.js" defer></script>
+    <script src="../../emj-puzzle-share.js" defer></script>
+<script src="game.js" defer></script>
+</body>
+
+</html>

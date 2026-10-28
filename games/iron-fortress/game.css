@@ -1,0 +1,53 @@
+#iron-fortress{max-width:1040px;box-sizing:border-box;color:#dbe5ed}
+#iron-fortress .if-layout{display:grid;grid-template-columns:minmax(0,720px) minmax(180px,1fr);gap:24px;align-items:start}
+#iron-fortress .if-game{min-width:0;min-height:0;padding:0;margin:0;border:1px solid #697b8c;border-radius:10px;overflow:hidden;background:#0a111c;box-shadow:0 10px 36px #0007}
+#iron-fortress .if-hud{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:12px;background:linear-gradient(120deg,#303b48,#121a25);font-size:10px;letter-spacing:.08em;color:#b9cbd7}
+#iron-fortress .if-hud strong{display:block;font-size:clamp(15px,3.8vw,23px);color:#f1f6fa;letter-spacing:0;font-variant-numeric:tabular-nums}
+#iron-fortress #if-life{color:#f98e82}
+#iron-fortress .if-route{display:flex;align-items:center;gap:15px;padding:7px 12px;font-size:10px;letter-spacing:.1em}
+#iron-fortress progress{accent-color:#67dfed;width:100%;height:6px}
+#iron-fortress .if-route span{white-space:nowrap}
+#iron-fortress .if-screen{position:relative;height:510px;background:#020611}
+#iron-fortress #if-canvas{display:block;width:100%;height:100%;touch-action:none;cursor:crosshair;outline-offset:-4px}
+#iron-fortress button{border:1px solid #64798c;border-radius:5px;padding:10px 12px;color:#e5edf5;background:#202d3d;font-family:inherit;font-size:12px;font-weight:700;line-height:1.4;cursor:pointer;min-height:44px}
+#iron-fortress button:disabled{opacity:.45;cursor:default}
+#iron-fortress button:hover{background:#36495d}
+#iron-fortress :focus-visible{outline:3px solid #70e9ff;outline-offset:2px}
+#iron-fortress button[aria-pressed=true]{border-color:#80efff;background:#204858;color:#bff7ff}
+#iron-fortress #if-overlay{position:absolute;inset:0;display:grid;place-items:center;padding:20px;text-align:center;background:linear-gradient(145deg,#091522ef,#030914e8);overflow:auto}
+#iron-fortress #if-overlay>div{width:100%;max-width:420px;max-height:100%}
+#iron-fortress #if-title{font-family:Impact,'Arial Black',sans-serif;font-size:clamp(27px,6vw,45px);font-style:italic;letter-spacing:.04em;color:#dfeaf4;text-shadow:2px 3px #305263}
+#iron-fortress .if-eyebrow{font-size:10px;letter-spacing:.3em;color:#6ee9ff}
+#iron-fortress #if-copy{font-size:13px;line-height:1.8;color:#becdda}
+#iron-fortress #if-difficulty{display:flex;gap:6px;justify-content:center;margin:20px 0}
+#iron-fortress .if-help{display:grid;gap:10px;text-align:left;margin:12px 0;font-size:12px;line-height:1.65;color:#c9d8e3}
+#iron-fortress .if-help-device{padding:9px 12px;border:1px solid #364c5e;border-radius:5px;background:#142230}
+#iron-fortress .if-help h3{font-size:12px;margin:0 0 5px;color:#8ce9f4;letter-spacing:.03em}
+#iron-fortress .if-help p{margin:0}
+#iron-fortress .if-help small{font-size:11px;line-height:1.5;margin-top:5px}
+#iron-fortress .if-help b{color:#edf7fc}
+#iron-fortress .if-sound-note{font-size:10px;line-height:1.5;color:#a7bfcd;margin:8px 0}
+#iron-fortress #if-difficulty{margin:12px 0}
+#iron-fortress #if-overlay .if-eyebrow{margin:0 0 6px}
+#iron-fortress #if-overlay #if-copy{font-size:12px;line-height:1.5;margin:8px 0}
+#iron-fortress .if-screen:has(#if-overlay:not([hidden])){height:auto;min-height:510px}
+#iron-fortress .if-screen:has(#if-overlay:not([hidden])) #if-canvas{position:absolute;inset:0}
+#iron-fortress #if-overlay{position:relative;min-height:510px;box-sizing:border-box;overflow:visible}
+#iron-fortress #if-overlay>div{max-height:none}
+#iron-fortress small{display:block;font-size:11px;line-height:1.7;color:#97aab9;margin-top:5px}
+#iron-fortress #if-start{background:#b9e7ee;color:#07121d;min-width:150px;margin:10px 4px 16px;letter-spacing:.14em}
+#iron-fortress .if-controls{display:flex;gap:8px;padding:10px;background:#18212e}
+#iron-fortress #if-fire{margin-left:auto;min-width:105px;touch-action:none;user-select:none;-webkit-user-select:none;background:#204b59;border-color:#80dbe7;font-size:17px;letter-spacing:.1em}
+#iron-fortress #if-fire.active{background:#63bdc9;color:#07121d}
+#iron-fortress .if-aside h3{font-size:13px;letter-spacing:.14em;border-bottom:1px solid #435362;padding-bottom:9px;color:#d2e5f0}
+#iron-fortress .if-aside p,#iron-fortress .if-aside li{font-size:12px;line-height:1.8;color:#b2c3cf}
+#iron-fortress .if-aside ol{padding-left:20px}
+#iron-fortress .if-aside li{margin-bottom:14px}
+#iron-fortress .if-aside a{color:#b4e9f1}
+#iron-fortress #if-boss{position:absolute;top:12px;left:12%;right:12%;font-size:10px;letter-spacing:.16em;color:#ffb7a0;text-align:center;pointer-events:none}
+#iron-fortress #if-boss progress{display:block;accent-color:#f27d65;height:9px;margin-top:5px}
+#iron-fortress #if-warning{position:absolute;top:52px;left:0;right:0;text-align:center;color:#ffb482;font-size:12px;letter-spacing:.12em;pointer-events:none}
+#iron-fortress.damaged .if-screen{box-shadow:inset 0 0 40px #ff4422}
+#iron-fortress.damaged #if-canvas{opacity:.7}
+#iron-fortress [hidden]{display:none!important}
+@media(max-width:720px){#iron-fortress .if-layout{grid-template-columns:1fr}#iron-fortress .if-screen{height:480px;height:min(63svh,540px);min-height:390px}#iron-fortress .if-aside{display:block}#iron-fortress .if-controls{gap:5px;padding:8px}#iron-fortress .if-controls button{padding:9px 8px;font-size:11px}#iron-fortress #if-fire{font-size:16px}}
