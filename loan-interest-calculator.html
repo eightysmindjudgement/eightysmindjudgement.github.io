@@ -7,10 +7,11 @@
     <meta name="description" content="Calculate estimated loan interest, repayments, and outstanding balances using your loan terms and selected day count convention.">
     <title>LOAN INTEREST CALCULATOR | Eighty's Mind Judgement Official Website</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="home-share.css">
     <script src="loan-interest-calculator.js" defer></script>
 </head>
 
-<body class="loan-calculator-page">
+<body class="loan-calculator-page tools-sharing-page">
 
     <header>
         <a href="index.html" aria-label="Home">
@@ -19,6 +20,23 @@
         <h1>LOAN INTEREST CALCULATOR</h1>
         <p class="site-name">Eighty's Mind Judgement Official Website<br><small>エイティズマインドジャッジメント オフィシャルウェブサイト</small></p>
         <p>WORKING PEOPLE'S HEAVY METAL</p>
+        <div class="puzzle-sharing" role="group" aria-label="サイトを共有" lang="ja" data-share-url="https://eightysmindjudgement.github.io/loan-interest-calculator.html" data-share-title="LOAN INTEREST CALCULATOR" data-share-text="ローン利息計算ツールをチェック！">
+            <div class="puzzle-share-buttons">
+                <button type="button" id="puzzle-link-copy" aria-label="リンクをコピー" title="リンクをコピー"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg></button>
+                <button type="button" id="puzzle-share" aria-label="共有する" title="共有する"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"/></svg></button>
+                <button type="button" id="puzzle-qr-toggle" aria-label="QRコードを表示" title="QRコードを表示" aria-haspopup="dialog" aria-expanded="false" aria-controls="puzzle-qr-panel"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h3v3h-3zM21 14v3h-4v4h4M14 20v1"/></svg></button>
+            </div>
+            <p id="puzzle-share-status" role="status" aria-live="polite"></p>
+            <div id="puzzle-copy-fallback" hidden>
+                <label for="puzzle-share-url">URLを選択してコピーしてください</label>
+                <input id="puzzle-share-url" type="url" readonly spellcheck="false">
+            </div>
+            <dialog id="puzzle-qr-panel" aria-labelledby="puzzle-qr-title">
+                <div class="puzzle-qr-heading"><h2 id="puzzle-qr-title">QR CODE</h2><button type="button" id="puzzle-qr-close" aria-label="QRコードを閉じる" title="閉じる" autofocus>×</button></div>
+                <canvas id="puzzle-qr" width="246" height="246" role="img" aria-label="LOAN INTEREST CALCULATORのURLのQRコード"></canvas>
+                <a href="https://eightysmindjudgement.github.io/loan-interest-calculator.html">https://eightysmindjudgement.github.io/loan-interest-calculator.html</a>
+            </dialog>
+        </div>
     </header>
 
     <nav>
@@ -37,7 +55,7 @@
     <main class="loan-calculator-main">
         <section class="loan-calculator-section" aria-labelledby="loan-calculator-title">
             <div class="loan-calculator-intro">
-                <h2 id="loan-calculator-title">LOAN INTEREST CALCULATOR <span lang="ja">ローン利息計算ツール</span></h2>
+                <h2 id="loan-calculator-title" class="tool-body-title" lang="ja">ローン利息計算ツール</h2>
                 <p>Calculate loan interest, repayment amounts, and outstanding balances based on your loan terms.</p>
                 <p class="loan-japanese-copy" lang="ja">借入条件に基づいて、支払利息、返済額、借入残高を計算できます。</p>
             </div>
@@ -202,6 +220,7 @@
     </footer>
 
     <script src="site-navigation.js" defer></script>
+    <script src="emj-puzzle-share.js" defer></script>
 </body>
 
 </html>

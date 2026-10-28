@@ -9,9 +9,10 @@
     <title>COMPOUND INTEREST CALCULATOR | Eighty's Mind Judgement Official Website</title>
 
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="home-share.css">
 </head>
 
-<body class="compound-calculator-page">
+<body class="compound-calculator-page tools-sharing-page">
 
     <header>
         <a href="index.html" aria-label="Home">
@@ -20,6 +21,23 @@
         <h1>COMPOUND INTEREST CALCULATOR</h1>
         <p class="site-name">Eighty's Mind Judgement Official Website<br><small>エイティズマインドジャッジメント オフィシャルウェブサイト</small></p>
         <p>WORKING PEOPLE'S HEAVY METAL</p>
+        <div class="puzzle-sharing" role="group" aria-label="サイトを共有" lang="ja" data-share-url="https://eightysmindjudgement.github.io/compound-interest-calculator.html" data-share-title="COMPOUND INTEREST CALCULATOR" data-share-text="複利計算ツールをチェック！">
+            <div class="puzzle-share-buttons">
+                <button type="button" id="puzzle-link-copy" aria-label="リンクをコピー" title="リンクをコピー"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg></button>
+                <button type="button" id="puzzle-share" aria-label="共有する" title="共有する"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"/></svg></button>
+                <button type="button" id="puzzle-qr-toggle" aria-label="QRコードを表示" title="QRコードを表示" aria-haspopup="dialog" aria-expanded="false" aria-controls="puzzle-qr-panel"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h3v3h-3zM21 14v3h-4v4h4M14 20v1"/></svg></button>
+            </div>
+            <p id="puzzle-share-status" role="status" aria-live="polite"></p>
+            <div id="puzzle-copy-fallback" hidden>
+                <label for="puzzle-share-url">URLを選択してコピーしてください</label>
+                <input id="puzzle-share-url" type="url" readonly spellcheck="false">
+            </div>
+            <dialog id="puzzle-qr-panel" aria-labelledby="puzzle-qr-title">
+                <div class="puzzle-qr-heading"><h2 id="puzzle-qr-title">QR CODE</h2><button type="button" id="puzzle-qr-close" aria-label="QRコードを閉じる" title="閉じる" autofocus>×</button></div>
+                <canvas id="puzzle-qr" width="246" height="246" role="img" aria-label="COMPOUND INTEREST CALCULATORのURLのQRコード"></canvas>
+                <a href="https://eightysmindjudgement.github.io/compound-interest-calculator.html">https://eightysmindjudgement.github.io/compound-interest-calculator.html</a>
+            </dialog>
+        </div>
     </header>
 
     <nav>
@@ -38,7 +56,7 @@
     <main class="compound-calculator-main">
         <section class="compound-calculator-section" aria-labelledby="calculator-title">
             <div class="compound-calculator-intro">
-                <h2 id="calculator-title">COMPOUND INTEREST CALCULATOR <span class="compound-japanese-inline" lang="ja">複利計算ツール</span></h2>
+                <h2 id="calculator-title" class="tool-body-title" lang="ja">複利計算ツール</h2>
                 <p>See how your money could grow over time through compound interest and regular contributions.</p>
                 <p class="compound-japanese-copy" lang="ja">複利と定期的な積立によって、資産が時間とともにどのように増えるかを試算できます。</p>
             </div>
@@ -193,6 +211,7 @@
 
     <script src="compound-interest-calculator.js" defer></script>
     <script src="site-navigation.js" defer></script>
+    <script src="emj-puzzle-share.js" defer></script>
 </body>
 
 </html>

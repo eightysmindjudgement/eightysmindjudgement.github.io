@@ -21,3 +21,13 @@
 
 /* Match one line of the Japanese site name (1rem × .75 × 1.7). */
 .home-page>header>p:has(+.puzzle-sharing){margin-bottom:1.275rem}
+
+/* Tool pages: exactly 20px from the sharing row to the first content block. */
+.tools-sharing-page>header{min-height:0;padding-bottom:0}
+.tools-sharing-page>header>.puzzle-sharing{margin:0 auto}
+.tools-sharing-page>main{margin-top:0;padding-top:20px}
+.tools-sharing-page>main>section:first-child{margin-top:0;padding-top:0}
+.tools-sharing-page>main>section:first-child>div:first-child{margin-top:0}
+.tools-sharing-page>main>section:first-child>div:first-child>h2:first-child{margin-top:0}
+.tools-sharing-page>header #puzzle-share-status:empty{display:none}
+.tools-sharing-page>header #puzzle-share-status{margin:8px 0;line-height:1.6}
