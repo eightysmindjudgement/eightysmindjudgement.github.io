@@ -1,0 +1,23 @@
+.puzzle-sharing{min-height:0;max-width:460px;margin:0 auto;padding:0 12px;border-bottom:0;box-sizing:border-box;color:#c1c9d2;font-size:.8rem}
+.puzzle-share-buttons{display:flex;justify-content:center;flex-wrap:wrap;gap:6px}
+.puzzle-share-buttons button{display:grid;place-items:center;width:28px;height:28px;padding:5px;border:1px solid #687785;border-radius:4px;background:#202833;color:#e6edf3;font:inherit;cursor:pointer}
+.puzzle-share-buttons svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.puzzle-share-buttons button:hover{background:#303d4b}
+.puzzle-sharing :focus-visible{outline:3px solid #8ce5ed;outline-offset:3px}
+.home-page>header #puzzle-share-status:empty{display:none}
+.home-page>header #puzzle-share-status{margin:8px 0;line-height:1.6}
+.puzzle-sharing [hidden]{display:none}
+#puzzle-copy-fallback{margin-top:10px}
+#puzzle-copy-fallback label{display:block;margin-bottom:6px}
+#puzzle-share-url{box-sizing:border-box;width:100%;min-height:44px;padding:8px;border:1px solid #687785;border-radius:4px;background:#111820;color:#fff;font:inherit}
+#puzzle-qr-panel{box-sizing:border-box;width:310px;max-width:calc(100vw - 24px);max-height:calc(100dvh - 24px);margin:auto;padding:16px;overflow:auto;border:1px solid #687785;border-radius:10px;background:#111820;color:#e6edf3;box-shadow:0 12px 48px #0009;text-align:center}
+#puzzle-qr-panel::backdrop{background:#0009}
+.puzzle-qr-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+#puzzle-qr-title{margin:0;font-size:.9rem;letter-spacing:.1em}
+#puzzle-qr-close{width:36px;height:36px;padding:0;border:1px solid #687785;border-radius:5px;background:#202833;color:#e6edf3;font-size:24px;cursor:pointer}
+#puzzle-qr{display:block;width:246px;max-width:100%;height:auto;margin:0 auto 8px}
+#puzzle-qr-panel a{display:block;color:#c2dfed;overflow-wrap:anywhere;font-size:.75rem}
+
+
+/* Match one line of the Japanese site name (1rem × .75 × 1.7). */
+.home-page>header>p:has(+.puzzle-sharing){margin-bottom:1.275rem}

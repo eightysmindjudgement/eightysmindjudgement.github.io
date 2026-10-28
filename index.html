@@ -9,6 +9,7 @@
     <title>Eighty's Mind Judgement | Official Website</title>
 
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="home-share.css">
 </head>
 
 <body class="home-page">
@@ -21,6 +22,23 @@
         </a>
         <p class="site-name">Eighty's Mind Judgement Official Website<br><small>エイティズマインドジャッジメント オフィシャルウェブサイト</small></p>
         <p>WORKING PEOPLE'S HEAVY METAL</p>
+        <div class="puzzle-sharing" role="group" aria-label="サイトを共有" lang="ja" data-share-url="https://eightysmindjudgement.github.io/" data-share-title="Eighty's Mind Judgement" data-share-text="Eighty's Mind Judgementの公式サイトをチェック！">
+            <div class="puzzle-share-buttons">
+                <button type="button" id="puzzle-link-copy" aria-label="リンクをコピー" title="リンクをコピー"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg></button>
+                <button type="button" id="puzzle-share" aria-label="共有する" title="共有する"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"/></svg></button>
+                <button type="button" id="puzzle-qr-toggle" aria-label="QRコードを表示" title="QRコードを表示" aria-haspopup="dialog" aria-expanded="false" aria-controls="puzzle-qr-panel"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h3v3h-3zM21 14v3h-4v4h4M14 20v1"/></svg></button>
+            </div>
+            <p id="puzzle-share-status" role="status" aria-live="polite"></p>
+            <div id="puzzle-copy-fallback" hidden>
+                <label for="puzzle-share-url">URLを選択してコピーしてください</label>
+                <input id="puzzle-share-url" type="url" readonly spellcheck="false">
+            </div>
+            <dialog id="puzzle-qr-panel" aria-labelledby="puzzle-qr-title">
+                <div class="puzzle-qr-heading"><h2 id="puzzle-qr-title">QR CODE</h2><button type="button" id="puzzle-qr-close" aria-label="QRコードを閉じる" title="閉じる" autofocus>×</button></div>
+                <canvas id="puzzle-qr" width="246" height="246" role="img" aria-label="Eighty's Mind JudgementのURLのQRコード"></canvas>
+                <a href="https://eightysmindjudgement.github.io/">https://eightysmindjudgement.github.io/</a>
+            </dialog>
+        </div>
         <a class="home-scroll-cue" href="#home-mission" aria-label="Scroll to slogan and mission">
             <svg viewBox="0 0 48 64" aria-hidden="true" focusable="false">
                 <path class="home-scroll-tube" d="M24 6 V54 M9 39 L24 54 L39 39" />
@@ -185,6 +203,7 @@
     <script src="todays-track.js" defer></script>
     <script src="site-navigation.js" defer></script>
     <script src="home-scroll.js" defer></script>
+    <script src="emj-puzzle-share.js" defer></script>
 
 </body>
 

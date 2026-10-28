@@ -1,6 +1,9 @@
 (() => {
   'use strict';
-  const gameUrl = 'https://eightysmindjudgement.github.io/emj-puzzle.html';
+  const sharing = document.querySelector('.puzzle-sharing');
+  const gameUrl = sharing.dataset.shareUrl || 'https://eightysmindjudgement.github.io/emj-puzzle.html';
+  const shareTitle = sharing.dataset.shareTitle || 'EMJ PUZZLE';
+  const shareText = sharing.dataset.shareText || '無料で遊べるEMJ PUZZLE！ぜひ遊んでみてください。';
   const byId = id => document.getElementById(id);
   const status = byId('puzzle-share-status');
   const field = byId('puzzle-share-url');
@@ -27,7 +30,7 @@
       return;
     }
     try {
-      await navigator.share({ title: 'EMJ PUZZLE', text: '無料で遊べるEMJ PUZZLE！ぜひ遊んでみてください。', url: gameUrl });
+      await navigator.share({ title: shareTitle, text: shareText, url: gameUrl });
       status.textContent = '共有メニューでの操作が完了しました';
     } catch (error) {
       if (error.name !== 'AbortError') status.textContent = '共有できませんでした。リンクコピーボタンをご利用ください。';
