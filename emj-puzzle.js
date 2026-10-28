@@ -11,7 +11,13 @@
   let playMs=0,clockStarted=null;
   let clearCount=0,clearAge=0,clearLast=null,clearDone=false,secretRevealed=false;
   try{const n=Number(localStorage.getItem("emj-puzzle-clears"));if(Number.isSafeInteger(n)&&n>=0)clearCount=n;}catch{}
-  $("puzzle-clears").textContent=clearCount;
+  function updateClears(){
+    $('puzzle-clears').textContent=clearCount;
+    const medals=$('puzzle-clear-medals'),count=Math.min(10,clearCount);
+    medals.replaceChildren(...Array.from({length:count},()=>{const star=document.createElement('span');star.className='puzzle-star';star.setAttribute('aria-hidden','true');return star;}));
+    medals.setAttribute('aria-label',`星メダル ${count}個`);
+  }
+  updateClears();
   function updateTime(){
     const seconds=Math.floor((playMs+(clockStarted===null?0:performance.now()-clockStarted))/1000);
     const text=`${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`;
@@ -55,7 +61,7 @@
     for(const e of world.discharges){
       const elapsed=world.time-e.time,b=e.body;
       if(e.final){paintFinalDischarge(e,elapsed);continue;}
-      if(elapsed<.8){const img=images[e.body.level];if(img&&img.complete&&img.naturalWidth){ctx.save();ctx.globalAlpha=.5;const scale=Math.max(C.width/img.naturalWidth,C.height/img.naturalHeight);ctx.drawImage(img,(C.width-img.naturalWidth*scale)/2,(C.height-img.naturalHeight*scale)/2,img.naturalWidth*scale,img.naturalHeight*scale);ctx.restore();}continue;}
+      if(elapsed<.8){paintTileImage(e.body.level);continue;}
       const age=elapsed-.8;
       const pulse=reduced?1:age<.17?1:age<.3?.2:age<.41?.7:age<.51?.15:.45;
       ctx.globalAlpha=(1-age/.8)*pulse*(reduced?.35:1);
@@ -110,7 +116,8 @@
     if(e.kind==='brain')board.style.transform='translateX('+Math.sin(age*90)*12+'px)';
     if(e.kind==='heart'){const beat=age%.8,pulse=Math.exp(-beat*24)+(beat>=.18?.65*Math.exp(-(beat-.18)*28):0);board.style.transform='translateY('+(-pulse*5)+'px) scale('+(1+pulse*.012)+')';board.style.transformOrigin=e.body.x/4+'% '+e.body.y/5.7+'%';}
   }
-  function paintSpecial(){const e=world.activeEffect;if(!e||e.kind==='discharge')return;const img=images[e.body.level];if(!img?.complete||!img.naturalWidth)return;ctx.save();ctx.globalAlpha=.5;const scale=Math.max(C.width/img.naturalWidth,C.height/img.naturalHeight);ctx.drawImage(img,(C.width-img.naturalWidth*scale)/2,(C.height-img.naturalHeight*scale)/2,img.naturalWidth*scale,img.naturalHeight*scale);ctx.restore();}
+  function paintTileImage(level){const img=images[level];if(!img?.complete||!img.naturalWidth)return;ctx.save();ctx.globalAlpha=.5;const scale=Math.max(C.width/img.naturalWidth,C.height/img.naturalHeight);ctx.drawImage(img,(C.width-img.naturalWidth*scale)/2,(C.height-img.naturalHeight*scale)/2,img.naturalWidth*scale,img.naturalHeight*scale);ctx.restore();}
+  function paintSpecial(){const e=world.activeEffect;if(!e||e.kind==='discharge')return;paintTileImage(e.body.level);}
   function paintDrill(){const d=world.drill;if(!d)return;ctx.save();ctx.beginPath();ctx.rect(0,0,C.width,C.height);ctx.clip();ctx.translate(d.x,d.y);ctx.beginPath();ctx.moveTo(-26,0);ctx.lineTo(26,0);ctx.lineTo(26,208);ctx.lineTo(0,260);ctx.lineTo(-26,208);ctx.closePath();ctx.clip();const metal=ctx.createLinearGradient(-26,0,26,0);for(const [p,c] of [[0,'#343e49'],[.3,'#b4bfca'],[.46,'#fff'],[.65,'#aab5c0'],[1,'#343e49']])metal.addColorStop(p,c);ctx.fillStyle=metal;ctx.fillRect(-26,0,52,260);for(let y=-40;y<300;y+=32){const phase=(d.angle/(Math.PI*2)%1)*32;ctx.beginPath();ctx.moveTo(-26,y+phase);ctx.lineTo(26,y+22+phase);ctx.lineWidth=9;ctx.strokeStyle='#38434f';ctx.stroke();ctx.lineWidth=3;ctx.strokeStyle='#eef5ff';ctx.stroke();}ctx.restore();}
   function paintWater(){
     const w=world.water;if(world.stageIndex>2||(!w.height&&!w.raining))return;
@@ -183,6 +190,7 @@
     if(running&&!world.over&&!world.clear){const r=world.current<0?C.pieces[0].radius*2/3:C.pieces[world.current].radius,x=world.aimX(aim,r);ctx.setLineDash([4,6]);ctx.strokeStyle='#b8d9ee55';ctx.beginPath();ctx.moveTo(x,r*2+8);ctx.lineTo(x,C.height);ctx.stroke();ctx.setLineDash([]);drawTile({level:world.current,rock:world.current===-1,bomb:world.current===-2,r,x,y:r+5,angle:0},.6);}
     world.bodies.forEach(b=>drawTile(b));paintWater();paintBlasts();paintDischarges();paintAttacks();paintSpecial();paintDrill();syncRocks();syncCombo();paintClear();
     for(const e of world.events){const age=world.time-e.time;ctx.save();ctx.globalAlpha=1-age;ctx.fillStyle=e.final?'#ffe49b':'#b8ffe8';ctx.textAlign='center';ctx.font=`bold ${e.final?22:16}px Arial`;ctx.fillText(`+${e.points}${e.combo>1?' ×'+e.combo:''}`,e.x,e.y-(reduced?0:age*40));if(e.final&&!reduced){ctx.beginPath();ctx.arc(e.x,e.y,30+age*100,0,Math.PI*2);ctx.strokeStyle='#ffe49b';ctx.lineWidth=3;ctx.stroke();}ctx.restore();}
+    if(world.clear&&!clearDone&&clearAge<.8)paintTileImage(world.clear.body.level);
   }
   function statusText(ja,en){const el=$('puzzle-status'),small=document.createElement('small');small.className='puzzle-translation';small.lang='en';small.textContent=en;el.replaceChildren(document.createTextNode(ja),small);}
   function score(){if(drawnScore===world.score)return;drawnScore=world.score;$('puzzle-score').textContent=world.score;if(world.score>best){best=world.score;$('puzzle-best').textContent=best;try{localStorage.setItem('emj-puzzle-best',String(best));}catch{}}}
@@ -230,9 +238,9 @@
     if(clearDone)return;
     if(clearLast===null){stopClock();stopHeartbeat();syncSpecial();pointer=null;revealSecret();clearLast=now;$('puzzle-pause').disabled=true;statusText('ゲームクリア！','Game clear!');}
     if(!document.hidden)clearAge+=Math.max(0,(now-clearLast)/1000);
-    clearLast=now;clearText.hidden=false;paint();
-    if(clearAge>=5){
-      clearDone=true;clearCount++;$('puzzle-clears').textContent=clearCount;
+    clearLast=now;clearText.hidden=clearAge<.8;paint();
+    if(clearAge>=5.8){
+      clearDone=true;clearCount++;updateClears();
       try{localStorage.setItem('emj-puzzle-clears',String(clearCount));}catch{}
       running=false;paused=false;world.over=true;clearText.hidden=true;
       overlay('GAME CLEAR', 'スコア '+world.score+' / CLEAR '+clearCount,'もういちど / Play again','Score '+world.score+' / CLEAR '+clearCount);
@@ -242,11 +250,13 @@
   function paintClear(){
     const ctx=fireworksContext;if(!ctx)return;ctx.clearRect(0,0,C.width,C.height);
     if(!world.clear||clearDone)return;
+    if(clearAge<.8)return;
+    const effectAge=clearAge-.8;
     // Fireworks use only the presentation clock, never bodies or scoring.
     ctx.save();ctx.globalCompositeOperation='screen';
     const colors=['#fff','#ffe75b','#ff28b3','#65edff'];
     for(let i=0;i<12;i++){
-      const t=clearAge-i*.32;if(t<0||t>2)continue;
+      const t=effectAge-i*.32;if(t<0||t>2)continue;
       const x=45+(i*137%310),y=90+(i*79%240),color=colors[i%4];ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=2;
       if(t<.55){const py=C.height-(C.height-y)*t/.55;ctx.beginPath();ctx.moveTo(x,py+24);ctx.lineTo(x,py);ctx.stroke();continue;}
       const age=t-.55;ctx.globalAlpha=Math.max(0,1-age/1.45);

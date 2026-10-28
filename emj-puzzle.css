@@ -16,6 +16,28 @@
 
 .puzzle-rock-guide{width:48px;height:48px;margin-right:10px;vertical-align:middle}
 
+/* Sharing controls are scoped to the header; game styles stay unchanged. */
+.puzzle-sharing{min-height:0;max-width:460px;margin:6px auto 0;padding:0 12px;border-bottom:0;box-sizing:border-box;color:#c1c9d2;font-size:.8rem}
+.puzzle-share-buttons{display:flex;justify-content:center;flex-wrap:wrap;gap:8px}
+.puzzle-share-buttons button{display:grid;place-items:center;width:36px;height:36px;padding:7px;border:1px solid #687785;border-radius:5px;background:#202833;color:#e6edf3;font:inherit;cursor:pointer}
+.puzzle-share-buttons svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+@media(pointer:coarse){.puzzle-share-buttons button{width:44px;height:44px}}
+.puzzle-share-buttons button:hover{background:#303d4b}
+.puzzle-sharing :focus-visible{outline:3px solid #8ce5ed;outline-offset:3px}
+.puzzle-page>header #puzzle-share-status:empty{display:none}
+.puzzle-page>header #puzzle-share-status{margin:8px 0;line-height:1.6}
+.puzzle-sharing [hidden]{display:none}
+#puzzle-copy-fallback{margin-top:10px}
+#puzzle-copy-fallback label{display:block;margin-bottom:6px}
+#puzzle-share-url{box-sizing:border-box;width:100%;min-height:44px;padding:8px;border:1px solid #687785;border-radius:4px;background:#111820;color:#fff;font:inherit}
+#puzzle-qr-panel{box-sizing:border-box;width:310px;max-width:calc(100vw - 24px);max-height:calc(100dvh - 24px);margin:auto;padding:16px;overflow:auto;border:1px solid #687785;border-radius:10px;background:#111820;color:#e6edf3;box-shadow:0 12px 48px #0009;text-align:center}
+#puzzle-qr-panel::backdrop{background:#0009}
+.puzzle-qr-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+#puzzle-qr-title{margin:0;font-size:.9rem;letter-spacing:.1em}
+#puzzle-qr-close{width:36px;height:36px;padding:0;border:1px solid #687785;border-radius:5px;background:#202833;color:#e6edf3;font-size:24px;cursor:pointer}
+#puzzle-qr{display:block;width:246px;max-width:100%;height:auto;margin:0 auto 8px}
+#puzzle-qr-panel a{display:block;color:#c2dfed;overflow-wrap:anywhere;font-size:.75rem}
+
 /* Secret preview deliberately contains no identifying artwork before discovery. */
 .puzzle-secret-silhouette{background:#060a10;clip-path:ellipse(42% 47% at 50% 50%);filter:blur(2px);box-shadow:inset 0 0 6px #66717d}
 .puzzle-score-group{line-height:1.15}.puzzle-score-line{display:flex;align-items:baseline;gap:5px}.puzzle-clear-count{display:flex;align-items:baseline;gap:5px;margin-top:5px}.puzzle-clear-count span{font-size:.6rem}
@@ -27,3 +49,5 @@
 .puzzle-bomb-preview{position:relative;display:inline-block;flex-shrink:0;width:30px;height:30px;margin-top:9px;border-radius:50%;background:radial-gradient(circle at 32% 27%,#afb4ba,#626a73 16%,#30363e 40%,#161a20 76%,#07090d);border:1px solid #535a63;box-shadow:inset -2px -3px 4px #0008}
 .puzzle-bomb-preview::before{content:'';position:absolute;left:13px;top:-9px;width:7px;height:10px;border:2px solid #b49a6c;border-left:0;border-bottom:0;border-radius:0 80% 0 0;transform:rotate(-15deg)}
 .puzzle-bomb-preview::after{content:'';position:absolute;left:17px;top:-14px;width:6px;height:9px;border-radius:70% 30% 60% 40%;background:radial-gradient(ellipse at 45% 75%,#fffbd1,#ffe34d 35%,#ff9a16 65%,#ff4900);box-shadow:0 0 5px #ffac36;transform:rotate(12deg)}
+
+.puzzle-clear-medals{display:grid;grid-template-columns:repeat(5,12px);grid-auto-rows:12px;gap:2px;width:68px;height:26px;margin-top:3px}.puzzle-clear-medals .puzzle-star{display:block;width:12px;height:12px;background:linear-gradient(135deg,#fff5b3 5%,#ffe56b 25%,#d69a16 48%,#fff08a 60%,#a56708 90%);clip-path:polygon(50% 0,62% 34%,100% 38%,71% 61%,80% 100%,50% 79%,20% 100%,29% 61%,0 38%,38% 34%)}.puzzle-aside .puzzle-rock-label{color:#fff;font-size:.72rem;font-weight:400;line-height:1.4;letter-spacing:normal}
