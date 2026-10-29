@@ -39,6 +39,11 @@
     close.textContent = String.fromCharCode(0x00D7);
 
     const links = [...menu.querySelectorAll('a')];
+    links.forEach(link => {
+        if (/(^|\/)games\.html(?:[?#]|$)/.test(link.getAttribute('href') || '')) {
+            link.textContent = 'GAMES ｰ EMJ ARCADE ｰ';
+        }
+    });
     let returnFocus = toggle;
     let closeTimer;
 

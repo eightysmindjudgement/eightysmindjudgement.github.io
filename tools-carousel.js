@@ -1,6 +1,5 @@
 (() => {
-    const list = document.querySelector('.tools-page .tool-list');
-    if (!list) return;
+    document.querySelectorAll('.tools-page .tool-list').forEach(list => {
     const itemLabel = list.dataset.itemLabel || 'TOOL';
     const itemName = itemLabel.toLowerCase();
     const cards = [...list.querySelectorAll('.tool-card')];
@@ -9,7 +8,7 @@
     carousel.className = 'tool-carousel';
     carousel.setAttribute('role', 'region');
     carousel.setAttribute('aria-roledescription', 'carousel');
-    carousel.setAttribute('aria-label', itemLabel === 'GAME' ? 'Game selector' : 'Tool selector');
+    carousel.setAttribute('aria-label', list.dataset.selectorLabel || (itemLabel === 'GAME' ? 'Game selector' : 'Tool selector'));
     carousel.tabIndex = 0;
     list.before(carousel);
     carousel.append(list);
@@ -96,4 +95,5 @@
     }, true);
     list.addEventListener('dragstart', event => event.preventDefault());
     select(0);
+    });
 })();

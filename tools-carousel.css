@@ -112,3 +112,45 @@
     .tools-page .tool-carousel .tool-card,
     .tools-page .tool-carousel .tool-card > span { transition: none; }
 }
+
+/* Directory-only additions: shared game cards keep their existing styles. */
+.tools-page .tools-directory-intro { padding: 1.7em 40px 0; }
+.tools-page .tools-scroll-cue {
+    display: flex;
+    width: 64px;
+    min-height: 80px;
+    margin: 0 auto 24px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    color: #ff8ae7;
+    text-shadow: 0 0 4px #ff39d4, 0 0 9px #b52aff99;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+}
+.tools-page .tools-scroll-cue:hover { color: #f0baff; }
+.tools-page #life-tools { scroll-margin-top: 24px; }
+.tools-page .tools-directory-section { border-top: 1px solid #ffffff24; padding-bottom: 48px; }
+.tools-page .tools-directory-section h2 { margin: 0 0 18px; font-size: clamp(1.2rem, 3vw, 1.6rem); letter-spacing: .12em; }
+.tools-page .tools-directory-section .tool-list { gap: 0; }
+.tools-page .tools-lab-intro { color: #b6bac0; font-size: .9rem; }
+.tools-page .lab-visual { display: flex; align-items: center; justify-content: center; align-self: flex-start; width: 108px; height: 58px; margin-bottom: 16px; border: 1px solid #858b93; border-radius: 2px; color: #e7e9ec; background: #ffffff08; box-sizing: border-box; }
+.tools-page .lab-visual-type { font: bold 36px Georgia, serif; letter-spacing: -.08em; }
+.tools-page .lab-visual-color { gap: 6px; }
+.tools-page .lab-visual-color i { width: 22px; height: 28px; border: 1px solid #ffffff60; background: #d5dbe2; }
+.tools-page .lab-visual-color i:nth-child(2) { background: #7c91a7; }
+.tools-page .lab-visual-color i:nth-child(3) { background: #343f4d; }
+.tools-page .lab-visual-space { padding: 11px 20px; border-style: dashed; background: #7c91a733; }
+.tools-page .lab-visual-space i { width: 100%; height: 100%; border: 5px solid #b2becb; box-sizing: border-box; background: #20252b; }
+.tools-page .lab-visual-layout { padding: 9px; gap: 5px; }
+.tools-page .lab-visual-layout i { width: 23px; height: 100%; border: 1px solid #aeb9c6; background: #7c91a733; }
+.tools-page .lab-visual-layout i:first-child { width: 36px; }
+.web-design-lab-page .lab-detail { scroll-margin-top: 100px; border-top: 1px solid #ffffff24; }
+.web-design-lab-page .lab-detail:target { background: #ffffff08; }
+.web-design-lab-page main a { color: #d3dce7; text-underline-offset: .2em; }
+@media (max-width: 600px) {
+    .tools-page .tools-directory-intro { padding-inline: 20px; }
+    .tools-page .tools-directory-section, .web-design-lab-page .lab-detail { padding-inline: 20px; }
+    .tools-page .tools-directory-section .tool-carousel .tool-card { min-height: 340px; }
+}

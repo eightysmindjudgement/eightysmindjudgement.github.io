@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Explore tools from Eighty's Mind Judgement, including the JAPANESE ERA CONVERTER, COUNTDOWN TO FULFILLMENT, and financial calculators.">
+    <meta name="description" content="Explore tools from Eighty's Mind Judgement, including the JAPANESE ERA CONVERTER, COUNTDOWN TO FULFILLMENT, financial calculators, and the upcoming WEB DESIGN LAB.">
 
     <title>TOOLS | Eighty's Mind Judgement Official Website</title>
 
@@ -37,10 +37,23 @@
     </nav>
 
     <main class="tools-main">
-        <section class="tools-section" aria-label="Tools">
+        <div class="tools-directory-intro">
             <p class="tools-intro">From Eighty's Mind Judgement to everyone striving to make the most of life: practical tools to help you live with purpose and move forward with confidence.</p>
             <p class="tools-intro-japanese" lang="ja">Eighty's Mind Judgementから、懸命に生きるあなたへ。日々の暮らしや人生をより豊かに、力強く歩むためのツールを提供します。</p>
-            <div class="tool-list">
+            <a class="home-scroll-cue tools-scroll-cue" href="#life-tools" aria-label="Scroll to LIFE TOOLS">
+                <svg viewBox="0 0 48 64" aria-hidden="true" focusable="false">
+                    <path class="home-scroll-tube" d="M24 6 V54 M9 39 L24 54 L39 39" />
+                    <path class="home-scroll-light home-scroll-light--shaft" pathLength="100" d="M24 6 V54" />
+                    <path class="home-scroll-light home-scroll-light--shaft home-scroll-light--core" pathLength="100" d="M24 6 V54" />
+                    <path class="home-scroll-light home-scroll-light--head" pathLength="100" d="M9 39 L24 54" />
+                    <path class="home-scroll-light home-scroll-light--head" pathLength="100" d="M39 39 L24 54" />
+                </svg>
+                <span>SCROLL</span>
+            </a>
+        </div>
+        <section class="tools-section tools-directory-section" id="life-tools" aria-labelledby="life-tools-title">
+            <h2 id="life-tools-title">LIFE TOOLS</h2>
+            <div class="tool-list" data-selector-label="LIFE TOOLS">
                 <a class="tool-card" href="japanese-era-converter.html">
                     <span class="tool-card-title">JAPANESE ERA CONVERTER<span lang="ja">&#x3000;和暦・西暦変換</span></span>
                     <span class="tool-card-description">Convert between Gregorian years and Japanese era years.</span>
@@ -51,6 +64,11 @@
                     <span class="tool-card-description">Set your personal target age and see the time remaining. Every day counts.</span>
                     <span class="tool-card-japanese" lang="ja">自分で設定した目標年齢までの時間を表示します。</span>
                 </a>
+            </div>
+        </section>
+        <section class="tools-section tools-directory-section" id="finance-tools" aria-labelledby="finance-tools-title">
+            <h2 id="finance-tools-title">FINANCE TOOLS</h2>
+            <div class="tool-list" data-selector-label="FINANCE TOOLS">
                 <a class="tool-card" href="compound-interest-calculator.html">
                     <span class="tool-card-title">COMPOUND INTEREST CALCULATOR<span lang="ja">&#x3000;複利計算ツール</span></span>
                     <span class="tool-card-description">Estimate how your money could grow through compound interest and regular contributions.</span>
@@ -61,11 +79,36 @@
                     <span class="tool-card-description">Estimate loan interest, repayment amounts, and outstanding balances.</span>
                     <span class="tool-card-japanese" lang="ja">ローンの支払利息、返済額、借入残高を試算します。</span>
                 </a>
-                <div class="tool-card tool-card-coming-soon" aria-disabled="true">
-                    <span class="tool-card-title">MORE TOOLS</span>
-                    <span class="tool-card-description">More tools are in development.</span>
-                    <span class="tool-card-japanese" lang="ja">今後、ツールを追加予定です。</span>
-                </div>
+            </div>
+        </section>
+        <section class="tools-section tools-directory-section" id="web-design-lab" aria-labelledby="web-design-lab-title">
+            <h2 id="web-design-lab-title">WEB DESIGN LAB</h2>
+            <p class="tools-lab-intro" lang="ja">Web制作の設定を視覚的に考えるための補助ツール。各画面は準備中です。</p>
+            <div class="tool-list" data-selector-label="WEB DESIGN LAB">
+                <a class="tool-card" href="web-design-lab.html#typography">
+                    <span class="lab-visual lab-visual-type" aria-hidden="true">Aa</span>
+                    <span class="tool-card-title">TYPOGRAPHY</span>
+                    <span class="tool-card-description" lang="ja">文字サイズ・太さ・行間・文字間隔</span>
+                    <span class="tool-card-japanese" lang="ja">準備中 · 詳細を見る</span>
+                </a>
+                <a class="tool-card" href="web-design-lab.html#color">
+                    <span class="lab-visual lab-visual-color" aria-hidden="true"><i></i><i></i><i></i></span>
+                    <span class="tool-card-title">COLOR</span>
+                    <span class="tool-card-description" lang="ja">文字色・背景色・枠線色</span>
+                    <span class="tool-card-japanese" lang="ja">準備中 · 詳細を見る</span>
+                </a>
+                <a class="tool-card" href="web-design-lab.html#spacing">
+                    <span class="lab-visual lab-visual-space" aria-hidden="true"><i></i></span>
+                    <span class="tool-card-title">SPACING</span>
+                    <span class="tool-card-description" lang="ja">margin・padding・gap</span>
+                    <span class="tool-card-japanese" lang="ja">準備中 · 詳細を見る</span>
+                </a>
+                <a class="tool-card" href="web-design-lab.html#layout">
+                    <span class="lab-visual lab-visual-layout" aria-hidden="true"><i></i><i></i><i></i></span>
+                    <span class="tool-card-title">LAYOUT</span>
+                    <span class="tool-card-description" lang="ja">幅・高さ・配置・並び方向</span>
+                    <span class="tool-card-japanese" lang="ja">準備中 · 詳細を見る</span>
+                </a>
             </div>
         </section>
     </main>
