@@ -9,7 +9,7 @@ const root=path.resolve(__dirname,'..');
 const hooks=`
 globalThis.gameTest={
  state:()=>({mode,time,score,kills,life,best,level,enemies:enemies.length,shots:shots.length,bullets:bullets.length,particles:particles.length,boss:boss?.hp,x:player.position.x,fire:firePointer!==null,drag:!!drag}),
- step:n=>{for(let i=0;i<n;i++)if(mode==='playing')update(1/60)},
+ step:n=>{for(let i=0;i<n;i++){if(mode==='playing')update(1/60);else if(mode==='ending')updateEnding(1/60)}},
  damage:()=>{invulnerable=0;damage()},
  target:()=>{addEnemy();const e=enemies.at(-1);e.mesh.position.set(player.position.x,player.position.y,-8)},
  hazard:kind=>{invulnerable=0;if(kind==='bullet'){enemyBullet(player.position.clone(),new T.Vector3(0,0,10))}else{addRock();enemies.at(-1).mesh.position.copy(player.position)}},
@@ -34,8 +34,8 @@ async function run(){
   await page.locator('#if-pause').click();const paused=await state();await page.evaluate(()=>gameTest.step(200));assert.equal((await state()).time,paused.time);
   await page.locator('#if-start').click();await page.evaluate(()=>{gameTest.hazard('bullet');gameTest.step(1)});assert.equal((await state()).life,2);
   await page.evaluate(()=>{gameTest.hazard('rock');gameTest.step(1)});assert.equal((await state()).life,1);
-  await page.evaluate(()=>{gameTest.damage()});assert.equal((await state()).mode,'over');
-  for(let i=0;i<2;i++){await page.locator('#if-start').click();const s=await state();assert.equal(s.life,3);assert.equal(s.score,0);assert.equal(s.enemies,0);assert.equal(s.bullets,0);assert.equal(s.shots,0);if(i===0)await page.evaluate(()=>{gameTest.damage();gameTest.damage();gameTest.damage()})}
+  await page.evaluate(()=>{gameTest.damage()});assert.equal((await state()).mode,'ending');await page.evaluate(()=>gameTest.step(205));assert.equal((await state()).mode,'over');
+  for(let i=0;i<2;i++){await page.locator('#if-start').click();const s=await state();assert.equal(s.life,3);assert.equal(s.score,0);assert.equal(s.enemies,0);assert.equal(s.bullets,0);assert.equal(s.shots,0);if(i===0)await page.evaluate(()=>{gameTest.damage();gameTest.damage();gameTest.damage();gameTest.step(205)})}
   await page.evaluate(()=>{gameTest.stage()});assert.ok((await state()).boss>0);
   await page.locator('#if-canvas').focus();await page.keyboard.down('Space');await page.evaluate(()=>{gameTest.shield();for(let i=0;i<2000;i++){gameTest.aim();gameTest.step(1)}});await page.keyboard.up('Space');assert.equal((await state()).mode,'clear');assert.ok((await state()).score>=4500);
   await page.locator('#if-home').click();await page.locator('[data-difficulty="HARD"]').click();assert.equal((await state()).best,0);await page.locator('#if-start').click();await page.keyboard.down('KeyD');await page.evaluate(()=>gameTest.step(120));await page.keyboard.up('KeyD');assert.ok((await state()).x>0);
