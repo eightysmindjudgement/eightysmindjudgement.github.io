@@ -1,0 +1,11 @@
+const {MetalStrike}=require('../games/metal-strike/engine.js');
+const assert=require('node:assert/strict');let count=0;
+function game(best=0){const g=new MetalStrike(best);g.reset();return g;}
+function test(name,fn){fn();count++;console.log('PASS '+name);}
+test('PERFECT / GOOD and score',()=>{let g=game();assert.equal(g.strike(g.arrival,g.xAt(g.arrival)),'PERFECT');assert.equal(g.score,100);let h=game(),t=h.arrival-.2;assert.equal(h.strike(t,h.xAt(t)),'GOOD');assert.equal(h.score,50);let j=game();assert.equal(j.strike(j.arrival,j.xAt(j.arrival)+.1),'GOOD');});
+test('Early and misplaced inputs; one miss per ball',()=>{let g=game();assert.equal(g.strike(.1,.5),null);assert.equal(g.strike(g.arrival,0),null);g.advance(g.arrival+.251);assert.equal(g.miss,1);g.advance(g.time+.1);assert.equal(g.miss,1);});
+test('Three misses end game and disable scoring',()=>{let g=game();g.advance(40);assert.equal(g.miss,3);assert.equal(g.reason,'GAME OVER');g.strike(44,.5);assert.equal(g.score,0);});
+test('TIME UP, combo multiplier and capped speed',()=>{let g=game();while(g.state==='PLAYING'){if(g.arrival>=45){g.advance(45);break;}g.strike(g.arrival,g.xAt(g.arrival));if(g.state==='PLAYING')g.advance(Math.min(45,g.phaseAt+g.zOrigin*g.flight));}assert.equal(g.reason,'TIME UP');assert.ok(g.combo>5);assert.ok(g.score>g.perfect*100);assert.ok(g.flight>=2.5/1.8);});
+test('Retry resets all play data and preserves record',()=>{let g=game(500);g.strike(g.arrival,g.xAt(g.arrival));g.advance(45);g.reset();for(const field of ['score','combo','maxCombo','perfect','good','miss','time','rallies'])assert.equal(g[field],0);assert.equal(g.best,500);assert.equal(g.events.length,0);});
+test('Frame-rate independent and continuous outgoing path',()=>{let a=game(),b=game();a.advance(10);for(let t=0;t<10;t+=.007)b.advance(t);b.advance(10);assert.equal(a.miss,b.miss);assert.equal(a.phase,b.phase);assert.equal(a.ball().x,b.ball().x);let g=game();g.strike(g.arrival,g.xAt(g.arrival));assert.equal(g.ball().z,1);g.advance(g.time+.1);assert.ok(g.ball().z<1);});
+console.log(count+' tests passed');

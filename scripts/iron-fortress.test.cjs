@@ -30,7 +30,7 @@ async function run(){
   await page.goto(base+'/games/iron-fortress/iron-fortness.html');await page.waitForFunction(()=>globalThis.gameTest);
   const state=()=>page.evaluate(()=>gameTest.state());
   assert.equal((await state()).mode,'title');assert.equal((await state()).time,0);
-  await page.locator('#if-start').click();await page.keyboard.down('Space');await page.evaluate(()=>{gameTest.target();gameTest.step(35)});await page.keyboard.up('Space');assert.equal((await state()).kills,1);assert.equal((await state()).score,150);
+  await page.locator('#if-start').click();await page.keyboard.down('Space');await page.evaluate(()=>{gameTest.target();gameTest.step(35)});await page.keyboard.up('Space');assert.equal((await state()).kills,1);assert.equal((await state()).score,200);
   await page.locator('#if-pause').click();const paused=await state();await page.evaluate(()=>gameTest.step(200));assert.equal((await state()).time,paused.time);
   await page.locator('#if-start').click();await page.evaluate(()=>{gameTest.hazard('bullet');gameTest.step(1)});assert.equal((await state()).life,2);
   await page.evaluate(()=>{gameTest.hazard('rock');gameTest.step(1)});assert.equal((await state()).life,1);
