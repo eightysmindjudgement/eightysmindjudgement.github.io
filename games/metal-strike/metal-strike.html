@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="METAL STRIKE — 鋼鉄のトンネルでエネルギー球を打ち返す、無料の疑似3Dアクション。">
+
+    <title>METAL STRIKE | Eighty's Mind Judgement Official Website</title>
+
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../../emj-puzzle.css">
+    <link rel="stylesheet" href="game.css">
+</head>
+
+<body class="puzzle-page">
+
+    <header>
+        <a href="../../index.html" aria-label="Home">
+            <img src="../../EMJ_logo2026.png" alt="Eighty's Mind Judgement">
+        </a>
+        <h1 data-puzzle-name>METAL STRIKE</h1>
+        <p class="site-name">Eighty's Mind Judgement Official Website<br><small>エイティズマインドジャッジメント オフィシャルウェブサイト</small></p>
+        <p>WORKING PEOPLE'S HEAVY METAL</p>
+        <section data-share-url="https://eightysmindjudgement.github.io/games/metal-strike/metal-strike.html" data-share-title="METAL STRIKE" data-share-text="無料の反射神経アクション METAL STRIKE" class="puzzle-sharing" aria-label="ゲームを共有">
+            <div class="puzzle-share-buttons">
+                <button type="button" id="puzzle-link-copy" aria-label="リンクをコピー" title="リンクをコピー"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg></button>
+                <button type="button" id="puzzle-share" aria-label="共有する" title="共有する"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"/></svg></button>
+                <button type="button" id="puzzle-qr-toggle" aria-label="QRコードを表示" title="QRコードを表示" aria-haspopup="dialog" aria-expanded="false" aria-controls="puzzle-qr-panel"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h3v3h-3zM21 14v3h-4v4h4M14 20v1"/></svg></button>
+            </div>
+            <p id="puzzle-share-status" role="status" aria-live="polite"></p>
+            <div id="puzzle-copy-fallback" hidden>
+                <label for="puzzle-share-url">URLを選択してコピーしてください</label>
+                <input id="puzzle-share-url" type="url" readonly spellcheck="false">
+            </div>
+            <dialog id="puzzle-qr-panel" aria-labelledby="puzzle-qr-title">
+                <div class="puzzle-qr-heading"><h2 id="puzzle-qr-title">QR CODE</h2><button type="button" id="puzzle-qr-close" aria-label="QRコードを閉じる" title="閉じる" autofocus>×</button></div>
+                <canvas id="puzzle-qr" width="246" height="246" role="img" aria-label="METAL STRIKEのURLのQRコード"></canvas>
+                <a href="https://eightysmindjudgement.github.io/games/metal-strike/metal-strike.html">https://eightysmindjudgement.github.io/games/metal-strike/metal-strike.html</a>
+            </dialog>
+        </section>
+    </header>
+
+    <nav>
+        <a href="../../index.html">HOME</a>
+        <a href="../../visions.html">VISIONS</a>
+        <a href="../../biography.html">BIOGRAPHY</a>
+        <a href="../../discography.html">DISCOGRAPHY</a>
+        <a href="../../videos.html">VIDEOS</a>
+        <a href="../../tools.html">TOOLS</a>
+        <a href="../../market.html">MARKET</a>
+        <a href="../../games.html" aria-current="page">GAMES</a>
+        <a href="../../links.html">LINKS</a>
+        <a href="../../sitemap.html">SITEMAP</a>
+    </nav>
+
+    <main class="puzzle-main ms-main" lang="ja">
+<p class="puzzle-lead">鋼鉄を貫く、一撃を。<br>迫るエネルギー球を打ち返し、45秒のラリーに挑もう。<small class="puzzle-translation" lang="en">Strike the energy. Keep the rally alive for 45 seconds.</small></p>
+<div class="ms-layout"><section class="ms-game" aria-label="METAL STRIKE">
+<div class="ms-hud"><div>SCORE<strong id="ms-score">0</strong></div><div>TIME<strong id="ms-time" role="timer">45.0</strong></div><div>COMBO<strong id="ms-combo">0</strong></div><div>ミス残数<strong id="ms-lives">3</strong></div></div>
+<div class="ms-screen"><canvas id="ms-canvas" tabindex="0" aria-label="球が手前の打撃ラインに来たら、その左右位置をクリックまたはタップ。矢印キーで照準、Spaceで打ち返す。">Canvas対応ブラウザで遊んでください。</canvas>
+<div id="ms-overlay"><div><p class="ms-eyebrow">EMJ ARCADE / 03</p><h2 id="ms-title">METAL STRIKE</h2><p id="ms-copy">球が手前の赤いラインに来た瞬間、球と同じ左右位置をクリック／タップ！<br>PC：マウス移動・← →で照準、Spaceで打撃。<small>Aim with your mouse or arrow keys. Click, tap or press Space as the ball reaches the strike line.</small></p><div id="ms-result" hidden></div><button id="ms-start" type="button">START</button></div></div></div>
+<p id="ms-status" role="status" aria-live="polite">READY — タイミングと左右位置を合わせよう。</p></section>
+<aside class="ms-aside"><h3>HOW TO PLAY</h3><p>球の左右位置を追い、手前の打撃ラインで一撃。クリック／タップした横位置が打撃の中心になります。早すぎる入力は空振りです。<small>Follow the ball and strike at the near line. Your click or tap sets the strike position.</small></p><p>Spaceの場合はマウス移動または← →で照準を合わせてください。ゲーム画面にフォーカスがある間だけキー操作できます。<small>Focus the game screen to use arrow keys and Space.</small></p><h3>SCORING</h3><p>PERFECT 100 / GOOD 50<br>5 COMBO ×1.5 / 10 ×2 / 20 ×3<br>3回ミス、または45秒で終了。<small>Three misses or 45 seconds ends the game.</small></p><h3>PERSONAL BEST</h3><strong id="ms-best">0</strong><p>完全無料・広告なし。自己ベストのみ端末に保存。<small>Free, no ads. Best score stored on this device.</small></p><a href="../../games.html">← GAMESへもどる<small>Back to games</small></a></aside></div>
+<noscript>遊ぶにはJavaScriptを有効にしてください。 / Enable JavaScript to play.</noscript><p class="puzzle-note">本ゲームは予告なく改修・変更・公開停止する場合があります。改修に伴う不具合やゲームデータ消失の可能性について、あらかじめご了承ください。<small class="puzzle-translation" lang="en">This game may be updated, modified, or discontinued without prior notice. Updates may cause bugs or loss of game data.</small></p></main>
+    <footer>
+        <p>℗ 2025 Eighty's Mind Judgement<br>
+        © 2025 Eighty's Mind Judgement<br>
+        Based in Japan | Active since November 8, 2025</p>
+        <p class="footer-sitemap"><a href="../../sitemap.html">SITEMAP</a></p>
+    </footer>
+
+    <script src="../../site-navigation.js" defer></script>
+    <script src="../../emj-puzzle-share.js" defer></script>
+<script src="engine.js" defer></script>
+<script src="game.js" defer></script>
+</body>
+
+</html>
