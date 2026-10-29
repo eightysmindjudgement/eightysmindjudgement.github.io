@@ -11,7 +11,7 @@ let time=0,score=0,kills=0,life=3,best=0,invulnerable=0,shot=0,spawn=0,rocks=0,w
 const enemies=[],shots=[],bullets=[],particles=[],keys=new Set();
 let ending=null;
 let firePointer=null,drag=null,target=new T.Vector2(),bounds={x:7,y:5};
-function remove(list,item){const i=list.indexOf(item);if(i<0)return;list.splice(i,1);view.scene.remove(item.mesh);item.mesh.traverse(o=>{o.geometry?.dispose();if(o.material)for(const m of [o.material].flat())m.dispose()})}
+function remove(list,item){const i=list.indexOf(item);if(i<0)return;list.splice(i,1);view.scene.remove(item.mesh);const geometries=new Set(),materials=new Set();item.mesh.traverse(o=>{if(o.geometry)geometries.add(o.geometry);if(o.material)for(const m of [o.material].flat())materials.add(m)});for(const geo of geometries)geo.dispose();for(const m of materials){m.map?.dispose();m.dispose()}}
 function clearInput(){keys.clear();firePointer=null;drag=null;ui('if-fire').classList.remove('active')}
 function hud(){ui('if-score').textContent=score;ui('if-best').textContent=best;ui('if-kills').textContent=kills;ui('if-life').textContent='♥'.repeat(Math.max(0,life));ui('if-sector').textContent=boss?'BOSS':time>=STAGE.interior?'03 / CORE':time>=STAGE.fortress?'02 / FORTRESS':'01 / APPROACH';ui('if-progress').value=Math.min(100,time);ui('if-boss').hidden=!boss;if(boss)ui('if-boss-hp').value=boss.hp/boss.max}
 function show(title,copy){ui('if-overlay').hidden=false;ui('if-title').textContent=title;ui('if-copy').textContent=copy;ui('if-difficulty').hidden=mode!=='title';ui('if-start').textContent=mode==='title'?'START':mode==='paused'?'Resume（再開）':'RETRY';ui('if-home').hidden=mode==='title';ui('if-pause').disabled=mode!=='playing'&&mode!=='paused';if(view)resize()}
@@ -21,7 +21,7 @@ function start(){audio.unlock().then(c=>{if(c&&mode==='playing')audio.play('star
 function finish(clear){mode=clear?'clear':'over';record();clearInput();hud();show(clear?'STAGE CLEAR':'GAME OVER',`SCORE ${score}  ·  BEST ${best}  ·  DESTROYED ${kills}`)}
 function pause(){if(mode==='playing'){mode='paused';clearInput();show('PAUSED','ひと休み。RESUMEで再開 / Resume when ready.')}else if(mode==='paused'){audio.unlock();mode='playing';ui('if-overlay').hidden=true;resize();canvas.focus()}}
 function damage(){if(invulnerable>0||mode!=='playing')return;life--;invulnerable=1.6;audio.play('damage');root.classList.add('damaged');if(life<=0)beginEnding(false)}
-function burst(pos,count=12){audio.play('hit');for(let i=0;i<count&&particles.length<100;i++){const mesh=spark();mesh.position.copy(pos);view.scene.add(mesh);particles.push({mesh,ttl:.65,velocity:new T.Vector3((Math.random()-.5)*10,(Math.random()-.5)*10,(Math.random()-.5)*10)})}}
+function burst(pos,count=12){audio.play('hit');const scale=count/12;effect(pos,'flash',1,scale*.35);effect(pos,'flame',view.compact?5:9,scale*.45);effect(pos,'smoke',3,scale*.35);effect(pos,'metal',view.compact?4:7,scale*.4);effect(pos,'spark',view.compact?5:9,scale*.5)}
 function addEnemy(){if(enemies.length>=20)return;const type=wave++%3,data=ENEMIES[type],mesh=ship(data.color,type);mesh.rotation.y=Math.PI;const x=Math.sin(wave*2.4)*bounds.x*.8,y=Math.cos(wave*1.7)*3.5;mesh.position.set(x,y,-100);view.scene.add(mesh);enemies.push({mesh,type,hp:Math.max(1,Math.ceil(data.hp*cfg.hp)),radius:data.radius,score:data.score,baseX:x,phase:wave,attack:cfg.attack})}
 function addRock(){if(enemies.length>=20)return;const mesh=obstacle();mesh.position.set(Math.sin(wave*1.6)*bounds.x*.8,Math.cos(wave*2.1)*3.5,-100);view.scene.add(mesh);enemies.push({mesh,type:3,radius:1.65,hp:Infinity})}
 function enemyBullet(pos,aim){if(bullets.length>=90)return;const mesh=bolt(0xff6658,.3);mesh.position.copy(pos);view.scene.add(mesh);const velocity=aim.clone().sub(pos).normalize().multiplyScalar(cfg.bullet);mesh.quaternion.setFromUnitVectors(new T.Vector3(0,0,1),velocity.clone().normalize());bullets.push({mesh,velocity})}
@@ -32,12 +32,13 @@ function update(dt){
  const motion=cfg.motion??1;
  time+=dt;shot-=dt;invulnerable=Math.max(0,invulnerable-dt);player.visible=invulnerable===0||Math.floor(invulnerable*12)%2===0;if(invulnerable<1.3)root.classList.remove('damaged');
  const dx=Number(keys.has('ArrowRight')||keys.has('KeyD'))-Number(keys.has('ArrowLeft')||keys.has('KeyA')),dy=Number(keys.has('ArrowUp')||keys.has('KeyW'))-Number(keys.has('ArrowDown')||keys.has('KeyS'));
- target.x=clamp(target.x+dx*dt*9,-bounds.x,bounds.x);target.y=clamp(target.y+dy*dt*9,-bounds.y,bounds.y);const previous=player.position.x;player.position.x=T.MathUtils.damp(player.position.x,target.x,12,dt);player.position.y=T.MathUtils.damp(player.position.y,target.y,12,dt);player.rotation.z=T.MathUtils.damp(player.rotation.z,-(player.position.x-previous)/Math.max(dt,.001)*.055,8,dt);
+ target.x=clamp(target.x+dx*dt*9,-bounds.x,bounds.x);target.y=clamp(target.y+dy*dt*9,-bounds.y,bounds.y);const previous=player.position.x,previousY=player.position.y;player.position.x=T.MathUtils.damp(player.position.x,target.x,12,dt);player.position.y=T.MathUtils.damp(player.position.y,target.y,12,dt);player.rotation.z=T.MathUtils.damp(player.rotation.z,-(player.position.x-previous)/Math.max(dt,.001)*.055,8,dt);
+ player.rotation.x=T.MathUtils.damp(player.rotation.x,(player.position.y-previousY)/Math.max(dt,.001)*.025,8,dt);
  if((firePointer!==null||keys.has('Space'))&&shot<=0){shoot();shot=WEAPON.interval}
  if(time<STAGE.boss){spawn-=dt;if(spawn<=0){addEnemy();spawn=cfg.spawn}if(time>STAGE.fortress){rocks-=dt;if(rocks<=0){addRock();rocks=cfg.obstacle}}}else if(!boss)createBoss();
  for(const e of [...enemies]){e.mesh.position.z+=dt*cfg.speed;if(e.type===1)e.mesh.position.x=clamp(e.baseX+Math.sin(time*2*motion+e.phase)*2,-bounds.x,bounds.x);if(e.type<3){e.attack-=dt;if(e.attack<=0&&e.mesh.position.z<0){enemyBullet(e.mesh.position,player.position);e.attack=cfg.attack}}if(hit(e.mesh.position,player.position,e.radius+.45)){damage();remove(enemies,e);if(mode!=='playing')return}else if(e.mesh.position.z>12)remove(enemies,e)}
- if(boss){boss.mesh.position.z=Math.min(-26,boss.mesh.position.z+dt*8*motion);boss.mesh.position.x=Math.sin(time*.65*motion)*bounds.x*.65;boss.mesh.position.y=Math.cos(time*.8*motion)*2.7;boss.attack-=dt;const warning=boss.attack<1;ui('if-warning').textContent=warning?(boss.pattern%2?'WARNING · FAN SHOT':'WARNING · TARGET LOCK'):'';boss.mesh.children[0].material.emissive.setHex(warning?0x662211:0x000000);if(boss.attack<=0){const p=boss.mesh.position;const aim=player.position.clone();if(boss.pattern++%2){for(let i=-2;i<=2;i++)enemyBullet(p,new T.Vector3(i*3,aim.y,5))}else{for(const x of [-3,0,3])enemyBullet(p,new T.Vector3(aim.x+x,aim.y,5))}boss.attack=cfg.attack+1}}
- for(const s of [...shots]){const oldZ=s.mesh.position.z;s.mesh.position.z-=WEAPON.speed*dt;let victim=null;for(const e of [...enemies,...(boss?[boss]:[])]){const p=e.mesh.position;if(Math.abs(s.mesh.position.x-p.x)<e.radius&&Math.abs(s.mesh.position.y-p.y)<e.radius&&p.z<=oldZ+2&&p.z>=s.mesh.position.z-2){victim=e;break}}if(victim){remove(shots,s);victim.hp-=WEAPON.damage;if(victim.hp<=0){const p=victim.mesh.position.clone();if(victim!==boss)burst(p);score+=Math.round((victim===boss?3000:victim.score)*cfg.multiplier);kills++;record();if(victim===boss){beginEnding(true);return}else remove(enemies,victim)}}else if(s.mesh.position.z< -130)remove(shots,s)}
+ if(boss){boss.mesh.position.z=Math.min(-26,boss.mesh.position.z+dt*8*motion);boss.mesh.position.x=Math.sin(time*.65*motion)*bounds.x*.65;boss.mesh.position.y=Math.cos(time*.8*motion)*2.7;boss.attack-=dt;const warning=boss.attack<1;ui('if-warning').textContent=warning?(boss.pattern%2?'WARNING · FAN SHOT':'WARNING · TARGET LOCK'):'';boss.mesh.children[0].material.emissive.setHex(warning?0x662211:0x000000);if(boss.mesh.userData.core)boss.mesh.userData.core.material.emissiveIntensity=warning?3:1.6;if(boss.attack<=0){const p=boss.mesh.position;const aim=player.position.clone();if(boss.pattern++%2){for(let i=-2;i<=2;i++)enemyBullet(p,new T.Vector3(i*3,aim.y,5))}else{for(const x of [-3,0,3])enemyBullet(p,new T.Vector3(aim.x+x,aim.y,5))}boss.attack=cfg.attack+1}}
+ for(const s of [...shots]){const oldZ=s.mesh.position.z;s.mesh.position.z-=WEAPON.speed*dt;let victim=null;for(const e of [...enemies,...(boss?[boss]:[])]){const p=e.mesh.position;if(Math.abs(s.mesh.position.x-p.x)<e.radius&&Math.abs(s.mesh.position.y-p.y)<e.radius&&p.z<=oldZ+2&&p.z>=s.mesh.position.z-2){victim=e;break}}if(victim){effect(s.mesh.position,'spark',view.compact?2:3,.16);remove(shots,s);victim.hp-=WEAPON.damage;if(victim.hp<=0){const p=victim.mesh.position.clone();if(victim!==boss)burst(p,victim.type===2?18:12);score+=Math.round((victim===boss?3000:victim.score)*cfg.multiplier);kills++;record();if(victim===boss){beginEnding(true);return}else remove(enemies,victim)}}else if(s.mesh.position.z< -130)remove(shots,s)}
  for(const b of [...bullets]){b.mesh.position.addScaledVector(b.velocity,dt);if(hit(b.mesh.position,player.position,.65)){damage();remove(bullets,b);if(mode!=='playing')return}else if(b.mesh.position.z>14||Math.abs(b.mesh.position.x)>40||Math.abs(b.mesh.position.y)>30)remove(bullets,b)}
  animateParticles(dt);
  view.background(dt,time);hud();
@@ -45,15 +46,15 @@ function update(dt){
 
 // Ending phases use the render loop, never detached timers or combat updates.
 function effect(pos,kind,count,scale=1){
- for(let i=0;i<count&&particles.length<240;i++){
+ for(let i=0;i<count&&particles.length<(view.particleLimit??240);i++){
   const metal=kind==='metal',smoke=kind==='smoke',flash=kind==='flash';
-  const geometry=metal?new T.BoxGeometry(.4+Math.random()*.8,.15+Math.random()*.4,.4+Math.random()):new T.OctahedronGeometry(flash?2:smoke?.7:.35);
-  const material=metal?new T.MeshStandardMaterial({color:0x8795a6,metalness:.8,roughness:.4,transparent:true}):new T.MeshBasicMaterial({color:flash?0xffffff:smoke?0x45505d:i%2?0xff6319:0xffce56,transparent:true,depthWrite:false});
+  const geometry=metal?new T.BoxGeometry(.25+Math.random()*.5,.08+Math.random()*.2,.2+Math.random()*.6):new T.SphereGeometry(flash?.9:smoke?.65:kind==='spark'?.09:.3,view.compact?8:12,view.compact?6:8);
+  const material=metal?new T.MeshStandardMaterial({color:0x8795a6,metalness:.8,roughness:.4,transparent:true}):new T.MeshBasicMaterial({color:flash?0xffffff:smoke?0x45505d:i%2?0xff6319:0xffce56,transparent:true,depthWrite:false,blending:smoke?T.NormalBlending:T.AdditiveBlending,toneMapped:false});
   const mesh=new T.Mesh(geometry,material);mesh.position.copy(pos);mesh.position.x+=(Math.random()-.5)*scale*2;mesh.position.y+=(Math.random()-.5)*scale;mesh.position.z+=(Math.random()-.5)*scale;mesh.scale.setScalar(scale);view.scene.add(mesh);
   particles.push({mesh,effect:kind,ttl:flash?.22:metal?5:smoke?3:1.2,spin:new T.Vector3(Math.random()*6,Math.random()*8,Math.random()*5),velocity:new T.Vector3((Math.random()-.5)*scale*15,smoke?scale*2:(Math.random()-.3)*scale*12,(Math.random()-.3)*scale*17)});
  }
 }
-function explode(pos,scale){audio.play('explosion');effect(pos,'flash',1,scale);effect(pos,'flame',32,scale);effect(pos,'smoke',18,scale);effect(pos,'metal',32,scale)}
+function explode(pos,scale){audio.play('explosion');effect(pos,'flash',1,scale);effect(pos,'flame',view.compact?20:32,scale);effect(pos,'metal',view.compact?24:40,scale);effect(pos,'spark',view.compact?12:24,scale);effect(pos,'smoke',view.compact?10:18,scale)}
 function beginEnding(clear){
  if(mode!=='playing'||ending)return;
  mode='ending';clearInput();ui('if-pause').disabled=true;ui('if-warning').textContent='';root.classList.remove('damaged');
@@ -65,9 +66,9 @@ function beginEnding(clear){
 }
 function updateEnding(dt){
  const e=ending;if(!e)return;e.elapsed+=dt;animateParticles(dt);view.background(dt,time);
- if(e.clear){player.visible=true;player.rotation.z=T.MathUtils.damp(player.rotation.z,0,5,dt)}
+ if(e.clear){player.visible=true;player.rotation.z=T.MathUtils.damp(player.rotation.z,0,5,dt);player.rotation.x=T.MathUtils.damp(player.rotation.x,0,5,dt)}
  if(e.phase==='burn'){
-  e.emission-=dt;if(e.emission<=0){effect(e.pos,'flame',6,1.8);effect(e.pos,'smoke',3,1.5);e.emission=.09}
+  e.emission-=dt;if(e.emission<=0){const hotspot=e.pos.clone().add(new T.Vector3(Math.sin(e.elapsed*19)*3,Math.cos(e.elapsed*13)*1.4,Math.sin(e.elapsed*11)*2));effect(hotspot,'flame',view.compact?3:6,1.1);effect(hotspot,'smoke',2,1);effect(hotspot,'spark',2,.8);e.emission=.09}
   boss.mesh.rotation.z+=dt*.18;
   if(e.elapsed>=1.2){explode(e.pos,2.8);remove([boss],boss);boss=null;ui('if-boss').hidden=true;e.phase='blast';e.elapsed=0}
  }else if(e.phase==='blast'&&e.elapsed>=.4){
