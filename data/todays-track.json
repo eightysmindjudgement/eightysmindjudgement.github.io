@@ -1,6 +1,6 @@
 {
   "channelId": "UChh-9Ik4sCslLBSzaKTD7Sg",
-  "updatedAt": "2026-10-29T15:52:40.726Z",
+  "updatedAt": "2026-10-30T15:49:54.247Z",
   "videos": [
     {
       "videoId": "_x22SWqkM4U",
@@ -885,6 +885,13 @@
       "watchUrl": "https://www.youtube.com/watch?v=PbtY3k20wVU"
     },
     {
+      "videoId": "PHsKob8dxBA",
+      "title": "[Clip] Pleasure Is the Softest Cage / by Eighty's Mind Judgement (EMJ) / Heavy Metal",
+      "thumbnailUrl": "https://i.ytimg.com/vi/PHsKob8dxBA/maxresdefault.jpg",
+      "publishedAt": "2026-10-29T12:30:20Z",
+      "watchUrl": "https://www.youtube.com/watch?v=PHsKob8dxBA"
+    },
+    {
       "videoId": "pmyzpLXRKuc",
       "title": "[Clip]Theme of Raijin Girl/ by Eighty's Mind Judgement （EMJ）",
       "thumbnailUrl": "https://i.ytimg.com/vi/pmyzpLXRKuc/maxresdefault.jpg",
@@ -1306,11 +1313,11 @@
     }
   ],
   "dailyTrack": {
-    "date": "2026-10-30",
-    "videoId": "zJz1-f6WD90",
-    "title": "[Clip] Corporate Warrior-Into the Arena / by Eighty's Mind Judgement （EMJ）",
-    "thumbnailUrl": "https://i.ytimg.com/vi/zJz1-f6WD90/maxresdefault.jpg",
-    "publishedAt": "2025-12-02T12:45:19Z",
-    "watchUrl": "https://www.youtube.com/watch?v=zJz1-f6WD90"
+    "date": "2026-10-31",
+    "videoId": "qWTCIA5ZP3k",
+    "title": "[PR] First Meltdown / by Eighty's Mind Judgement （EMJ）",
+    "thumbnailUrl": "https://i.ytimg.com/vi/qWTCIA5ZP3k/maxresdefault.jpg",
+    "publishedAt": "2025-12-05T12:45:11Z",
+    "watchUrl": "https://www.youtube.com/watch?v=qWTCIA5ZP3k"
   }
 }
