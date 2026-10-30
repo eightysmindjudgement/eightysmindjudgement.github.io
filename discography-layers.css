@@ -72,6 +72,58 @@
 }
 .discography-page .discography-layer.is-current { z-index: 2; }
 
+/* Details live inside their category; keep long titles and artwork within it. */
+.discography-page .discography-layer { min-height: 0; }
+.discography-page .discography-layer article { min-width: 0; overflow-wrap: anywhere; }
+.discography-page .discography-layer article > img { max-width: min(100%, 320px); height: auto; }
+.discography-page .discography-layer article p,
+.discography-page .discography-layer article ol { max-width: 72ch; }
+.discography-page .discography-layer [id] { scroll-margin-top: 24px; }
+.discography-page .studio-album-carousel { overflow: hidden; }
+.discography-page .studio-album-card:focus-visible { outline-offset: -4px; }
+.discography-page .discography-layer article[hidden] { display: none; }
+
+.discography-page #discography-collaborations article {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 24px 32px;
+}
+.discography-page #discography-collaborations article > img {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+}
+.discography-page .collaboration-tracks { min-width: 0; }
+.discography-page .collaboration-tracks h3 { margin-top: 0; }
+.discography-page .collaboration-tracks ol { padding-left: 1.8em; }
+.discography-page .collaboration-description { grid-column: 1 / -1; }
+.discography-page .collaboration-description p { margin: 0; line-height: 1.85; }
+@media (max-width: 700px) {
+    .discography-page #discography-collaborations article {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 20px;
+    }
+}
+
+.discography-page .compilation-descriptions {
+    grid-column: 1 / -1;
+    width: 100%;
+    min-width: 0;
+    margin-top: 32px;
+    padding: 28px clamp(16px, 3vw, 32px);
+    border-top: 1px solid #42474b;
+    background: #08090b99;
+    overflow-wrap: anywhere;
+}
+.discography-page .compilation-descriptions [hidden] { display: none; }
+.discography-page .compilation-descriptions [lang] { max-width: 72ch; margin-inline: auto; }
+.discography-page .compilation-descriptions [lang] + [lang] { margin-top: 32px; padding-top: 20px; border-top: 1px solid #333; }
+.discography-page .compilation-descriptions p { max-width: none; line-height: 1.85; }
+.discography-page .compilation-descriptions a { display: inline-block; padding-block: 8px; }
+.discography-page .compilation-experience .studio-album-information h3 { font-size: clamp(1.1rem, 2vw, 1.6rem); overflow-wrap: anywhere; }
+.discography-page .compilation-experience .studio-album-information h4 { margin-top: 20px; }
+
 .discography-page .discography-layer-heading {
     display: flex;
     align-items: center;

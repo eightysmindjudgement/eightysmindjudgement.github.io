@@ -1,12 +1,22 @@
 (() => {
-    const experience = document.querySelector('.studio-album-experience');
+    document.querySelectorAll('.studio-album-experience').forEach(experience => {
     const section = experience?.closest('section');
     const sourceAlbums = section ? [...section.querySelectorAll(':scope > article')] : [];
-    if (!experience || sourceAlbums.length !== 10) return;
+    const isCompilation = experience.dataset.collection === 'compilations';
+    if (sourceAlbums.length < 2) return;
 
     const albums = sourceAlbums.map(article => {
         const headings = [...article.querySelectorAll('h3')];
         const image = article.querySelector('img');
+        if (isCompilation) {
+            return {
+                release: article.querySelector(':scope > p').textContent.trim(),
+                title: headings[0].textContent.trim(),
+                image,
+                tracks: [...article.querySelectorAll(':scope > ol > li')].map((item, index) => `${String(index + 1).padStart(2, '0')}. ${item.textContent.trim()}`),
+                descriptions: [...article.querySelectorAll(':scope > div[lang]')]
+            };
+        }
         const trackParagraph = article.querySelector('p');
         const trackText = trackParagraph.cloneNode(true);
         trackText.querySelectorAll('br').forEach(lineBreak => lineBreak.replaceWith('\n'));
@@ -21,7 +31,7 @@
     const carousel = document.createElement('div');
     carousel.className = 'studio-album-carousel';
     carousel.setAttribute('role', 'region');
-    carousel.setAttribute('aria-label', 'Studio albums');
+    carousel.setAttribute('aria-label', isCompilation ? 'Compilation albums' : 'Studio albums');
     carousel.tabIndex = 0;
 
     const ring = document.createElement('div');
@@ -51,7 +61,36 @@
     const trackList = document.createElement('ol');
     trackList.className = 'studio-album-tracklist';
     information.append(release, title, trackList);
-    experience.append(carousel, information);
+    const display = document.createElement('div');
+    display.className = 'studio-album-display';
+    display.append(carousel);
+    experience.append(display, information);
+        const controls = document.createElement('div');
+        controls.className = 'studio-album-controls';
+        controls.addEventListener('pointerdown', event => event.stopPropagation());
+        for (const [label, direction] of [['PREV', -1], ['NEXT', 1]]) {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.textContent = label;
+            button.setAttribute('aria-label', `${direction < 0 ? 'Previous' : 'Next'} ${isCompilation ? 'compilation' : 'studio'} album`);
+            button.addEventListener('click', () => selectAlbum((activeIndex + direction + albums.length) % albums.length));
+            controls.append(button);
+        }
+        display.append(controls);
+    const descriptionPanels = [];
+    if (isCompilation) {
+        const descriptions = document.createElement('div');
+        descriptions.className = 'compilation-descriptions';
+        descriptions.setAttribute('aria-label', 'Album descriptions');
+        albums.forEach(album => {
+            const panel = document.createElement('div');
+            panel.hidden = true;
+            panel.append(...album.descriptions);
+            descriptionPanels.push(panel);
+            descriptions.append(panel);
+        });
+        experience.append(descriptions);
+    }
 
     let rotation = 0;
     let activeIndex = 0;
@@ -66,6 +105,7 @@
         activeIndex = index;
         release.textContent = albums[index].release;
         title.textContent = albums[index].title;
+        descriptionPanels.forEach((panel, panelIndex) => { panel.hidden = panelIndex !== index; });
         trackList.replaceChildren(...albums[index].tracks.map(track => {
             const item = document.createElement('li');
             const match = track.match(/^(\d{2})\.\s*(.*)$/);
@@ -151,4 +191,5 @@
     });
 
     sourceAlbums.forEach(article => { article.hidden = true; });
+    });
 })();
