@@ -60,8 +60,6 @@ body {
 
 main {
     flex: 1;
-    -webkit-user-select: none;
-    user-select: none;
 }
 
 .visions-scroll-track {

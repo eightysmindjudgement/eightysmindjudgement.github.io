@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore 103 interactive web effects and animations with live demos and Japanese implementation notes.">
+
+    <title>EFFECTS CATALOUG | Eighty's Mind Judgement Official Website</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="page-transitions.css">
+    <link rel="stylesheet" href="effects-catalogue.css">
+</head>
+
+<body class="tools-page effects-catalogue-page">
+
+    <header>
+        <a href="index.html" aria-label="Home">
+            <img src="EMJ_logo2026.png" alt="Eighty's Mind Judgement">
+        </a>
+        <h1>EFFECTS CATALOUG</h1>
+        <p class="site-name">Eighty's Mind Judgement Official Website<br><small>エイティズマインドジャッジメント オフィシャルウェブサイト</small></p>
+        <p>WORKING PEOPLE'S HEAVY METAL</p>
+    </header>
+
+    <nav>
+        <a href="index.html">HOME</a>
+        <a href="visions.html">VISIONS</a>
+        <a href="biography.html">BIOGRAPHY</a>
+        <a href="discography.html">DISCOGRAPHY</a>
+        <a href="videos.html">VIDEOS</a>
+        <a href="tools.html" aria-current="page">TOOLS</a>
+        <a href="market.html">MARKET</a>
+        <a href="games.html">GAMES</a>
+        <a href="links.html">LINKS</a>
+        <a href="sitemap.html">SITEMAP</a>
+    </nav>
+
+<main class="effects-main" lang="ja">
+<p class="effects-kicker">EXPLORE INTERACTIVE WEB EFFECTS AND ANIMATIONS</p>
+<p class="effects-intro">Web表現の動きを、見て・触れて・理解する。9カテゴリー・103種類のアニメーションとインタラクションを、一つずつ試せるカタログです。</p>
+<div id="effects-categories" class="effects-categories" role="group" aria-label="エフェクトのカテゴリー"></div>
+<div class="effects-toolbar"><label for="effects-search">FIND AN EFFECT / 技術を検索 <input id="effects-search" type="search" placeholder="例：FADE、SCROLL、文字" autocomplete="off"></label><span id="effects-count" class="effects-meta" role="status"></span></div>
+<div class="effects-layout">
+<section class="effects-list-panel" aria-labelledby="effects-list-title"><h2 id="effects-list-title">EFFECTS</h2><div id="effects-list" class="effects-list"></div></section>
+<section id="effects-detail" class="effects-detail" aria-labelledby="effects-name">
+<div id="effects-current" class="effects-kicker"></div><h2 id="effects-name" tabindex="-1">FADE IN</h2><p id="effects-description"></p>
+<p id="effects-simple" class="effects-note" hidden>SIMPLIFIED DEMO / 仕組みを体験するための簡易デモです。実装欄に再現範囲を記載しています。</p>
+<div class="effects-preview-head"><h3>LIVE PREVIEW</h3><div class="effects-controls"><button id="effects-replay" type="button">REPLAY</button><button id="effects-pause" type="button" aria-pressed="false">PAUSE / 停止</button></div></div>
+<p id="effects-instruction" class="effects-help"></p><div id="effects-stage" class="effects-stage" aria-label="選択した技術のライブデモ"></div>
+<p id="effects-motion" class="effects-note" hidden>「動きを減らす」設定を検出しました。自動ループを止め、動作時間を短縮します。REPLAYで確認できます。</p>
+<div class="effects-implementation"><h3>IMPLEMENTATION</h3><p><strong id="effects-difficulty"></strong><span id="effects-tech"></span></p><p id="effects-method"></p></div>
+</section></div><a class="effects-back" href="tools.html#web-design-lab">← TOOLS / ツール一覧へ</a><noscript><p>カタログとデモを表示するにはJavaScriptを有効にしてください。</p></noscript></main>
+    <footer>
+        <p>℗ 2025 Eighty's Mind Judgement<br>
+        © 2025 Eighty's Mind Judgement<br>
+        Based in Japan | Active since November 8, 2025</p>
+        <p class="footer-sitemap"><a href="sitemap.html">SITEMAP</a></p>
+    </footer>
+
+    <script src="site-navigation.js" defer></script>
+    <script src="effects-catalogue-data.js" defer></script><script src="effects-catalogue-demos.js" defer></script><script src="effects-catalogue.js" defer></script>
+</body>
+
+</html>

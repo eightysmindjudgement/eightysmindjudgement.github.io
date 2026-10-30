@@ -25,8 +25,9 @@ body {
     line-height: 1.7;
 }
 
-/* Keep site copy limits within page content and leave interactive controls usable. */
-main {
+/* Limit selection suppression to the games directory and its game pages. */
+.games-page main,
+.puzzle-page main {
     -webkit-user-select: none;
     user-select: none;
 }
