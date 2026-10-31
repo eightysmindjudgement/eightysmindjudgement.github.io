@@ -73,6 +73,7 @@
             cancelAnimationFrame(frame);
             typingSteps.forEach(step => step.element.classList.add('is-typed'));
             slogan.classList.remove('slogan-pending', 'slogan-typing');
+            revealMission();
         };
         // Reveal one character per paint, then wait before scheduling the next.
         // Relative waits prevent late frames from revealing the remaining text in a batch.
@@ -81,6 +82,7 @@
             if (index >= typingSteps.length) { finishTyping(); return; }
             const step = typingSteps[index++];
             step.element.classList.add('is-typed');
+            if (index === typingSteps.length) { finishTyping(); return; }
             const nextPause = typingSteps[index]?.pauseBefore || 0;
             timer = setTimeout(() => {
                 frame = requestAnimationFrame(revealNext);
@@ -144,6 +146,7 @@
     if (!missionRevealed) missionItems.forEach(item => item.classList.add('mission-slide-pending'));
 
     function revealMission() {
+        if (missionRevealed) return;
         missionRevealed = true;
         missionItems.forEach(item => {
             item.classList.remove('mission-slide-pending');
@@ -151,24 +154,15 @@
         });
     }
 
-    function updateMission() {
-        if (missionRevealed) return;
-        // Trigger when the MISSION text center reaches the viewport's lower-third boundary.
-        const first = missionItems[0].getBoundingClientRect();
-        const last = missionItems[missionItems.length - 1].getBoundingClientRect();
-        if ((first.top + last.bottom) / 2 <= window.innerHeight * 2 / 3) revealMission();
-    }
     reducedMotion.addEventListener('change', event => {
         if (event.matches) revealMission();
     });
-    window.addEventListener('resize', updateMission);
     let queued = false;
     function update() {
         const hidden = window.scrollY > 64;
         cue.classList.toggle('is-dismissed', hidden);
         cue.inert = hidden;
         cue.setAttribute('aria-hidden', String(hidden));
-        updateMission();
         updateEffects();
         queued = false;
     }
