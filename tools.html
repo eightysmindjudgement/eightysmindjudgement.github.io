@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="page-transitions.css">
     <link rel="stylesheet" href="tools-carousel.css">
+    <link rel="stylesheet" href="tools-layers.css">
 </head>
 
 <body class="tools-page">
@@ -41,16 +42,11 @@
         <div class="tools-directory-intro">
             <p class="tools-intro">From Eighty's Mind Judgement to everyone striving to make the most of life: practical tools to help you live with purpose and move forward with confidence.</p>
             <p class="tools-intro-japanese" lang="ja">Eighty's Mind Judgementから、懸命に生きるあなたへ。日々の暮らしや人生をより豊かに、力強く歩むためのツールを提供します。</p>
-            <a class="home-scroll-cue tools-scroll-cue" href="#life-tools" aria-label="Scroll to LIFE TOOLS">
-                <svg viewBox="0 0 48 64" aria-hidden="true" focusable="false">
-                    <path class="home-scroll-tube" d="M24 6 V54 M9 39 L24 54 L39 39" />
-                    <path class="home-scroll-light home-scroll-light--shaft" pathLength="100" d="M24 6 V54" />
-                    <path class="home-scroll-light home-scroll-light--shaft home-scroll-light--core" pathLength="100" d="M24 6 V54" />
-                    <path class="home-scroll-light home-scroll-light--head" pathLength="100" d="M9 39 L24 54" />
-                    <path class="home-scroll-light home-scroll-light--head" pathLength="100" d="M39 39 L24 54" />
-                </svg>
-                <span>SCROLL</span>
-            </a>
+        </div>
+        <div class="tools-tabs" role="tablist" aria-label="Tool categories" hidden>
+            <button type="button" role="tab" id="tools-tab-life" aria-controls="life-tools">LIFE TOOLS</button>
+            <button type="button" role="tab" id="tools-tab-finance" aria-controls="finance-tools">FINANCE TOOLS</button>
+            <button type="button" role="tab" id="tools-tab-web" aria-controls="web-design-lab">WEB DESIGN LAB</button>
         </div>
         <section class="tools-section tools-directory-section" id="life-tools" aria-labelledby="life-tools-title">
             <h2 id="life-tools-title">LIFE TOOLS</h2>
@@ -94,7 +90,6 @@
         </section>
         <section class="tools-section tools-directory-section" id="web-design-lab" aria-labelledby="web-design-lab-title">
             <h2 id="web-design-lab-title">WEB DESIGN LAB</h2>
-            <p class="tools-lab-intro" lang="ja">文字・色・余白・配置のデザイン検討と、アニメーション・インタラクションの体験ができるWeb制作ツール。</p>
             <div class="tool-list" data-selector-label="WEB DESIGN LAB">
                 <a class="tool-card" href="web-design-lab.html">
                     <span class="lab-visual lab-visual-type" aria-hidden="true">Aa</span>
@@ -126,6 +121,8 @@
 
     <script src="site-navigation.js" defer></script>
     <script src="tools-carousel.js" defer></script>
+    <script src="tools-layers.js" defer></script>
+    <script src="page-parallax.js" defer></script>
 </body>
 
 </html>
