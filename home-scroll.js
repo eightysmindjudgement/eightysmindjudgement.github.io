@@ -24,7 +24,7 @@
         const nodes = [];
         while (walker.nextNode()) nodes.push(walker.currentNode);
         nodes.forEach(node => {
-            if (node.nodeName === 'BR') { typingPause += 180; return; }
+            if (node.nodeName === 'BR') { typingPause += 90; return; }
             if (node.nodeType !== 3) return;
             const fragment = document.createDocumentFragment();
             for (const character of node.textContent) {
@@ -32,7 +32,7 @@
                 span.className = 'slogan-character';
                 span.textContent = character;
                 fragment.append(span);
-                typingSteps.push({ element: span, pauseBefore: typingPause, hold: /\s/.test(character) ? 45 : 85 });
+                typingSteps.push({ element: span, pauseBefore: typingPause, hold: /\s/.test(character) ? 22.5 : 42.5 });
                 typingPause = 0;
             }
             node.replaceWith(fragment);
@@ -90,9 +90,9 @@
         slogan.classList.add('slogan-typing');
         frame = requestAnimationFrame(revealNext);
     }
-    function reachedTriggerLine(element) {
+    function reachedTriggerLine(element, viewportRatio = 2 / 3) {
         const rect = element.getBoundingClientRect();
-        return (rect.top + rect.bottom) / 2 <= window.innerHeight * 2 / 3;
+        return (rect.top + rect.bottom) / 2 <= window.innerHeight * viewportRatio;
     }
     function updateEffects() {
         if (slogan && !sloganStarted && reachedTriggerLine(slogan)) {
@@ -111,7 +111,7 @@
         albumRows.forEach(row => {
             if (!row.items.some(item => item.classList.contains('slide-pending'))) return;
             if (row.items.some(item => !item.querySelector('img').complete)) return;
-            if (!reachedTriggerLine(row.items[0])) return;
+            if (!reachedTriggerLine(row.items[0], .75)) return;
             row.items.forEach(item => {
                 item.classList.remove('slide-pending');
                 item.classList.add('slide-visible');
