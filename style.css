@@ -2578,6 +2578,20 @@ header {
         letter-spacing: 0.18em;
     }
 
+    header p.site-name small {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    header p.site-name small span {
+        white-space: nowrap;
+    }
+
+    header p.site-name + p {
+        margin-top: 12px;
+    }
+
     nav {
         gap: 16px;
         padding: 15px 12px;
