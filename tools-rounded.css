@@ -1,0 +1,48 @@
+/* Shared rounded surfaces for the tools directory and its linked tools. */
+:is(.tools-page, .tools-sharing-page) {
+    --tool-panel-radius: 24px;
+    --tool-field-radius: 12px;
+}
+
+/* Match the unselected discography category buttons. */
+.tools-page .tools-tabs button[aria-selected="false"],
+.tools-page .lab-tabs button[aria-selected="false"],
+.tools-page .effects-categories button[aria-pressed="false"],
+.tools-page .effects-list button[aria-pressed="false"] {
+    background: rgba(0, 0, 0, 0.88);
+}
+
+.tools-page .tools-directory-section,
+.tools-page .tool-card,
+.tools-page .tool-carousel .tool-card,
+.tools-page .lab-preview-panel,
+.tools-page .lab-settings,
+.tools-page .lab-code-panel,
+.tools-page .lab-code-panel pre,
+.tools-page .effects-list-panel,
+.tools-page .effects-detail,
+.tools-page .effects-stage,
+.tools-sharing-page :is(.compound-calculator-form, .compound-future-value,
+    .compound-summary-results, .compound-chart-wrap, .compound-table-wrap,
+    .life-countdown-form, .countdown-from-today, .countdown-secondary-results,
+    .era-converter-panel, .loan-calculator-form, .loan-summary-results > div,
+    .loan-table-wrap) {
+    border-radius: var(--tool-panel-radius);
+}
+
+.tools-page .tools-tabs button,
+.tools-page .tool-carousel-controls button,
+.tools-page .lab-main button,
+.tools-page .effects-categories button,
+.tools-page .effects-controls button,
+.tools-sharing-page main button {
+    border-radius: 999px;
+}
+
+.tools-sharing-page :is(.compound-input-wrap, .loan-input-wrap),
+.tools-sharing-page main :is(input:not([type="range"]):not([type="checkbox"]):not([type="radio"]), select, textarea),
+.tools-page .lab-main :is(input:not([type="range"]):not([type="color"]), select),
+.tools-page .effects-toolbar input,
+.tools-page .effects-list button {
+    border-radius: var(--tool-field-radius);
+}

@@ -1,0 +1,23 @@
+/* Arcade surfaces follow the tools' 24px panels and pill controls. */
+.puzzle-page .puzzle-board,
+.puzzle-page .puzzle-aside,
+#iron-fortress .if-game,
+#iron-fortress .if-help-device,
+.puzzle-page .ms-game {
+    border-radius: 24px;
+}
+
+.puzzle-page .puzzle-stats {
+    border-radius: 24px 24px 0 0;
+}
+
+.puzzle-page .puzzle-main button,
+#iron-fortress button,
+.puzzle-page #ms-start {
+    border-radius: 999px;
+}
+
+.puzzle-page .puzzle-stage-select button[aria-pressed="false"],
+#iron-fortress #if-difficulty button[aria-pressed="false"] {
+    background: rgba(0, 0, 0, 0.88);
+}

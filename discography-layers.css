@@ -9,7 +9,7 @@
     min-height: 54px;
     padding: 12px 8px;
     border: 1px solid #555b60;
-    border-radius: 3px;
+    border-radius: 999px;
     background: linear-gradient(175deg, #373b3e, #191b1d 48%, #101113 51%, #25282b);
     box-shadow: inset 0 1px 0 #ffffff26, 0 4px 12px #0008;
     color: #c9cdd0;
@@ -17,6 +17,10 @@
     letter-spacing: .09em;
     cursor: pointer;
     transition: border-color .2s, color .2s, box-shadow .2s;
+}
+
+.discography-page .discography-tabs button[aria-selected="false"] {
+    background: rgba(0, 0, 0, 0.88);
 }
 
 .discography-page .discography-tabs button:hover {
@@ -73,7 +77,10 @@
 .discography-page .discography-layer.is-current { z-index: 2; }
 
 /* Details live inside their category; keep long titles and artwork within it. */
-.discography-page .discography-layer { min-height: 0; }
+.discography-page .discography-layer {
+    min-height: 0;
+    border-radius: 24px;
+}
 .discography-page .discography-layer article { min-width: 0; overflow-wrap: anywhere; }
 .discography-page .discography-layer article > img { max-width: min(100%, 320px); height: auto; }
 .discography-page .discography-layer article p,
@@ -95,6 +102,12 @@
     margin: 0 auto;
 }
 .discography-page .collaboration-tracks { min-width: 0; }
+.discography-page .studio-album-information,
+.discography-page .compilation-descriptions,
+.discography-page .collaboration-tracks,
+.discography-page .collaboration-description {
+    border-radius: 24px;
+}
 .discography-page .collaboration-tracks h3 { margin-top: 0; }
 .discography-page .collaboration-tracks ol { padding-left: 1.8em; }
 .discography-page .collaboration-description { grid-column: 1 / -1; }

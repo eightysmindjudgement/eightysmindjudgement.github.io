@@ -2213,6 +2213,11 @@ footer .footer-sitemap a:focus-visible {
     margin: 0 auto 30px;
 }
 
+.biography-page .profile-artwork {
+    border-radius: 50%;
+    background: transparent;
+}
+
 /* ALBUM LIST */
 
 article {
