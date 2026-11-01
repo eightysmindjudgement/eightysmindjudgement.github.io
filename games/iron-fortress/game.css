@@ -52,7 +52,7 @@
 #iron-fortress [hidden]{display:none!important}
 @media(max-width:720px){#iron-fortress .if-layout{grid-template-columns:1fr}#iron-fortress .if-screen{height:480px;height:min(63svh,540px);min-height:390px}#iron-fortress .if-aside{display:block}#iron-fortress .if-controls{gap:5px;padding:8px}#iron-fortress .if-controls button{padding:9px 8px;font-size:11px}#iron-fortress #if-fire{font-size:16px}}
 
-#iron-fortress #if-announcement{position:absolute;inset:0;z-index:10;display:grid;place-items:center;pointer-events:none;text-align:center;font:italic 900 clamp(32px,7vw,64px)/1.2 Arial,sans-serif;color:#fff;letter-spacing:.04em;text-shadow:0 3px 8px #000,0 0 20px #000;background:linear-gradient(transparent,#07121d88,transparent)}
+#iron-fortress #if-announcement{position:absolute;inset:0;z-index:10;display:grid;place-items:center;pointer-events:none;text-align:center;font:italic 900 clamp(25px,5.6vw,50px)/1.3 Arial,sans-serif;padding:16px;box-sizing:border-box;color:#fff;letter-spacing:.04em;text-shadow:0 3px 8px #000,0 0 20px #000;background:linear-gradient(transparent,#07121d88,transparent)}
 #iron-fortress #if-announcement[data-result="over"]{background:#02061199}
 
 #iron-fortress .if-controls{flex-wrap:wrap}
@@ -60,3 +60,11 @@
 
 #iron-fortress #if-boss-hit{display:block;font-size:11px;color:#ffe3b2;letter-spacing:.05em;margin-top:4px;font-variant-numeric:tabular-nums}
 
+
+#iron-fortress #if-announcement-text{max-width:100%;overflow-wrap:anywhere;color:#9ceeff;text-shadow:none;filter:drop-shadow(0 3px 5px #000) drop-shadow(0 0 12px #001424)}
+@supports ((background-clip:text) or (-webkit-background-clip:text)){#iron-fortress #if-announcement-text{background:linear-gradient(110deg,#e4fcff 0%,#65eaff 35%,#6bafff 68%,#b4a2ff 100%);background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent}}
+
+#iron-fortress #if-boss-reading{font-size:10px;line-height:1.4;margin:3px 0;color:#c1d8e6;letter-spacing:.06em}
+#iron-fortress #if-boss-intro{position:absolute;top:30%;left:12px;right:12px;z-index:9;text-align:center;pointer-events:none;padding:18px 8px;background:linear-gradient(90deg,transparent,#061427bd,transparent);text-shadow:0 2px 8px #000}
+#iron-fortress #if-boss-intro-en{display:block;font:italic 900 clamp(22px,4.8vw,42px)/1.2 Arial,sans-serif;color:#9decff;letter-spacing:.05em}
+#iron-fortress #if-boss-intro-ja{display:block;font-size:clamp(11px,2vw,16px);line-height:1.5;margin-top:8px;color:#dcefff;letter-spacing:.08em}

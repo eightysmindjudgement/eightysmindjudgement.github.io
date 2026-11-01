@@ -1,6 +1,6 @@
 # IRON FORTRESS
 
-Static, original low-poly 3D rail shooter. Open `games.html`, choose IRON FORTRESS with the carousel arrow, and click the card. Both direct HTML opening (`file://`) and HTTP hosting are supported. Keep the game folder and its files together.
+Static, original 3D rail shooter. Open `games.html`, choose IRON FORTRESS with the carousel arrow, and click the card. Both direct HTML opening (`file://`) and HTTP hosting are supported. Keep the game folder and its files together.
 
 - `iron-fortness.html`, `game.css`: PUZZLE-style site shell, sharing, HUD and mobile controls.
 - `main.js`: editable game state, input, combat, lifecycle and UI.
@@ -12,7 +12,7 @@ Static, original low-poly 3D rail shooter. Open `games.html`, choose IRON FORTRE
 
 Uses the existing local **Three.js r180** files at `../../vendor/three.module.min.js` and `../../vendor/three.core.min.js`, with the existing `THREE-LICENSE.txt`. Keep these two library files on the same version. No CDN, build, account or network service is required.
 
-Drag to move; hold FIRE to shoot. Keyboard: arrows/WASD, Space, Escape. The stage enters the fortress at 36 seconds, the core at 65 seconds, and the boss at 100 seconds. Three lives, 1.6-second damage shield; EASY, NORMAL and HARD have separate best scores stored locally. Sound can be muted.
+Drag to move; hold FIRE to shoot. Keyboard: arrows/WASD, Space, Escape. The gatekeeper appears at 36 seconds; defeating it opens the fortress. SILVER WISP appears at 72 seconds, the core begins at 90 seconds, JADE SERPENT appears at 108 seconds, and the final boss at 144 seconds. Boss encounters are spaced 36 seconds apart in stage time, with an 18-second approach from core entry to JADE SERPENT. The stage clock pauses during all three earlier boss fights. SILVER WISP is a small fast target with slow, sparse single shots. Three lives, 1.6-second damage shield; EASY, NORMAL and HARD have separate best scores stored locally. Sound can be muted.
 
 Browser regression checks: `node scripts/iron-fortress.test.cjs` from the site root with Playwright available. Optional `PLAYWRIGHT_MODULE` and `BROWSER_PATH` environment variables select an existing installation. The test starts its own local HTTP server and injects test hooks into responses only; no test interface is shipped in the game.
 

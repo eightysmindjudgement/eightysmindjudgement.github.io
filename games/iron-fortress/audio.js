@@ -14,9 +14,9 @@ export class Audio {
   if(this.context.state!=='running'){const requested=performance.now();this.ready?.then(c=>{if(c?.state==='running'&&performance.now()-requested<250)this.play(kind)});return}
   try{
    const c=this.context,o=c.createOscillator(),g=c.createGain(),now=c.currentTime;
-   const f={start:440,laser:640,hit:120,damage:65,boss:42,explosion:48,clear:880,over:90}[kind]||180;
+   const f={start:440,laser:640,hit:120,damage:65,boss:42,explosion:48,clear:880,cure:1047,over:90}[kind]||180;
    const duration=kind==='laser'?.07:['boss','explosion'].includes(kind)?.8:.25;
-   o.type=kind==='clear'||kind==='start'?'sine':'sawtooth';o.frequency.setValueAtTime(f,now);o.frequency.exponentialRampToValueAtTime(Math.max(25,f/3),now+duration);
+   o.type=kind==='clear'||kind==='start'||kind==='cure'?'sine':'sawtooth';o.frequency.setValueAtTime(f,now);o.frequency.exponentialRampToValueAtTime(Math.max(25,f/3),now+duration);
    g.gain.setValueAtTime(.035,now);g.gain.exponentialRampToValueAtTime(.001,now+duration);o.connect(g);g.connect(c.destination);o.start(now);o.stop(now+duration);o.onended=()=>{o.disconnect();g.disconnect()};
   }catch(e){this.error=e;console.warn('IRON FORTRESS audio:',e)}
  }
