@@ -270,5 +270,6 @@
     ctx.restore();
   }
   function frame(now){if(world.clear){advanceClear(now);last=now;requestAnimationFrame(frame);return;}if(running){updateTime();if(last)accumulator+=Math.min((now-last)/1000,.08);while(accumulator>=1/120){world.step(1/120,(playMs+(clockStarted===null?0:performance.now()-clockStarted))/1000);accumulator-=1/120;if(world.clear)break;}score();if(world.clear){advanceClear(now);last=now;requestAnimationFrame(frame);return;}const event=world.events.at(-1);if(event&&event!==lastEvent){lastEvent=event;statusText(event.final?'METAL SHOGUN！ メタルの頂点！':event.combo>1?`${event.combo}連鎖！ +${event.points}`:`合体！ +${event.points}`,event.final?'The pinnacle of metal!':`${event.combo>1?event.combo+' combo!':'Merged!'} +${event.points}`);}if(world.over){world.clearEffects();syncSpecial();world.comboCue=null;stopClock();running=false;paused=false;pointer=null;$('puzzle-pause').disabled=true;overlay('GAME OVER',`スコア ${world.score} / 自己ベスト ${best}`,'もういちど / Play again', `Score ${world.score} / Personal best ${best}`);$('puzzle-start').focus();}paint();}last=now;requestAnimationFrame(frame);}
+  if(clearCount>=1)revealSecret();
   previews();paint();requestAnimationFrame(frame);
 })();
