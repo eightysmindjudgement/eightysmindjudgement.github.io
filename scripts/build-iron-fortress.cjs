@@ -7,7 +7,8 @@ const graph=[
  ['three','vendor/three.module.min.js',{'./three.core.min.js':'core'}],
  ['config','games/iron-fortress/config.js',{}],
  ['audio','games/iron-fortress/audio.js',{}],
- ['scene','games/iron-fortress/scene.js',{'../../vendor/three.module.min.js':'three'}],
+ ['face','games/iron-fortress/boss-face.js',{}],
+ ['scene','games/iron-fortress/scene.js',{'../../vendor/three.module.min.js':'three','./boss-face.js':'face'}],
  ['main','games/iron-fortress/main.js',{'./config.js':'config','./scene.js':'scene','./audio.js':'audio'}]
 ];
 const output=['/* IRON FORTRESS browser bundle. Three.js r180, MIT; see ../../vendor/THREE-LICENSE.txt. */','(()=>{"use strict";'];
@@ -33,3 +34,4 @@ const html=fs.readFileSync(entry,'utf8');
 if(!/<script src="game\.js(?:\?[^"\s]*)?" defer><\/script>/.test(html))throw Error('Game script entry not found');
 fs.writeFileSync(entry,html.replace(/<script src="game\.js(?:\?[^"\s]*)?" defer><\/script>/,'<script src="game.js?v='+revision+'" defer></script>'));
 console.log('Game revision '+revision);
+
