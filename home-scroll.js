@@ -10,6 +10,13 @@
     let sloganStarted = reducedMotion.matches;
     let glowStarted = reducedMotion.matches;
     let finishTyping = () => {};
+    let nextEffectAt = 0;
+    let effectTimer;
+    function waitForNextEffect(delay) {
+        nextEffectAt = performance.now() + delay;
+        clearTimeout(effectTimer);
+        effectTimer = setTimeout(updateEffects, delay + 20);
+    }
     const typingSteps = [];
     let typingPause = 0;
     if (slogan && !sloganStarted) {
@@ -96,29 +103,66 @@
         const rect = element.getBoundingClientRect();
         return (rect.top + rect.bottom) / 2 <= window.innerHeight * viewportRatio;
     }
+    function sloganHasEntered() {
+        const firstCharacter = slogan.querySelector('.slogan-character') || slogan;
+        const rect = firstCharacter.getBoundingClientRect();
+        return rect.top < window.innerHeight - 16 && rect.bottom > 0;
+    }
     function updateEffects() {
-        if (slogan && !sloganStarted && reachedTriggerLine(slogan)) {
-            sloganStarted = true;
-            typeSlogan();
-        }
-        if (visions && !glowStarted && reachedTriggerLine(visions)) {
-            glowStarted = true;
-            visions.classList.add('glow-started');
-        }
         if (visions && glowStarted) {
             const rect = visions.getBoundingClientRect();
             visions.classList.toggle('glow-paused', rect.bottom < 0 || rect.top > window.innerHeight || document.hidden);
         }
+        if (document.hidden) return;
         if (reducedMotion.matches) return;
-        albumRows.forEach(row => {
-            if (!row.items.some(item => item.classList.contains('slide-pending'))) return;
+        // Complete entrances that have already passed above the viewport.
+        if (slogan && slogan.getBoundingClientRect().bottom <= 0 && slogan.classList.contains('slogan-pending')) {
+            sloganStarted = true;
+            typingSteps.forEach(step => step.element.classList.add('is-typed'));
+            slogan.classList.remove('slogan-pending');
+            revealMission();
+            nextEffectAt = 0;
+        } else if (slogan && slogan.getBoundingClientRect().bottom <= 0 && slogan.classList.contains('slogan-typing')) {
+            finishTyping();
+            nextEffectAt = 0;
+        }
+        missionItems.forEach(item => {
+            if (item.getBoundingClientRect().bottom <= 0) item.classList.remove('mission-slide-pending', 'mission-slide-visible');
+        });
+        if (visions && visions.getBoundingClientRect().bottom <= 0) {
+            glowStarted = true;
+            visions.classList.add('glow-started', 'glow-paused');
+            nextEffectAt = 0;
+        }
+        albums.forEach(album => {
+            if (album.getBoundingClientRect().bottom <= 0) album.classList.remove('slide-pending', 'slide-visible');
+        });
+        if (performance.now() < nextEffectAt) return;
+        if (slogan && !sloganStarted && sloganHasEntered()) {
+            sloganStarted = true;
+            typeSlogan();
+            return;
+        }
+        // Finish the slogan and mission entrance before starting lower sections.
+        if (slogan && (!sloganStarted || !missionRevealed)) return;
+        if (visions && !glowStarted && reachedTriggerLine(visions)) {
+            glowStarted = true;
+            visions.classList.add('glow-started');
+            waitForNextEffect(700);
+            return;
+        }
+        if (visions && !glowStarted) return;
+        for (const row of albumRows) {
+            if (!row.items.some(item => item.classList.contains('slide-pending'))) continue;
             if (row.items.some(item => !item.querySelector('img').complete)) return;
             if (!reachedTriggerLine(row.items[0], .75)) return;
             row.items.forEach(item => {
                 item.classList.remove('slide-pending');
                 item.classList.add('slide-visible');
             });
-        });
+            waitForNextEffect(1150);
+            return;
+        }
     }
     function remeasureEffects() {
         measureAlbumRows();
@@ -133,7 +177,10 @@
     document.addEventListener('visibilitychange', updateEffects);
     reducedMotion.addEventListener('change', event => {
         if (!event.matches) return;
+        clearTimeout(effectTimer);
         sloganStarted = true;
+        glowStarted = true;
+        visions?.classList.add('glow-started');
         finishTyping();
         slogan?.classList.remove('slogan-pending');
         albums.forEach(album => album.classList.remove('slide-pending'));
@@ -152,6 +199,7 @@
             item.classList.remove('mission-slide-pending');
             item.classList.add('mission-slide-visible');
         });
+        waitForNextEffect(1100);
     }
 
     reducedMotion.addEventListener('change', event => {

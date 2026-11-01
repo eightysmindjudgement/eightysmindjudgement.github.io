@@ -4,18 +4,58 @@
 
     const blocks = document.querySelectorAll('.biography-page main h2, .biography-page main h3, .biography-page main p, .home-page .digital-philosophy h2, .home-page .digital-philosophy h3, .home-page .digital-philosophy p');
     let elements = [];
+    const staggerHome = document.body.classList.contains('home-page');
+    const pending = new Set();
+    let revealTimer;
     const reveal = (element) => {
         element.classList.add('is-visible');
         observer.unobserve(element);
     };
     const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
-            if (entry.isIntersecting) reveal(entry.target);
+            if (!entry.isIntersecting) return;
+            if (staggerHome) pending.add(entry.target);
+            else reveal(entry.target);
         });
+        if (staggerHome && !revealTimer) revealNextLine();
     }, { rootMargin: '0px 0px -32px 0px', threshold: 0 });
+
+    function revealNextLine() {
+        revealTimer = undefined;
+        if (staggerHome) {
+            elements.forEach(element => {
+                if (!element.classList.contains('is-visible') && element.getBoundingClientRect().bottom <= 0) {
+                    pending.delete(element);
+                    reveal(element);
+                }
+            });
+        }
+        // Follow document order, even when one scroll brings many lines into view.
+        const next = elements.find(element => pending.has(element));
+        if (!next) return;
+        pending.delete(next);
+        reveal(next);
+        revealTimer = setTimeout(revealNextLine, 180);
+    }
+
+    if (staggerHome) {
+        let scrollFrame;
+        window.addEventListener('scroll', () => {
+            if (scrollFrame) return;
+            scrollFrame = requestAnimationFrame(() => {
+                scrollFrame = undefined;
+                if (revealTimer) return;
+                clearTimeout(revealTimer);
+                revealNextLine();
+            });
+        }, { passive: true });
+    }
 
     const prepareLines = () => {
         observer.disconnect();
+        clearTimeout(revealTimer);
+        revealTimer = undefined;
+        pending.clear();
         const visibleBlocks = new Set([...blocks].filter((block) => {
             const lines = block.querySelectorAll('.biography-reveal');
             return lines.length && [...lines].every((line) => line.classList.contains('is-visible'));
@@ -86,6 +126,8 @@
     });
     motionPreference.addEventListener('change', (event) => {
         if (event.matches) {
+            clearTimeout(revealTimer);
+            pending.clear();
             elements.forEach(reveal);
             observer.disconnect();
         }
