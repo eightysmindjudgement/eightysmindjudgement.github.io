@@ -144,6 +144,21 @@ main [role="textbox"] {
     background-size: 100% 100%, 100% auto;
 }
 
+@media (max-width: 767px) {
+    .home-page::before,
+    .biography-page::before,
+    .discography-page::before,
+    .videos-page::before,
+    .tools-page::before,
+    .links-page::before,
+    .market-page::before,
+    .sitemap-page::before {
+        /* Keep the overlay full-screen and start the image one sixth down. */
+        background-position: center top, center 16.6667vh;
+        background-position: center top, center 16.6667svh;
+    }
+}
+
 header {
     min-height: 55vh;
     display: flex;
