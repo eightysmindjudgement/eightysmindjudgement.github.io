@@ -204,6 +204,11 @@ header p.site-name small {
 
 /* NAVIGATION */
 
+/* Prevent the legacy horizontal layout from flashing before menu setup. */
+body.home-page:not(.site-menu-ready) > nav.site-navigation {
+    display: none;
+}
+
 body.site-menu-ready > nav:not(.digital-philosophy-nav) {
     position: fixed;
     inset: 0 auto 0 0;
