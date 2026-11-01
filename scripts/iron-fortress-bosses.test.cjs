@@ -35,7 +35,7 @@ async function run(){
  const serpentTime=t.state().time;t.state().boss.mesh.position.set(0,0,-26);t.update(3);t.update(.02);
  assert.equal(t.state().time,serpentTime,'clock waits for serpent defeat');assert.equal(t.state().boss.hitTargets.length,1);
  const segment=t.state().boss.mesh.userData.segments[5].mesh;const oldX=segment.position.x;t.updateBoss(.2,1);assert.notEqual(segment.position.x,oldX,'body snakes through space');
- t.state().boss.attack=0;t.updateBoss(.01,1);assert.equal(t.state().bullets,3,'serpent fires a three-shot fan');
+ t.state().boss.attack=0;t.updateBoss(.01,1);assert.equal(t.state().bullets,5,'serpent fires five simultaneous fan shots');
  t.state().boss.hitCooldown=0;t.kill();assert.equal(t.state().boss,null);assert.equal(t.state().serpentDone,true);assert.equal(t.state().mode,'playing');assert.ok(el('if-announcement-text').textContent.includes('JADE SERPENT DOWN'));
  t.update(.1);assert.equal(t.state().boss,null,'serpent stays defeated');
  t.update(2);t.setTime(144);t.update(.01);assert.equal(t.state().boss.kind,'final');
