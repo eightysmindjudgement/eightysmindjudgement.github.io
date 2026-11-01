@@ -19,6 +19,15 @@ import * as THREE from "./vendor/three.module.min.js";
     const track = document.querySelector(".visions-scroll-track");
     const canvas = document.querySelector(".visions-canvas");
     const loading = document.querySelector(".visions-loading");
+    const loadingBar = document.querySelector(".visions-loading-bar");
+    const loadingPercent = document.querySelector(".visions-loading-percent");
+    let completedLoads = 0;
+    function advanceLoadingProgress() {
+        // Ten album covers and the track information each count as one task.
+        const percent = Math.round(++completedLoads / (albums.length + 1) * 100);
+        if (loadingBar) loadingBar.value = percent;
+        if (loadingPercent) loadingPercent.textContent = `${percent}%`;
+    }
     const prompt = document.querySelector(".visions-scroll-prompt");
     const indexNav = document.querySelector(".visions-index");
     const details = document.querySelector(".visions-details");
@@ -106,10 +115,11 @@ import * as THREE from "./vendor/three.module.min.js";
         loading.hidden = true;
         fallback.querySelector("p").textContent = message;
         canvas.setAttribute("aria-hidden", "true");
+        document.dispatchEvent(new Event("visions:ready"));
     }
 
     function readAlbumDetails() {
-        return fetch(new URL("albums.html", document.baseURI), { signal: abortController.signal })
+        return fetch(new URL("discography.html", document.baseURI), { signal: AbortSignal.any([abortController.signal, AbortSignal.timeout(20000)]) })
             .then(response => {
                 if (!response.ok) throw new Error(`Album information request failed (${response.status}).`);
                 return response.text();
@@ -117,7 +127,7 @@ import * as THREE from "./vendor/three.module.min.js";
             .then(markup => {
                 const source = new DOMParser().parseFromString(markup, "text/html");
                 const information = new Map();
-                source.querySelectorAll("main > section > article").forEach(article => {
+                source.querySelectorAll("#discography-studio > article").forEach(article => {
                     const headings = [...article.querySelectorAll("h3")];
                     const trackParagraph = article.querySelector("p");
                     if (headings.length < 2 || !trackParagraph) return;
@@ -168,7 +178,13 @@ import * as THREE from "./vendor/three.module.min.js";
     function makeTexture(imagePath) {
         return new Promise((resolve, reject) => {
             const image = new Image();
+            const timeout = setTimeout(() => {
+                image.onload = image.onerror = null;
+                reject(new Error(`Album cover loading timed out: ${imagePath}`));
+            }, 20000);
             image.onload = () => {
+                clearTimeout(timeout);
+                try {
                 const maxSize = window.innerWidth <= 700 ? 512 : 1024;
                 const scale = Math.min(1, maxSize / Math.max(image.naturalWidth, image.naturalHeight));
                 const width = Math.max(1, Math.round(image.naturalWidth * scale));
@@ -188,8 +204,14 @@ import * as THREE from "./vendor/three.module.min.js";
                 texture.needsUpdate = true;
                 textures.push(texture);
                 resolve(texture);
+                } catch (error) {
+                    reject(error);
+                }
             };
-            image.onerror = () => reject(new Error(`Could not load album cover: ${imagePath}`));
+            image.onerror = () => {
+                clearTimeout(timeout);
+                reject(new Error(`Could not load album cover: ${imagePath}`));
+            };
             image.src = imagePath;
         });
     }
@@ -595,7 +617,8 @@ import * as THREE from "./vendor/three.module.min.js";
                 console.error("VISIONS could not load album track information.", error);
                 if (selectedIndex >= 0) showAlbumDetails(selectedIndex, albumInformation);
             }
-        });
+        })
+        .finally(advanceLoadingProgress);
 
     try {
         renderer = new THREE.WebGLRenderer({
@@ -636,7 +659,6 @@ import * as THREE from "./vendor/three.module.min.js";
         resize();
         updateScrollProgress();
 
-        let loaded = 0;
         let failed = 0;
         const coverRequests = albums.map((album, albumIndex) => makeTexture(album.image)
             .then(texture => createCube(album, albumIndex, texture))
@@ -645,18 +667,15 @@ import * as THREE from "./vendor/three.module.min.js";
                 console.error(`VISIONS could not load "${album.title}".`, error);
             })
             .finally(() => {
-                loaded += 1;
-                if (loading) {
-                    loading.textContent = failed
-                        ? `Loading albums ${loaded} / ${albums.length} — some covers are unavailable.`
-                        : `Loading albums ${loaded} / ${albums.length}...`;
-                }
+                advanceLoadingProgress();
             }));
         Promise.all([Promise.all(coverRequests), detailsRequest]).then(() => {
             if (disposed) return;
             loading.hidden = true;
             if (failed === albums.length) {
                 showFallback("Album artwork could not be loaded. Check your connection and try again.");
+            } else {
+                document.dispatchEvent(new Event("visions:ready"));
             }
         });
 

@@ -7,22 +7,26 @@
     <meta name="description" content="A spatial journey through ten albums by Eighty's Mind Judgement.">
     <title>VISIONS | Eighty's Mind Judgement Official Website</title>
     <link rel="stylesheet" href="visions.css">
-    <script type="module" src="visions.js"></script>
+    <script src="visions-intro.js"></script>
+    <script src="visions-loader.js" defer></script>
 </head>
 <body>
     <header class="visions-header">
         <h1>VISIONS</h1>
-        <a class="return-link" href="index.html">EIGHTY'S MIND JUDGEMENT</a>
     </header>
+    <a class="return-link" href="index.html" aria-label="Back to HOME" title="Back to HOME">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M14 6l-6 6 6 6M8 12h12" />
+        </svg>
+    </a>
     <main>
         <div class="visions-scroll-track">
             <section class="visions-stage" aria-label="Three-dimensional album journey">
                 <canvas class="visions-canvas" aria-label="Floating album cubes. Select a cube or use the album buttons to explore." role="img"></canvas>
-                <div class="visions-opening" aria-hidden="true">
-                    <img src="EMJ_logo2026.png" alt="">
-                    <span>ENTER THE SOUND</span>
+                <div class="visions-loading">
+                    <progress class="visions-loading-bar" max="100" value="0" aria-label="Album space loading progress"></progress>
+                    <span class="visions-loading-percent" aria-hidden="true">0%</span>
                 </div>
-                <div class="visions-loading" role="status">Preparing the album space...</div>
                 <p class="visions-scroll-prompt">SCROLL TO TRAVEL <span aria-hidden="true">↓</span></p>
                 <nav class="visions-index" aria-label="Choose an album"></nav>
                 <section class="visions-details" aria-labelledby="visions-title" aria-live="polite" hidden>
