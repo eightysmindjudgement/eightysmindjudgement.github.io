@@ -15,7 +15,7 @@ globalThis.gameTest={
  hazard:kind=>{invulnerable=0;if(kind==='bullet'){enemyBullet(player.position.clone(),new T.Vector3(0,0,10))}else{addRock();enemies.at(-1).mesh.position.copy(player.position)}},
  boss:()=>{time=100;createBoss();boss.mesh.position.set(player.position.x,player.position.y,-26)},
  aim:()=>{if(boss){target.set(boss.mesh.position.x,boss.mesh.position.y);player.position.x=target.x;player.position.y=target.y}},
- stage:()=>{invulnerable=1000;for(let i=0;i<12000;i++){if(boss?.kind==='mid'){target.set(boss.mesh.position.x,boss.mesh.position.y);player.position.x=target.x;player.position.y=target.y;if(i%10===0)shoot()}update(1/60);if(boss?.kind==='final')break}},
+ stage:()=>{invulnerable=1000;for(let i=0;i<12000;i++){if(boss&&boss.kind!=='final'){target.set(boss.mesh.position.x,boss.mesh.position.y);player.position.x=target.x;player.position.y=target.y;if(i%10===0)shoot()}update(1/60);if(boss?.kind==='final')break}},
  shield:()=>{invulnerable=1000}
 };`;
 async function run(){
