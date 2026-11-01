@@ -27,7 +27,7 @@
       { name: 'HEART', reading: 'ハート', image: 'MAP背景.PNG', radius: 61, color: '#f37f94', points: 180 },
       { name: 'BRAIN', reading: 'ブレイン', image: 'BRAIN.PNG', radius: 69, color: '#75ebcc', points: 400 },
       { name: 'METAL SHOGUN', reading: 'メタルショウグン', image: 'profile-artwork.JPG', radius: 77, color: '#ffe49b', points: 900 },
-      { name: 'メタル大将軍', reading: 'メタルだいしょうぐん', image: 'MARKET背景.JPEG', radius: 77*1.5, color: '#ffe49b', points: 2400 }
+      { name: 'メタル大将軍', reading: 'メタルだいしょうぐん', image: 'assets/emj-puzzle-metal-general.jpeg', radius: 77*1.5, color: '#ffe49b', points: 2400 }
     ]
   };
   function vertices(b) {
