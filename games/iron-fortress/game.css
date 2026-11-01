@@ -54,3 +54,9 @@
 
 #iron-fortress #if-announcement{position:absolute;inset:0;z-index:10;display:grid;place-items:center;pointer-events:none;text-align:center;font:italic 900 clamp(32px,7vw,64px)/1.2 Arial,sans-serif;color:#fff;letter-spacing:.04em;text-shadow:0 3px 8px #000,0 0 20px #000;background:linear-gradient(transparent,#07121d88,transparent)}
 #iron-fortress #if-announcement[data-result="over"]{background:#02061199}
+
+#iron-fortress .if-controls{flex-wrap:wrap}
+#iron-fortress .if-roll-help{font-size:12px;line-height:1.6;color:#c9d8e3}
+
+#iron-fortress #if-boss-hit{display:block;font-size:11px;color:#ffe3b2;letter-spacing:.05em;margin-top:4px;font-variant-numeric:tabular-nums}
+
