@@ -1,6 +1,6 @@
 /* Pure, elapsed-time game model. All positions are normalized to the canvas. */
 (function(root){'use strict';
-const CONFIG=Object.freeze({duration:45,perfectTime:.1,goodTime:.25,perfectX:.06,goodX:.14,initialFlight:2.5,maxSpeed:1.8,acceleration:.045,missFlight:.6,respawn:.85});
+const CONFIG=Object.freeze({duration:20,perfectTime:.1,goodTime:.25,perfectX:.06,goodX:.14,initialFlight:1.25,acceleration:.1,missFlight:.6,respawn:.85});
 class MetalStrike {
 constructor(best=0){this.best=best;this.reset();this.state='READY';}
 reset(){Object.assign(this,{state:'PLAYING',time:0,score:0,combo:0,maxCombo:0,perfect:0,good:0,miss:0,rallies:0,reason:'',events:[],phase:'incoming',phaseAt:0,xOrigin:.5,xVelocity:.15,zOrigin:0,aim:.5,newBest:false});this.flight=CONFIG.initialFlight;this.arrival=this.flight;}
@@ -18,7 +18,7 @@ else{this.transition('incoming',next,0);this.arrival=next+this.flight;}
 }}
 strike(t,aim){this.advance(t);if(this.state!=='PLAYING')return null;this.aim=Math.max(0,Math.min(1,aim));this.event('SWING');if(this.phase!=='incoming'||Math.abs(this.time-this.arrival)>CONFIG.goodTime)return null;
 const dx=Math.abs(this.ball().x-this.aim);if(dx>CONFIG.goodX)return null;
-const grade=Math.abs(this.time-this.arrival)<=CONFIG.perfectTime&&dx<=CONFIG.perfectX?'PERFECT':'GOOD';this.combo++;this.maxCombo=Math.max(this.combo,this.maxCombo);this[grade.toLowerCase()]++;const multiplier=this.combo>=20?3:this.combo>=10?2:this.combo>=5?1.5:1;this.score+=Math.round((grade==='PERFECT'?100:50)*multiplier);this.event(grade);const z=this.ball().z;this.rallies++;this.flight=CONFIG.initialFlight/(1+(CONFIG.maxSpeed-1)*(1-Math.exp(-this.rallies*CONFIG.acceleration)));this.transition('outgoing',this.time,z);return grade;
+const grade=Math.abs(this.time-this.arrival)<=CONFIG.perfectTime&&dx<=CONFIG.perfectX?'PERFECT':'GOOD';this.combo++;this.maxCombo=Math.max(this.combo,this.maxCombo);this[grade.toLowerCase()]++;const multiplier=this.combo>=20?3:this.combo>=10?2:this.combo>=5?1.5:1;this.score+=Math.round((grade==='PERFECT'?100:50)*multiplier);this.event(grade);const z=this.ball().z;this.rallies++;this.flight=CONFIG.initialFlight/(1+this.rallies*CONFIG.acceleration);this.transition('outgoing',this.time,z);return grade;
 }
 finish(reason){this.state='GAME_OVER';this.reason=reason;this.newBest=this.score>this.best;this.best=Math.max(this.best,this.score);this.event(reason);}
 }

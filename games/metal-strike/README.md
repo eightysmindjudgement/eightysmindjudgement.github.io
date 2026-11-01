@@ -12,7 +12,8 @@ No new dependencies or remote assets.
 Controls: click/tap the ball's horizontal position at the near strike line. Move the mouse or use left/right arrows to aim; press Space to strike. Keyboard input is scoped to the focused canvas.
 
 Tests: node scripts/metal-strike.test.cjs (from the site root).
-Six model tests cover timing, position, scoring, misses, end conditions, retry, record retention, speed and frame independence.
+Seven model tests cover timing, position, scoring, misses, end conditions, retry, record retention, speed and frame independence.
+The initial flight takes 1.25 seconds. Ball speed stays constant during flight and through wall returns. Each successful strike adds 10% of the initial speed, with no speed cap; retry restores the initial speed.
 A mocked Canvas/DOM smoke run also checked desktop/mobile drawing, unavailable localStorage, retry and input handlers. Visual browser and physical touch verification remains required.
 
 Publishing: follow the root AGENTS.md. Copy games.html and games/metal-strike/ into _github_publish_work, inspect the diff, then commit/push only when publication is requested.
