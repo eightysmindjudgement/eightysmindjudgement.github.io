@@ -111,7 +111,7 @@ function bossModel(){const g=new T.Group(),armor=metal(0x75828f),dark=metal(0x20
 
 
 function serpentBossModel(){
- const g=new T.Group(),green=new T.MeshStandardMaterial({color:0x238851,metalness:.45,roughness:.34}),white=new T.MeshStandardMaterial({color:0xe5eee1,metalness:.2,roughness:.48}),dark=metal(0x152f22),red=new T.MeshStandardMaterial({color:0xeb2542,emissive:0x9b0921,emissiveIntensity:.3,roughness:.5}),gold=light(0xf5d666);
+ const g=new T.Group(),green=new T.MeshStandardMaterial({color:0x29463e,metalness:.38,roughness:.52}),white=new T.MeshStandardMaterial({color:0xaaa99a,metalness:.12,roughness:.65}),dark=metal(0x141e1c),red=new T.MeshStandardMaterial({color:0x6e263b,emissive:0x351019,emissiveIntensity:.12,roughness:.5}),gold=light(0xb49b67);
  const headGreen=green.clone(),headWhite=white.clone();
  const head=new T.Group();g.add(head);
  const skull=put(head,new T.SphereGeometry(1,20,12),headGreen,0,.25,.15);skull.scale.set(1.4,.9,1.65);
@@ -125,11 +125,11 @@ function serpentBossModel(){
  }
  const tongue=new T.Group();tongue.position.set(0,-.28,1.8);head.add(tongue);box(tongue,red,.16,.065,1,0,0,.4);
  for(const side of [-1,1]){const fork=box(tongue,red,.085,.055,.55,side*.15,0,1.1);fork.rotation.y=side*.48}
- const segments=[];
+ const segments=[],scaleShade=green.clone();scaleShade.color.setHex(0x354b42);
  const bodyGeometry=new T.SphereGeometry(1,8,6),bellyGeometry=new T.SphereGeometry(1,8,6);
  for(let i=1;i<=72;i++){
   const segment=new T.Group(),radius=1.15-i*.009;
-  const body=put(segment,bodyGeometry,green);body.scale.set(radius,radius*.88,1.05);
+  const body=put(segment,bodyGeometry,i%3===0?scaleShade:green);body.scale.set(radius,radius*.88,1.05);
   const belly=put(segment,bellyGeometry,white,0,-radius*.59,.08);belly.scale.set(radius*.82,radius*.34,.99);
   segment.position.z=-i*.1;g.add(segment);segments.push({mesh:segment,radius});
  }
@@ -245,9 +245,9 @@ function crossLaser(axis='y'){
  const glow=put(g,new T.CylinderGeometry(.6,.6,24,12),new T.MeshBasicMaterial({color:0xff29c2,transparent:true,opacity:.24,blending:T.AdditiveBlending,depthWrite:false,toneMapped:false}));glow.rotation.z=Math.PI/2;
  if(axis==='x')g.rotation.z=Math.PI/2;g.name=axis==='x'?'pink vertical laser':'pink horizontal laser';return g;
 }
-function pellet(){
- const mesh=new T.Mesh(new T.SphereGeometry(.16,10,6),light(0xffd998));
- put(mesh,new T.SphereGeometry(.28,10,6),new T.MeshBasicMaterial({color:0xff8b35,transparent:true,opacity:.24,blending:T.AdditiveBlending,depthWrite:false}));
+function pellet(coreColor=0xffd998,haloColor=0xff8b35){
+ const mesh=new T.Mesh(new T.SphereGeometry(.16,10,6),light(coreColor));
+ put(mesh,new T.SphereGeometry(.28,10,6),new T.MeshBasicMaterial({color:haloColor,transparent:true,opacity:.24,blending:T.AdditiveBlending,depthWrite:false}));
  return mesh;
 }
 function spark(){const m=new T.Mesh(new T.SphereGeometry(.16,8,6),light(0xffb054));m.scale.set(1,1,2.5);return m}
@@ -379,7 +379,7 @@ function addSpaceRock(){
  enemies.push({mesh,type:3,spaceRock:true,radius:1.15,hp:Infinity});
 }
 function addRock(){if(enemies.length>=20)return;const mesh=obstacle();mesh.position.set(Math.sin(wave*1.6)*bounds.x*.8,Math.cos(wave*2.1)*3.5,-100);view.scene.add(mesh);enemies.push({mesh,type:3,radius:1.65,hp:Infinity})}
-function enemyBullet(pos,aim,speedScale=1,scatter=false){if(presentationActive()||bullets.length>=90)return;const mesh=scatter?pellet():bolt(0xff6658,.3);mesh.position.copy(pos);view.scene.add(mesh);const velocity=aim.clone().sub(pos).normalize().multiplyScalar(cfg.bullet*speedScale);mesh.quaternion.setFromUnitVectors(new T.Vector3(0,0,1),velocity.clone().normalize());bullets.push({mesh,velocity})}
+function enemyBullet(pos,aim,speedScale=1,scatter=false,palette=null){if(presentationActive()||bullets.length>=90)return;const mesh=scatter?pellet(palette?.core,palette?.halo):bolt(0xff6658,.3);mesh.position.copy(pos);view.scene.add(mesh);const velocity=aim.clone().sub(pos).normalize().multiplyScalar(cfg.bullet*speedScale);mesh.quaternion.setFromUnitVectors(new T.Vector3(0,0,1),velocity.clone().normalize());bullets.push({mesh,velocity})}
 function fireEnemy(e){
  if(e.type===4){
   if(bullets.length>86)return;
@@ -485,7 +485,7 @@ function updateBoss(dt,motion){
   boss.mesh.updateMatrixWorld(true);boss.hitTargets=[{position:p.clone(),radius:1.5}];
 
   ui('if-warning').textContent=boss.attack<.8?'JADE SERPENT · VENOM FAN':'';
-  if(!presentationActive()&&boss.attack<=0&&p.z>=-27){for(const offset of [-2.5,0,2.5])enemyBullet(p,new T.Vector3(player.position.x+offset,player.position.y,5),.7,true);boss.attack=cfg.attack+1.8}
+  if(!presentationActive()&&boss.attack<=0&&p.z>=-27){if(bullets.length<=85){const origin=p.clone().add(new T.Vector3(0,-.25,1.9));for(const offset of [-5,-2.5,0,2.5,5])enemyBullet(origin,new T.Vector3(player.position.x+offset,player.position.y,5),.7,true,{core:0xd8d8b1,halo:0x6e9680})}boss.attack=cfg.attack+1.8}
  }else if(boss.kind==='raider'){
   ui('if-warning').textContent=boss.attack<.6?'SILVER WISP · SINGLE SHOT':'';
   if(boss.attack<=0&&p.z>=-27){enemyBullet(p,player.position,.65);boss.attack=Math.max(3.8,cfg.attack+2)}

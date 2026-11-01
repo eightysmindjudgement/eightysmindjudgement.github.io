@@ -109,7 +109,7 @@ function addSpaceRock(){
  enemies.push({mesh,type:3,spaceRock:true,radius:1.15,hp:Infinity});
 }
 function addRock(){if(enemies.length>=20)return;const mesh=obstacle();mesh.position.set(Math.sin(wave*1.6)*bounds.x*.8,Math.cos(wave*2.1)*3.5,-100);view.scene.add(mesh);enemies.push({mesh,type:3,radius:1.65,hp:Infinity})}
-function enemyBullet(pos,aim,speedScale=1,scatter=false){if(presentationActive()||bullets.length>=90)return;const mesh=scatter?pellet():bolt(0xff6658,.3);mesh.position.copy(pos);view.scene.add(mesh);const velocity=aim.clone().sub(pos).normalize().multiplyScalar(cfg.bullet*speedScale);mesh.quaternion.setFromUnitVectors(new T.Vector3(0,0,1),velocity.clone().normalize());bullets.push({mesh,velocity})}
+function enemyBullet(pos,aim,speedScale=1,scatter=false,palette=null){if(presentationActive()||bullets.length>=90)return;const mesh=scatter?pellet(palette?.core,palette?.halo):bolt(0xff6658,.3);mesh.position.copy(pos);view.scene.add(mesh);const velocity=aim.clone().sub(pos).normalize().multiplyScalar(cfg.bullet*speedScale);mesh.quaternion.setFromUnitVectors(new T.Vector3(0,0,1),velocity.clone().normalize());bullets.push({mesh,velocity})}
 function fireEnemy(e){
  if(e.type===4){
   if(bullets.length>86)return;
@@ -215,7 +215,7 @@ function updateBoss(dt,motion){
   boss.mesh.updateMatrixWorld(true);boss.hitTargets=[{position:p.clone(),radius:1.5}];
 
   ui('if-warning').textContent=boss.attack<.8?'JADE SERPENT · VENOM FAN':'';
-  if(!presentationActive()&&boss.attack<=0&&p.z>=-27){for(const offset of [-2.5,0,2.5])enemyBullet(p,new T.Vector3(player.position.x+offset,player.position.y,5),.7,true);boss.attack=cfg.attack+1.8}
+  if(!presentationActive()&&boss.attack<=0&&p.z>=-27){if(bullets.length<=85){const origin=p.clone().add(new T.Vector3(0,-.25,1.9));for(const offset of [-5,-2.5,0,2.5,5])enemyBullet(origin,new T.Vector3(player.position.x+offset,player.position.y,5),.7,true,{core:0xd8d8b1,halo:0x6e9680})}boss.attack=cfg.attack+1.8}
  }else if(boss.kind==='raider'){
   ui('if-warning').textContent=boss.attack<.6?'SILVER WISP · SINGLE SHOT':'';
   if(boss.attack<=0&&p.z>=-27){enemyBullet(p,player.position,.65);boss.attack=Math.max(3.8,cfg.attack+2)}

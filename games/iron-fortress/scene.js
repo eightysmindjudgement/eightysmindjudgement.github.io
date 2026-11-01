@@ -26,7 +26,7 @@ export function bossModel(){const g=new T.Group(),armor=metal(0x75828f),dark=met
 
 
 export function serpentBossModel(){
- const g=new T.Group(),green=new T.MeshStandardMaterial({color:0x238851,metalness:.45,roughness:.34}),white=new T.MeshStandardMaterial({color:0xe5eee1,metalness:.2,roughness:.48}),dark=metal(0x152f22),red=new T.MeshStandardMaterial({color:0xeb2542,emissive:0x9b0921,emissiveIntensity:.3,roughness:.5}),gold=light(0xf5d666);
+ const g=new T.Group(),green=new T.MeshStandardMaterial({color:0x29463e,metalness:.38,roughness:.52}),white=new T.MeshStandardMaterial({color:0xaaa99a,metalness:.12,roughness:.65}),dark=metal(0x141e1c),red=new T.MeshStandardMaterial({color:0x6e263b,emissive:0x351019,emissiveIntensity:.12,roughness:.5}),gold=light(0xb49b67);
  const headGreen=green.clone(),headWhite=white.clone();
  const head=new T.Group();g.add(head);
  const skull=put(head,new T.SphereGeometry(1,20,12),headGreen,0,.25,.15);skull.scale.set(1.4,.9,1.65);
@@ -40,11 +40,11 @@ export function serpentBossModel(){
  }
  const tongue=new T.Group();tongue.position.set(0,-.28,1.8);head.add(tongue);box(tongue,red,.16,.065,1,0,0,.4);
  for(const side of [-1,1]){const fork=box(tongue,red,.085,.055,.55,side*.15,0,1.1);fork.rotation.y=side*.48}
- const segments=[];
+ const segments=[],scaleShade=green.clone();scaleShade.color.setHex(0x354b42);
  const bodyGeometry=new T.SphereGeometry(1,8,6),bellyGeometry=new T.SphereGeometry(1,8,6);
  for(let i=1;i<=72;i++){
   const segment=new T.Group(),radius=1.15-i*.009;
-  const body=put(segment,bodyGeometry,green);body.scale.set(radius,radius*.88,1.05);
+  const body=put(segment,bodyGeometry,i%3===0?scaleShade:green);body.scale.set(radius,radius*.88,1.05);
   const belly=put(segment,bellyGeometry,white,0,-radius*.59,.08);belly.scale.set(radius*.82,radius*.34,.99);
   segment.position.z=-i*.1;g.add(segment);segments.push({mesh:segment,radius});
  }
@@ -160,9 +160,9 @@ export function crossLaser(axis='y'){
  const glow=put(g,new T.CylinderGeometry(.6,.6,24,12),new T.MeshBasicMaterial({color:0xff29c2,transparent:true,opacity:.24,blending:T.AdditiveBlending,depthWrite:false,toneMapped:false}));glow.rotation.z=Math.PI/2;
  if(axis==='x')g.rotation.z=Math.PI/2;g.name=axis==='x'?'pink vertical laser':'pink horizontal laser';return g;
 }
-export function pellet(){
- const mesh=new T.Mesh(new T.SphereGeometry(.16,10,6),light(0xffd998));
- put(mesh,new T.SphereGeometry(.28,10,6),new T.MeshBasicMaterial({color:0xff8b35,transparent:true,opacity:.24,blending:T.AdditiveBlending,depthWrite:false}));
+export function pellet(coreColor=0xffd998,haloColor=0xff8b35){
+ const mesh=new T.Mesh(new T.SphereGeometry(.16,10,6),light(coreColor));
+ put(mesh,new T.SphereGeometry(.28,10,6),new T.MeshBasicMaterial({color:haloColor,transparent:true,opacity:.24,blending:T.AdditiveBlending,depthWrite:false}));
  return mesh;
 }
 export function spark(){const m=new T.Mesh(new T.SphereGeometry(.16,8,6),light(0xffb054));m.scale.set(1,1,2.5);return m}
