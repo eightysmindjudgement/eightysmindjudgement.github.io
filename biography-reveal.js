@@ -2,7 +2,7 @@
     const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
     if (motionPreference.matches || !('IntersectionObserver' in window)) return;
 
-    const blocks = document.querySelectorAll('.biography-page main h2, .biography-page main h3, .biography-page main p');
+    const blocks = document.querySelectorAll('.biography-page main h2, .biography-page main h3, .biography-page main p, .home-page .digital-philosophy h2, .home-page .digital-philosophy h3, .home-page .digital-philosophy p');
     let elements = [];
     const reveal = (element) => {
         element.classList.add('is-visible');

@@ -140,6 +140,10 @@ main [role="textbox"] {
     background-size: cover;
 }
 
+.home-page::before {
+    background-size: 100% 100%, 100% auto;
+}
+
 header {
     min-height: 55vh;
     display: flex;
@@ -2517,21 +2521,24 @@ article img {
     }
 }
 
-/* Each rendered biography line enters once as it scrolls into view. */
-.biography-page .biography-reveal {
+/* Each rendered line enters once as it scrolls into view. */
+.biography-page .biography-reveal,
+.home-page .digital-philosophy .biography-reveal {
     position: relative;
     top: 8px;
     opacity: 0;
     transition: opacity 800ms ease-out, top 800ms cubic-bezier(0.2, 0.65, 0.3, 1);
 }
 
-.biography-page .biography-reveal.is-visible {
+.biography-page .biography-reveal.is-visible,
+.home-page .digital-philosophy .biography-reveal.is-visible {
     opacity: 1;
     top: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .biography-page .biography-reveal {
+    .biography-page .biography-reveal,
+    .home-page .digital-philosophy .biography-reveal {
         opacity: 1;
         top: 0;
         transition: none;
@@ -3062,12 +3069,26 @@ header {
 
     .home-page .album-grid {
         margin-top: 0;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 3px;
+        width: calc(100vw - 8px);
+        margin-left: calc(50% - 50vw + 4px);
+        margin-right: calc(50% - 50vw + 4px);
+    }
+
+    .home-page .album-grid-click-entry:empty {
+        display: none;
     }
 
     .home-page .todays-track {
         min-height: 0;
         padding-bottom: 0;
         border-bottom: 0;
+    }
+
+    .home-page .todays-track h2 span[lang="ja"] {
+        display: block;
+        margin-left: 0;
     }
 
     .home-page .digital-philosophy {
