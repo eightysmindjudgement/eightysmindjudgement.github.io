@@ -168,12 +168,21 @@
     // Split the pause-aware play clock at rain boundaries, including delayed frames.
     updateWater(dt,elapsed){
       const w=this.water;if(this.stageIndex>2){w.height=0;w.raining=false;w.waves=[];return;}
+      const metalShogunPresent=(this.stageIndex===1||this.stageIndex===2)&&this.bodies.some(b=>b.level===8);
+      const maxHeight=CONFIG.waterMaxHeight*(metalShogunPresent ? .6 : 1),rainRate=CONFIG.rainAmount/CONFIG.rainDuration;
       const end=Math.max(w.elapsed,elapsed);let t=w.elapsed;
       while(t<end-1e-9){
         const cycle=Math.floor((t+1e-9)/CONFIG.rainInterval),phase=t-cycle*CONFIG.rainInterval,rain=cycle>=1&&phase<CONFIG.rainDuration;
-        const boundary=rain?cycle*CONFIG.rainInterval+CONFIG.rainDuration:(cycle+1)*CONFIG.rainInterval,span=Math.min(end,boundary)-t;if(span<=0)break;
+        const boundary=rain?cycle*CONFIG.rainInterval+CONFIG.rainDuration:(cycle+1)*CONFIG.rainInterval;
+        let span=Math.min(end,boundary)-t;if(span<=0)break;
         // Rain supply is independent of the existing buoyancy reference depth.
-        w.height=Math.max(0,Math.min(CONFIG.waterMaxHeight,w.height+span*((rain?CONFIG.rainAmount/CONFIG.rainDuration:0)-w.drainRate)));t+=span;
+        if(metalShogunPresent&&w.height>maxHeight+1e-9){
+          span=Math.min(span,(w.height-maxHeight)/rainRate);
+          w.height=Math.max(maxHeight,w.height-span*rainRate);
+        }else{
+          w.height=Math.max(0,Math.min(maxHeight,w.height+span*((rain?rainRate:0)-w.drainRate)));
+        }
+        t+=span;
         if(rain&&t>=boundary-1e-9)w.drainRate=w.height/CONFIG.drainDuration;
         if(w.height===0&&!rain)w.drainRate=0;
       }

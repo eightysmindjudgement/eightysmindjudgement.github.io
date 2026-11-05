@@ -9,6 +9,7 @@
   let reduced=motion.matches;motion.addEventListener('change',e=>{reduced=e.matches;});
   let running=false,paused=false,aim=200,last=0,accumulator=0,best=0,drawnScore=-1,lastEvent=null;
   let playMs=0,clockStarted=null;
+  const clearIntroDuration=.8,clearPresentationDuration=10;
   let clearCount=0,clearAge=0,clearLast=null,clearDone=false,secretRevealed=false;
   try{const n=Number(localStorage.getItem("emj-puzzle-clears"));if(Number.isSafeInteger(n)&&n>=0)clearCount=n;}catch{}
   function updateClears(){
@@ -190,7 +191,7 @@
     if(running&&!world.over&&!world.clear){const r=world.current<0?C.pieces[0].radius*2/3:C.pieces[world.current].radius,x=world.aimX(aim,r);ctx.setLineDash([4,6]);ctx.strokeStyle='#b8d9ee55';ctx.beginPath();ctx.moveTo(x,r*2+8);ctx.lineTo(x,C.height);ctx.stroke();ctx.setLineDash([]);drawTile({level:world.current,rock:world.current===-1,bomb:world.current===-2,r,x,y:r+5,angle:0},.6);}
     world.bodies.forEach(b=>drawTile(b));paintWater();paintBlasts();paintDischarges();paintAttacks();paintSpecial();paintDrill();syncRocks();syncCombo();paintClear();
     for(const e of world.events){const age=world.time-e.time;ctx.save();ctx.globalAlpha=1-age;ctx.fillStyle=e.final?'#ffe49b':'#b8ffe8';ctx.textAlign='center';ctx.font=`bold ${e.final?22:16}px Arial`;ctx.fillText(`+${e.points}${e.combo>1?' ×'+e.combo:''}`,e.x,e.y-(reduced?0:age*40));if(e.final&&!reduced){ctx.beginPath();ctx.arc(e.x,e.y,30+age*100,0,Math.PI*2);ctx.strokeStyle='#ffe49b';ctx.lineWidth=3;ctx.stroke();}ctx.restore();}
-    if(world.clear&&!clearDone&&clearAge<.8)paintTileImage(world.clear.body.level);
+    if(world.clear&&!clearDone&&clearAge<clearIntroDuration)paintTileImage(world.clear.body.level);
   }
   function statusText(ja,en){const el=$('puzzle-status'),small=document.createElement('small');small.className='puzzle-translation';small.lang='en';small.textContent=en;el.replaceChildren(document.createTextNode(ja),small);}
   function score(){if(drawnScore===world.score)return;drawnScore=world.score;$('puzzle-score').textContent=world.score;if(world.score>best){best=world.score;$('puzzle-best').textContent=best;try{localStorage.setItem('emj-puzzle-best',String(best));}catch{}}}
@@ -238,8 +239,8 @@
     if(clearDone)return;
     if(clearLast===null){stopClock();stopHeartbeat();syncSpecial();pointer=null;revealSecret();clearLast=now;$('puzzle-pause').disabled=true;statusText('ゲームクリア！','Game clear!');}
     if(!document.hidden)clearAge+=Math.max(0,(now-clearLast)/1000);
-    clearLast=now;clearText.hidden=clearAge<.8;paint();
-    if(clearAge>=5.8){
+    clearLast=now;clearText.hidden=clearAge<clearIntroDuration;paint();
+    if(clearAge>=clearIntroDuration+clearPresentationDuration){
       clearDone=true;clearCount++;updateClears();
       try{localStorage.setItem('emj-puzzle-clears',String(clearCount));}catch{}
       running=false;paused=false;world.over=true;clearText.hidden=true;
@@ -250,13 +251,14 @@
   function paintClear(){
     const ctx=fireworksContext;if(!ctx)return;ctx.clearRect(0,0,C.width,C.height);
     if(!world.clear||clearDone)return;
-    if(clearAge<.8)return;
-    const effectAge=clearAge-.8;
+    if(clearAge<clearIntroDuration)return;
+    const effectAge=clearAge-clearIntroDuration;
     // Fireworks use only the presentation clock, never bodies or scoring.
     ctx.save();ctx.globalCompositeOperation='screen';
     const colors=['#fff','#ffe75b','#ff28b3','#65edff'];
-    for(let i=0;i<12;i++){
-      const t=effectAge-i*.32;if(t<0||t>2)continue;
+    const fireworkCount=12,fireworkDuration=2,fireworkInterval=(clearPresentationDuration-fireworkDuration)/(fireworkCount-1);
+    for(let i=0;i<fireworkCount;i++){
+      const t=effectAge-i*fireworkInterval;if(t<0||t>fireworkDuration)continue;
       const x=45+(i*137%310),y=90+(i*79%240),color=colors[i%4];ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=2;
       if(t<.55){const py=C.height-(C.height-y)*t/.55;ctx.beginPath();ctx.moveTo(x,py+24);ctx.lineTo(x,py);ctx.stroke();continue;}
       const age=t-.55;ctx.globalAlpha=Math.max(0,1-age/1.45);
