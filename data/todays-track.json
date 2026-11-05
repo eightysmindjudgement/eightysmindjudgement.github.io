@@ -1,6 +1,6 @@
 {
   "channelId": "UChh-9Ik4sCslLBSzaKTD7Sg",
-  "updatedAt": "2026-11-04T21:14:47.721Z",
+  "updatedAt": "2026-11-05T21:26:19.191Z",
   "videos": [
     {
       "videoId": "_x22SWqkM4U",
@@ -920,6 +920,13 @@
       "watchUrl": "https://www.youtube.com/watch?v=PZStKCxudt4"
     },
     {
+      "videoId": "qLsiMbb8GWk",
+      "title": "[Clip] Cracks in the Chrome / by Eighty's Mind Judgement (EMJ) / Heavy Metal",
+      "thumbnailUrl": "https://i.ytimg.com/vi/qLsiMbb8GWk/maxresdefault.jpg",
+      "publishedAt": "2026-11-05T12:30:07Z",
+      "watchUrl": "https://www.youtube.com/watch?v=qLsiMbb8GWk"
+    },
+    {
       "videoId": "qWTCIA5ZP3k",
       "title": "[PR] First Meltdown / by Eighty's Mind Judgement （EMJ）",
       "thumbnailUrl": "https://i.ytimg.com/vi/qWTCIA5ZP3k/maxresdefault.jpg",
@@ -1320,11 +1327,11 @@
     }
   ],
   "dailyTrack": {
-    "date": "2026-11-05",
-    "videoId": "Gp0UoLmPKz0",
-    "title": "[Full009] Hard Rock Party Night / by Eighty's Mind Judgement  （EMJ）/ Heavy Metal",
-    "thumbnailUrl": "https://i.ytimg.com/vi/Gp0UoLmPKz0/maxresdefault.jpg",
-    "publishedAt": "2025-11-24T13:00:27Z",
-    "watchUrl": "https://www.youtube.com/watch?v=Gp0UoLmPKz0"
+    "date": "2026-11-06",
+    "videoId": "6hUIkr0-81c",
+    "title": "[Full038] Still Walking / by Eighty's Mind Judgement (EMJ)/ Heavy Metal",
+    "thumbnailUrl": "https://i.ytimg.com/vi/6hUIkr0-81c/maxresdefault.jpg",
+    "publishedAt": "2026-01-21T12:30:14Z",
+    "watchUrl": "https://www.youtube.com/watch?v=6hUIkr0-81c"
   }
 }
