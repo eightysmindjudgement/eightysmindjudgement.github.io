@@ -37,11 +37,20 @@
 
     <main>
 
-        <section>
+        <div class="biography-switcher">
             <img src="profile-artwork.JPG"
                  alt="Eighty's Mind Judgement"
                  class="profile-artwork">
-            <h2>ABOUT EIGHTY'S MIND JUDGEMENT</h2>
+        </div>
+
+        <div class="biography-switch-controls" role="group" aria-label="Biography sections">
+            <button type="button" class="biography-switch-control biography-switch-control--previous" data-biography-target="about-emj" aria-controls="about-emj" aria-label="Return to About EMJ" hidden>ABOUT EMJ <span aria-hidden="true">←</span></button>
+            <button type="button" class="biography-switch-control biography-switch-control--next" data-biography-target="about-creator" aria-controls="about-creator" aria-label="Read About the Creator" hidden><span aria-hidden="true">→</span> ABOUT THE CREATOR</button>
+        </div>
+
+        <div class="biography-panels">
+        <section class="biography-panel" id="about-emj" aria-labelledby="about-emj-heading">
+            <h2 id="about-emj-heading">ABOUT EIGHTY'S MIND JUDGEMENT</h2>
 
             <div id="japanese" lang="ja">
                 <p>
@@ -128,10 +137,98 @@
 
         </section>
 
-        <section>
-            <h2>ABOUT THE CREATOR</h2>
-            <p><small>Work in Progress</small></p>
+        <section class="biography-panel" id="about-creator" aria-labelledby="about-creator-heading" hidden>
+            <h2 id="about-creator-heading">ABOUT THE CREATOR</h2>
+
+            <div id="creator-japanese" lang="ja">
+                <p>
+                    <a href="#creator-japanese">日本語</a>｜<a href="#creator-english">English</a>
+                </p>
+                <p>Eighty's Mind Judgement（以下、EMJ）を手がけるのは、本業を持つ一人の会社員です。1980〜90年代のヘヴィメタルを原点に、AIなどの新しい技術も取り入れながら、「働く人のためのヘヴィメタル」を作っています。</p>
+                <p><strong>WORKING PEOPLE'S HEAVY METAL</strong> ヘヴィメタルで、世界中の労働者に元気を与える！</p>
+
+                <h3>1. MUSICAL ROOTS</h3>
+                <p>作者は幼い頃、テレビで流れる新旧さまざまなアニメの主題歌を、時代を問わず自然に耳にしていました。小学生の頃はファミコンとスーパーファミコンの全盛期で、ゲームのBGMも耳に残っていました。のちにヘヴィメタルと出会ってから、あの頃のフレーズがギターリフに通じる響きを持っていたと気づきました。</p>
+                <p>群れることを好まず、周りが夢中になるものには、あえて距離を置く一面がありました。10代半ばでハードロックとヘヴィメタルに出会ったときも、身近に同じ音楽を聴く人はいませんでした。</p>
+                <p>決定打はJudas Priestのアルバム『SCREAMING FOR VENGEANCE』。ジャケットに惹かれたいわゆる「ジャケ買い」でした。当時はインターネットもなく、情報は限られていました。頼りは、音楽評論家・伊藤政則氏による日本盤のライナーノーツです。困難を越えながら新しいことに挑み続けるバンドの姿を綴った文章に、深く感銘を受けました。『DEFENDERS OF THE FAITH』や『PAINKILLER』は、今も特別な作品です。</p>
+                <p>Judas PriestがTim “Ripper” Owensを迎えた『JUGULATOR』にも強い敬意を抱いています。Rob Halford期とは違う魅力を持つ傑作です。EMJの7作目のアルバムが全編にわたってメタリックでブルータルな仕上がりなのは、この作品の影響が大きいためです。</p>
+                <p>20代前半からは、ジャズをはじめ幅広いジャンルを日常的に聴くようになりました。</p>
+
+                <h3>2. FROM CONSUMER TO CREATOR</h3>
+                <p>作者は、自分の手で何かを生み出すことに喜びを感じてきました。誰かと比べて上に立つことや、賞賛の多さだけが、創作の意味ではありません。自分が納得できるものを、自分の手で形にする。その過程にこそ喜びがあると考えています。</p>
+                <p>しかし会社員として忙しく過ごす中で、生活は情報や知識を取り込む「インプット」に偏り、何かを生み出す「アウトプット」の時間はわずかでした。</p>
+                <p>そして2025年、長年蓄えてきたインプットが飽和点に達し、Eighty's Mind Judgementとしての創作を始めました。音楽、知識、経験、そして独自の考えを、作品として外へ届ける。それが、創り手としての最初の一歩でした。</p>
+
+                <h3>3. LIFE IN THE WORKPLACE</h3>
+                <p>作者が社会に出て最初に身を置いたのは、教育や指導の名のもとに、罵声が浴びせられ、時には手も出る職場でした。数年間、睡眠は毎日4時間ほど。朝7時半に出社し、日付が変わっても働き続ける日々でした。のちの職場でも多くの仕事を抱え、味覚障害を発症したことがあります。</p>
+                <p>そんな日々の中で、作者を支えたものが二つあります。</p>
+                <p>一つはヘヴィメタルです。力強いサウンドと、そこに込められた精神が、折れそうな気持ちを何度も奮い立たせてくれました。</p>
+                <p>もう一つは、自尊心です。自らの命は、幾世代もの先祖から受け継がれてきたものです。大きな力にはどうにもならないことがあるとしても、一人の人間が、もう一人の人間に潰されてよいはずがない。その思いが、屈しないための芯になりました。</p>
+                <p>組織の中で、割り切れない思いを抱えたとき、声を上げる人も、離れる人も、その場所に居場所を見つける人もいます。どの選択にも、その人なりの事情があります。EMJが励ましたいのは、そのすべての人です。</p>
+
+                <h3>4. INTELLECTUAL CURIOSITY</h3>
+                <p>作者の読書は、毎日の通勤が支えてきました。往復2〜3時間の多くを、本に充ててきたのです。</p>
+                <p>心に響いた文章や言葉を書き写す習慣は、学生時代から続いています。その記録は膨大な量になり、今の音楽制作にも少なからず影響を与えています。</p>
+                <p>読む目的は、仕事や生活の課題を解決するため、社会の仕組みを知るため、物語を楽しむためなどさまざまです。社会、歴史、人間、経済と関心は幅広く、知識を吸収するだけでなく、そこから自分の考えを深めることを大切にしてきました。</p>
+
+                <h3>5. TECHNOLOGY &amp; AI</h3>
+                <p>作者は新しい技術への好奇心が強く、興味を持ったものは実際に取り入れて試してきました。近年はAIに強い関心を寄せています。AIを仕事を奪う脅威としてではなく、人の活動を支え、可能性を広げる道具として捉えています。単純作業や反復作業に費やす時間が減れば、その分を創作や家族との時間、趣味に充てられるからです。</p>
+                <p>AIを使ううえで特に重視するのは、要件定義と検証です。何を実現したいのか、どんな条件を満たすべきかを整理し、明確な言葉で伝える。そして、出てきた結果が期待どおりか、どこに問題があるかを見極める。この過程が、目的を考え抜く力と論理的に整理する力を鍛えてくれると考えています。</p>
+                <p>会社員であると同時に、子どもを育てる親でもある作者にとって、AIとの付き合い方は、教育の問題でもあります。目的を考え抜く力や論理的に整理する力は、読書で語彙を増やし、自分の考えを整理して分かりやすく伝える力と同じ根を持つと考えています。</p>
+                <p>AIをライバルとして同じ土俵で競うのではなく、その力を借りて新しいものを生み出す。それが、作者のAIとの向き合い方です。</p>
+
+                <h3>6. WORKING PEOPLE'S HEAVY METAL</h3>
+                <p>仕事は人生の大きな部分を占め、家族と過ごす時間を上回ることもあります。だから作者は、社会に出た当初から、仕事を通じて豊かな人生を築くことを目指してきました。</p>
+                <p>現状に満足せず、自分の経験や専門分野にとらわれないよう、幅広い知識を身につけ、経験を重ねる。新しいことを学び、試行錯誤しながら思考を深め、判断力を磨く。その過程に、仕事の面白さと自分の成長を見いだしてきました。</p>
+                <p>働く人の権利、尊厳、安全が守られることは大切です。同時に、目標を持ち、工夫し、挑戦を続けた先にある自信や達成感もまた、人生を豊かにします。思いどおりにならない日があっても、そこから得られるものがあります。</p>
+                <p>EMJは、そうした仕事観と、長年親しんできたヘヴィメタルへの情熱から生まれたプロジェクトです。ヘヴィメタルの力強さ、躍動感、困難に立ち向かう精神を通じて、日々働く人の気持ちを奮い立たせたい。仕事に向き合う人が、明日へ進む力を得られるように。その願いを音楽に託して、作り続けています。</p>
+            </div>
+
+            <div id="creator-english" lang="en">
+                <p>
+                    <a href="#creator-japanese">日本語</a>｜<a href="#creator-english">English</a>
+                </p>
+                <p>Eighty's Mind Judgement (hereafter "EMJ") is a solo project by a company employee who works a regular day job. Rooted in the heavy metal of the 1980s and '90s, and open to new technology such as AI, he makes "heavy metal for working people."</p>
+                <p><strong>WORKING PEOPLE'S HEAVY METAL</strong> Lifting the spirits of working people around the world, with heavy metal!</p>
+
+                <h3>1. MUSICAL ROOTS</h3>
+                <p>As a child, he heard the theme songs of all kinds of anime, old and new, on TV, and absorbed them naturally, regardless of era. In elementary school, the Famicom and Super Famicom were at the height of their popularity, and the background music from those games stuck in his memory. Later, after discovering heavy metal, he realized that those melodic phrases had a ring much like guitar riffs.</p>
+                <p>He has never liked running with the pack, and has always tended to keep a deliberate distance from whatever everyone else is obsessed with. When hard rock and heavy metal entered his life in his mid-teens, no one nearby listened to that music either.</p>
+                <p>The turning point was Judas Priest's album SCREAMING FOR VENGEANCE, bought purely for its cover art. There was no internet at the time, and information was scarce. His lifeline was the liner notes of the Japanese editions, written by the music critic Masa Ito. The writing portrayed a band that kept taking on new challenges even as it overcame hardship, and it left a deep impression on him. DEFENDERS OF THE FAITH and PAINKILLER remain special albums to this day.</p>
+                <p>He also holds deep respect for JUGULATOR, the album Judas Priest made with Tim "Ripper" Owens on vocals. It is a masterpiece with a charm quite different from the Rob Halford era. EMJ's seventh album is metallic and brutal from start to finish, largely because of this record's influence.</p>
+                <p>From his early twenties, he listened to a wide range of music, jazz included, as part of everyday life.</p>
+
+                <h3>2. FROM CONSUMER TO CREATOR</h3>
+                <p>Creating something of his own has always brought him joy. Creation is not only about rising above others or collecting praise. The real joy, he believes, lies in the process itself: shaping, with his own hands, something he is truly satisfied with.</p>
+                <p>But as a busy company employee, his days had come to lean heavily toward "input," taking in information and knowledge, while time for "output," making something, was scarce.</p>
+                <p>Then, in 2025, years of accumulated input reached a saturation point, and he began working as Eighty's Mind Judgement. Giving shape to music, knowledge, experience, and a way of thinking all his own, and sending it out into the world as work: that was his first step as a creator.</p>
+
+                <h3>3. LIFE IN THE WORKPLACE</h3>
+                <p>The first workplace he joined was one where, in the name of training and guidance, people were shouted at and sometimes even struck. For several years he slept about four hours a night, arrived at the office at 7:30 a.m., and kept working past midnight. In a later job, too, the workload was heavy, and he at one point developed a taste disorder.</p>
+                <p>Two things carried him through those days.</p>
+                <p>The first was heavy metal. Its powerful sound, and the spirit within it, lifted his flagging spirits again and again.</p>
+                <p>The second was self-respect. His life has been handed down through generations of ancestors. There may be forces too large for anyone to stand against. Even so, it cannot be right for one human being to crush another. That conviction became the backbone that kept him from giving in.</p>
+                <p>When people in an organization are left with feelings they can't resolve, some speak up, some leave, and some find a place for themselves right where they are. Each choice carries its own circumstances. EMJ wants to encourage every one of them.</p>
+
+                <h3>4. INTELLECTUAL CURIOSITY</h3>
+                <p>His reading life has been sustained by the daily commute. Most of the two to three hours the round trip takes each day has gone to books.</p>
+                <p>Since his student days, he has kept a habit of copying out sentences and phrases that moved him. The collection has grown enormous, and it has had no small influence on the music he makes today.</p>
+                <p>The reasons for reading vary: to solve problems at work and in daily life, to understand how society works, or simply to enjoy a good story. With wide-ranging interests in society, history, human nature, and economics, he values not merely absorbing knowledge but developing his own thinking from it.</p>
+
+                <h3>5. TECHNOLOGY &amp; AI</h3>
+                <p>He is strongly drawn to new technology, and tends to try out whatever sparks his interest. In recent years, AI has been a particular fascination. Rather than seeing AI as a threat that takes jobs away, he sees it as a tool that supports people and widens what is possible. If less time goes to routine, repetitive tasks, more can go to creating, to family, and to hobbies.</p>
+                <p>What he values most in using AI is defining requirements and verifying results. That means working out what you want to achieve and what conditions must be met, and putting it into clear words; then checking whether the output is what you expected and where the problems lie. This process builds the ability to think a goal through and to organize ideas logically.</p>
+                <p>As both an employee and a parent, he sees how we engage with AI as an educational question too. The ability to think a goal through and organize ideas logically shares a root with what reading builds: a richer vocabulary, and the capacity to put one's thoughts in order and convey them clearly to others.</p>
+                <p>Rather than competing with AI as a rival on the same ground, he uses its power to make something new. That is his way of working with AI.</p>
+
+                <h3>6. WORKING PEOPLE'S HEAVY METAL</h3>
+                <p>Work takes up a large part of life, sometimes more of our time than family does. That is why, from the very start of his working life, his aim has been to build a rich life through work.</p>
+                <p>Never settling for the status quo, he has sought broad knowledge and experience rather than staying inside a single area of expertise: learning new things, experimenting by trial and error, deepening thought, and sharpening judgment. In that process, he has found both the enjoyment of work and a sense of personal growth.</p>
+                <p>It matters that workers' rights, dignity, and safety are protected. At the same time, the confidence and sense of accomplishment that come from setting goals, finding ways to improve, and continuing to take on challenges also enrich a life. Even on days when things don't go as planned, there is something to be gained.</p>
+                <p>EMJ is a project born of that outlook on work and a long-standing passion for heavy metal. Through heavy metal's power, its energy, and its spirit of standing up to hardship, EMJ wants to fire up the people who work hard every day. So that those who face their work can find the strength to move on to tomorrow: that is the wish he puts into this music, and the reason he keeps making it.</p>
+            </div>
         </section>
+        </div>
 
     </main>
 
@@ -143,6 +240,7 @@
     </footer>
 
     <script src="site-navigation.js" defer></script>
+    <script src="biography-switcher.js" defer></script>
     <script src="biography-reveal.js" defer></script>
     <script src="page-parallax.js" defer></script>
 </body>

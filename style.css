@@ -2238,6 +2238,154 @@ footer .footer-sitemap a:focus-visible {
     background: transparent;
 }
 
+.biography-page .biography-switcher {
+    padding: 5px 40px 0;
+}
+
+.biography-page .biography-switch-controls {
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    max-width: 700px;
+    min-height: 52px;
+    margin: -22px auto 18px;
+    padding: 0 40px;
+}
+
+.biography-page.biography-switcher-ready .biography-switch-controls {
+    display: flex;
+}
+
+.biography-page .biography-switch-control,
+.biography-page .biography-switch-control[hidden] {
+    display: none;
+}
+
+.biography-page.biography-switcher-ready .biography-switch-controls .biography-switch-control:not([hidden]) {
+    display: inline-flex;
+}
+
+.biography-page .biography-switch-control {
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 8px 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+    color: #85898c;
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-align: left;
+    cursor: pointer;
+    transition: color 180ms ease;
+}
+
+.biography-page .biography-switch-control--next:not([hidden]) {
+    margin-left: auto;
+}
+
+.biography-page .biography-switch-control:hover,
+.biography-page .biography-switch-control:focus-visible {
+    color: #d7e5ea;
+}
+
+.biography-page .biography-switch-control:focus-visible {
+    outline: 1px solid #879ba3;
+    outline-offset: 4px;
+}
+
+.biography-page .biography-switch-control span {
+    display: inline-block;
+    transition: transform 180ms ease;
+}
+
+.biography-page .biography-switch-control--next:hover span,
+.biography-page .biography-switch-control--next:focus-visible span {
+    transform: translateX(4px);
+}
+
+.biography-page .biography-switch-control--previous:hover span,
+.biography-page .biography-switch-control--previous:focus-visible span {
+    transform: translateX(-4px);
+}
+
+.biography-page .biography-panels {
+    position: relative;
+}
+
+.biography-page .biography-panel[hidden] {
+    display: none;
+}
+
+.biography-page .biography-panel.is-moving {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+}
+
+.biography-page .biography-panel.is-entering,
+.biography-page .biography-panel.is-exiting {
+    transition: opacity 280ms ease, transform 280ms ease;
+}
+
+.biography-page .biography-panel.is-entering {
+    opacity: 0;
+}
+
+.biography-page .biography-panel.is-entering[data-direction="forward"] {
+    transform: translateX(20px);
+}
+
+.biography-page .biography-panel.is-entering[data-direction="backward"] {
+    transform: translateX(-20px);
+}
+
+.biography-page .biography-panel.is-exiting {
+    opacity: 0;
+}
+
+.biography-page .biography-panel.is-exiting[data-direction="forward"] {
+    transform: translateX(-20px);
+}
+
+.biography-page .biography-panel.is-exiting[data-direction="backward"] {
+    transform: translateX(20px);
+}
+
+.biography-page .biography-panels.is-transitioning {
+    overflow: hidden;
+    transition: height 280ms ease;
+}
+
+@media (max-width: 700px) {
+    .biography-page .biography-switcher {
+        padding-top: var(--mobile-line-space, 1.7rem);
+    }
+
+    .biography-page .biography-switch-controls {
+        margin-top: -22px;
+        margin-bottom: 12px;
+        padding-right: 25px;
+        padding-left: 25px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .biography-page .biography-switch-control,
+    .biography-page .biography-switch-control span,
+    .biography-page .biography-panel.is-entering,
+    .biography-page .biography-panel.is-exiting,
+    .biography-page .biography-panels.is-transitioning {
+        transition: none;
+    }
+}
+
 /* ALBUM LIST */
 
 article {
