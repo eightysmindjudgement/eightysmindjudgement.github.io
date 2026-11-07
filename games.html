@@ -10,17 +10,8 @@
 
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="page-transitions.css">
-    <link rel="stylesheet" href="tools-carousel.css">
-    <style>
-        .games-page header h1 .games-title-label{display:block;font-size:.55em;margin-bottom:.25em}
-        .games-page header h1 .games-title-arcade{display:block}
-        .games-page .tool-list .games-puzzle-card{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;align-items:center}
-        .games-page .games-puzzle-copy{display:flex;flex-direction:column;min-width:0}
-        .games-page .games-puzzle-image{display:block;width:100%;height:auto;max-height:300px;object-fit:contain;margin:0 auto}
-        .games-page .games-puzzle-description{margin-top:28px}
-        .games-page .games-notice{font-size:.78rem;line-height:1.7;color:#b9c5ce}
-    </style>
     <link rel="stylesheet" href="tools-rounded.css">
+    <link rel="stylesheet" href="games-arcade.css">
 </head>
 
 <body class="tools-page games-page">
@@ -47,29 +38,76 @@
         <a href="sitemap.html">SITEMAP</a>
     </nav>
 
-    <main class="tools-main">
-        <section class="tools-section" aria-label="Games">
-            <p class="tools-intro">Games from Eighty's Mind Judgement. Take a break and enjoy a new challenge.</p>
-            <p class="tools-intro-japanese" lang="ja">Eighty's Mind Judgementのゲーム。ひと息ついて、新しいチャレンジを楽しもう。</p>
-            <div class="tool-list" data-item-label="GAME">
-                <a class="tool-card games-puzzle-card" href="emj-puzzle.html">
-                    <span class="games-puzzle-copy">
-                    <span class="tool-card-title">EMJ PUZZLE<span lang="ja">落下・合体パズル</span></span>
-                    <span class="tool-card-description">Drop. Merge. Become METAL SHOGUN.</span>
-                    <span class="tool-card-japanese" lang="ja">同じタイルをくっつけて、メタル将軍への進化に挑戦。無料で遊べます。</span>
+    <main class="tools-main games-main">
+        <section class="tools-section games-section" aria-label="Games">
+            <p class="games-intro">Games from Eighty's Mind Judgement. Take a break and enjoy a new challenge.</p>
+            <p class="games-intro-japanese" lang="ja">Eighty's Mind Judgementのゲーム。ひと息ついて、新しいチャレンジを楽しもう。</p>
+            <div class="games-machine-grid">
+                <a class="arcade-machine arcade-machine-puzzle" href="emj-puzzle.html" aria-label="Play EMJ PUZZLE">
+                    <span class="machine-marquee">
+                        <span class="machine-index">01 / EMJ SYSTEMS</span>
+                        <span class="machine-title">EMJ PUZZLE</span>
+                        <span class="machine-subtitle" lang="ja">落下・合体パズル</span>
                     </span>
-                    <span><img class="games-puzzle-image" src="PUZZLE画面.jpg" alt="EMJ PUZZLEのゲーム画面" width="400" loading="lazy"></span>
+                    <span class="machine-screen">
+                        <img src="PUZZLE画面.jpg" alt="EMJ PUZZLEのゲーム画面" width="400" loading="lazy">
+                    </span>
+                    <span class="machine-copy">
+                        <span class="machine-description">Drop. Merge. Become METAL SHOGUN.</span>
+                        <span class="machine-japanese" lang="ja">同じタイルをくっつけて、メタル将軍への進化に挑戦。無料で遊べます。</span>
+                    </span>
+                    <span class="machine-play">PLAY GAME <span aria-hidden="true">→</span></span>
                 </a>
-                <a class="tool-card games-puzzle-card" href="games/iron-fortress/iron-fortness.html"><span class="games-puzzle-copy"><span class="tool-card-title">IRON FORTRESS<span lang="ja">3Dレールシューティング</span></span><span class="tool-card-description">Break the fleet. Destroy the fortress.</span><span class="tool-card-japanese" lang="ja">宇宙艦隊を突破し、機械要塞の核を撃て。スマートフォン・PCで無料で遊べます。</span></span><span><img class="games-puzzle-image" src="games/iron-fortress/preview-gameplay-v3.png" alt="IRON FORTRESSの実際のボス戦画面。機械要塞内で自機がIRON WARDENと対峙する" width="960" height="724" loading="lazy"></span></a>
-                <a class="tool-card games-puzzle-card" href="games/metal-strike/metal-strike.html"><span class="games-puzzle-copy"><span class="tool-card-title">METAL STRIKE<span lang="ja">疑似3D・反射神経アクション</span></span><span class="tool-card-description">Strike the energy. Keep the rally alive.</span><span class="tool-card-japanese" lang="ja">迫るエネルギー球を打ち返し、20秒のラリーに挑もう。スマートフォン・PCで無料で遊べます。</span></span><span><img class="games-puzzle-image" src="games/metal-strike/preview.svg" alt="METAL STRIKEの鋼鉄トンネルとエネルギー球" width="720" height="450" loading="lazy"></span></a>
-                <div class="tool-card tool-card-coming-soon" aria-disabled="true">
-                    <span class="tool-card-title">MORE GAMES</span>
-                    <span class="tool-card-description">More games are in development.</span>
-                    <span class="tool-card-japanese" lang="ja">今後、ゲームを追加予定です。</span>
+                <a class="arcade-machine arcade-machine-fortress" href="games/iron-fortress/iron-fortness.html" aria-label="Play IRON FORTRESS">
+                    <span class="machine-marquee">
+                        <span class="machine-index">02 / DEEP SPACE DIVISION</span>
+                        <span class="machine-title">IRON FORTRESS</span>
+                        <span class="machine-subtitle" lang="ja">3Dレールシューティング</span>
+                    </span>
+                    <span class="machine-screen">
+                        <img src="games/iron-fortress/preview-gameplay-v3.png" alt="IRON FORTRESSの実際のボス戦画面。機械要塞内で自機がIRON WARDENと対峙する" width="960" height="724" loading="lazy">
+                    </span>
+                    <span class="machine-copy">
+                        <span class="machine-description">Break the fleet. Destroy the fortress.</span>
+                        <span class="machine-japanese" lang="ja">宇宙艦隊を突破し、機械要塞の核を撃て。スマートフォン・PCで無料で遊べます。</span>
+                    </span>
+                    <span class="machine-play">PLAY GAME <span aria-hidden="true">→</span></span>
+                </a>
+                <a class="arcade-machine arcade-machine-strike" href="games/metal-strike/metal-strike.html" aria-label="Play METAL STRIKE">
+                    <span class="machine-marquee">
+                        <span class="machine-index">03 / IMPACT PROTOCOL</span>
+                        <span class="machine-title">METAL STRIKE</span>
+                        <span class="machine-subtitle" lang="ja">疑似3D・反射神経アクション</span>
+                    </span>
+                    <span class="machine-screen">
+                        <img src="games/metal-strike/preview.svg" alt="METAL STRIKEの鋼鉄トンネルとエネルギー球" width="720" height="450" loading="lazy">
+                    </span>
+                    <span class="machine-copy">
+                        <span class="machine-description">Strike the energy. Keep the rally alive.</span>
+                        <span class="machine-japanese" lang="ja">迫るエネルギー球を打ち返し、20秒のラリーに挑もう。スマートフォン・PCで無料で遊べます。</span>
+                    </span>
+                    <span class="machine-play">PLAY GAME <span aria-hidden="true">→</span></span>
+                </a>
+                <div class="arcade-machine arcade-machine-loading" aria-disabled="true">
+                    <span class="machine-marquee">
+                        <span class="machine-index">04 / SIGNAL DETECTED</span>
+                        <span class="machine-title">MORE GAMES</span>
+                        <span class="machine-subtitle" lang="ja">次期マシン準備中</span>
+                    </span>
+                    <span class="machine-loading-screen">
+                        <span class="loading-orbit" aria-hidden="true"></span>
+                        <span class="loading-message">NEXT MACHINE<br>LOADING<span class="loading-dots" aria-hidden="true">...</span></span>
+                    </span>
+                    <span class="machine-copy">
+                        <span class="machine-description">MORE GAMES IN DEVELOPMENT.</span>
+                        <span class="machine-japanese" lang="ja">今後、ゲームを追加予定です。</span>
+                    </span>
+                    <span class="machine-play machine-play-loading">STANDBY <span aria-hidden="true">···</span></span>
                 </div>
             </div>
-            <div class="games-puzzle-description">
-                <div><p class="games-notice" lang="ja">本ゲームは予告なく改修・変更・公開停止する場合があります。改修に伴う不具合やゲームデータ消失の可能性について、あらかじめご了承ください。</p><p class="games-notice" lang="en">This game may be updated, modified, or discontinued without prior notice. Updates may cause bugs or loss of game data.</p></div>
+            <div class="games-notice">
+                <p lang="ja">本ゲームは予告なく改修・変更・公開停止する場合があります。改修に伴う不具合やゲームデータ消失の可能性について、あらかじめご了承ください。</p>
+                <p lang="en">This game may be updated, modified, or discontinued without prior notice. Updates may cause bugs or loss of game data.</p>
             </div>
         </section>
     </main>
@@ -82,7 +120,7 @@
     </footer>
 
     <script src="site-navigation.js" defer></script>
-    <script src="tools-carousel.js" defer></script>
+    <script src="games-arcade.js" defer></script>
     <script src="page-parallax.js" defer></script>
 </body>
 
