@@ -10,12 +10,10 @@
 
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="page-transitions.css">
-    <link rel="stylesheet" href="tools-carousel.css">
-    <link rel="stylesheet" href="tools-layers.css">
-    <link rel="stylesheet" href="tools-rounded.css">
+    <link rel="stylesheet" href="tools-page.css">
 </head>
 
-<body class="tools-page">
+<body class="tools-page tools-showcase-page">
 
     <header>
         <a href="index.html" aria-label="Home">
@@ -24,6 +22,8 @@
         <h1>TOOLS</h1>
         <p class="site-name">Eighty's Mind Judgement Official Website<br><small><span>エイティズマインドジャッジメント</span> <span>オフィシャルウェブサイト</span></small></p>
         <p>WORKING PEOPLE'S HEAVY METAL</p>
+        <p class="tools-hero-tagline">ENGINEER YOUR LIFE.</p>
+        <p class="tools-hero-subcopy">A COLLECTION OF DIGITAL TOOLS &amp; CREATIVE EXPERIMENTS.</p>
     </header>
 
     <nav>
@@ -44,72 +44,177 @@
             <p class="tools-intro">From Eighty's Mind Judgement to everyone striving to make the most of life: practical tools to help you live with purpose and move forward with confidence.</p>
             <p class="tools-intro-japanese" lang="ja">Eighty's Mind Judgementから、懸命に生きるあなたへ。日々の暮らしや人生をより豊かに、力強く歩むためのツールを提供します。</p>
         </div>
-        <div class="tools-tabs" role="tablist" aria-label="Tool categories" hidden>
-            <button type="button" role="tab" id="tools-tab-life" aria-controls="life-tools">LIFE TOOLS</button>
-            <button type="button" role="tab" id="tools-tab-finance" aria-controls="finance-tools">FINANCE TOOLS</button>
-            <button type="button" role="tab" id="tools-tab-web" aria-controls="web-design-lab">WEB DESIGN LAB</button>
-        </div>
-        <section class="tools-section tools-directory-section" id="life-tools" aria-labelledby="life-tools-title">
-            <h2 id="life-tools-title">LIFE TOOLS</h2>
-            <div class="tool-list" data-selector-label="LIFE TOOLS">
-                <a class="tool-card" href="japanese-era-converter.html">
-                    <span class="tool-card-title">JAPANESE ERA CONVERTER<span lang="ja">&#x3000;和暦・西暦変換</span></span>
-                    <span class="tool-card-description">Convert between Gregorian years and Japanese era years.</span>
-                    <span class="tool-card-japanese" lang="ja">西暦と和暦を相互に変換できます。</span>
+
+        <nav class="tools-category-nav" aria-label="TOOL CATEGORIES">
+            <a href="#life-tools" class="tools-category-link tools-category-life"><span>01</span>LIFE</a>
+            <a href="#finance-tools" class="tools-category-link tools-category-finance"><span>02</span>FINANCE</a>
+            <a href="#web-design-lab" class="tools-category-link tools-category-web"><span>03</span>WEB DESIGN LAB</a>
+        </nav>
+
+        <section class="tools-directory-section tools-category-life" id="life-tools" aria-labelledby="life-tools-title">
+            <div class="tools-section-heading" data-reveal="heading">
+                <p class="tools-section-index">01 / LIFE TOOLS</p>
+                <h2 id="life-tools-title">LIFE TOOLS</h2>
+                <p class="tools-section-subtitle">TOOLS FOR EVERYDAY LIFE.</p>
+            </div>
+            <div class="tool-list">
+                <a class="tool-card" href="japanese-era-converter.html" data-reveal="card">
+                    <span class="tool-card-icon" aria-hidden="true">
+                        <svg viewBox="0 0 48 48" fill="none">
+                            <rect x="7" y="10" width="34" height="31" rx="2"></rect>
+                            <path d="M15 6v8M33 6v8M7 19h34M15 26h6M27 26h6M15 33h6M27 33h6"></path>
+                        </svg>
+                    </span>
+                    <span class="tool-card-copy">
+                        <span class="tool-card-title">JAPANESE ERA CONVERTER</span>
+                        <span class="tool-card-japanese" lang="ja">和暦・西暦変換</span>
+                        <span class="tool-card-description">Convert between Gregorian years and Japanese era years.</span>
+                        <span class="tool-card-japanese-description" lang="ja">西暦と和暦を相互に変換できます。</span>
+                    </span>
+                    <span class="tool-card-arrow" aria-hidden="true">&#8599;</span>
                 </a>
-                <a class="tool-card" href="life-countdown.html">
-                    <span class="tool-card-title">COUNTDOWN TO FULFILLMENT<span lang="ja">&#x3000;自己実現へのカウントダウン</span></span>
-                    <span class="tool-card-description">Set your personal target age and see the time remaining. Every day counts.</span>
-                    <span class="tool-card-japanese" lang="ja">自分で設定した目標年齢までの時間を表示します。</span>
+                <a class="tool-card" href="life-countdown.html" data-reveal="card">
+                    <span class="tool-card-icon" aria-hidden="true">
+                        <svg viewBox="0 0 48 48" fill="none">
+                            <circle cx="24" cy="25" r="17"></circle>
+                            <path d="M24 15v11l8 5M18 5h12M24 5v3"></path>
+                        </svg>
+                    </span>
+                    <span class="tool-card-copy">
+                        <span class="tool-card-title">COUNTDOWN TO FULFILLMENT</span>
+                        <span class="tool-card-japanese" lang="ja">自己実現へのカウントダウン</span>
+                        <span class="tool-card-description">Set your personal target age and see the time remaining. Every day counts.</span>
+                        <span class="tool-card-japanese-description" lang="ja">自分で設定した目標年齢までの時間を表示します。</span>
+                    </span>
+                    <span class="tool-card-arrow" aria-hidden="true">&#8599;</span>
                 </a>
-                <div class="tool-card tool-card-coming-soon" aria-disabled="true">
-                    <span class="tool-card-title">MORE TOOLS</span>
-                    <span class="tool-card-description">More life tools are in development.</span>
-                    <span class="tool-card-japanese" lang="ja">今後、暮らしや人生に役立つツールを追加予定です。</span>
+                <div class="tool-card tool-card-coming-soon" aria-disabled="true" data-reveal="card">
+                    <span class="tool-card-icon" aria-hidden="true">
+                        <svg viewBox="0 0 48 48" fill="none">
+                            <path d="M8 24h32M24 8v32"></path>
+                            <circle cx="24" cy="24" r="18"></circle>
+                        </svg>
+                    </span>
+                    <span class="tool-card-copy">
+                        <span class="tool-card-title">MORE TOOLS</span>
+                        <span class="tool-card-description">New ideas. New tools. New possibilities.</span>
+                        <span class="tool-card-japanese-description" lang="ja">今後、暮らしや人生に役立つツールを追加予定です。</span>
+                    </span>
                 </div>
             </div>
         </section>
-        <section class="tools-section tools-directory-section" id="finance-tools" aria-labelledby="finance-tools-title">
-            <h2 id="finance-tools-title">FINANCE TOOLS</h2>
-            <div class="tool-list" data-selector-label="FINANCE TOOLS">
-                <a class="tool-card" href="compound-interest-calculator.html">
-                    <span class="tool-card-title">COMPOUND INTEREST CALCULATOR<span lang="ja">&#x3000;複利計算ツール</span></span>
-                    <span class="tool-card-description">Estimate how your money could grow through compound interest and regular contributions.</span>
-                    <span class="tool-card-japanese" lang="ja">複利と定期的な積立による資産の成長を試算します。</span>
+
+        <section class="tools-directory-section tools-category-finance" id="finance-tools" aria-labelledby="finance-tools-title">
+            <div class="tools-section-heading" data-reveal="heading">
+                <p class="tools-section-index">02 / FINANCE TOOLS</p>
+                <h2 id="finance-tools-title">FINANCE TOOLS</h2>
+                <p class="tools-section-subtitle">TOOLS FOR FINANCIAL PLANNING.</p>
+            </div>
+            <div class="tool-list">
+                <a class="tool-card" href="compound-interest-calculator.html" data-reveal="card">
+                    <span class="tool-card-icon" aria-hidden="true">
+                        <svg viewBox="0 0 48 48" fill="none">
+                            <path d="M7 39h35M10 35V9M13 32l9-10 7 5 12-15M33 12h8v8"></path>
+                        </svg>
+                    </span>
+                    <span class="tool-card-copy">
+                        <span class="tool-card-title">COMPOUND INTEREST CALCULATOR</span>
+                        <span class="tool-card-japanese" lang="ja">複利計算ツール</span>
+                        <span class="tool-card-description">Estimate how your money could grow through compound interest and regular contributions.</span>
+                        <span class="tool-card-japanese-description" lang="ja">複利と定期的な積立による資産の成長を試算します。</span>
+                    </span>
+                    <span class="tool-card-arrow" aria-hidden="true">&#8599;</span>
                 </a>
-                <a class="tool-card" href="loan-interest-calculator.html">
-                    <span class="tool-card-title">LOAN INTEREST CALCULATOR<span lang="ja">&#x3000;ローン利息計算ツール</span></span>
-                    <span class="tool-card-description">Estimate loan interest, repayment amounts, and outstanding balances.</span>
-                    <span class="tool-card-japanese" lang="ja">ローンの支払利息、返済額、借入残高を試算します。</span>
+                <a class="tool-card" href="loan-interest-calculator.html" data-reveal="card">
+                    <span class="tool-card-icon" aria-hidden="true">
+                        <svg viewBox="0 0 48 48" fill="none">
+                            <rect x="10" y="5" width="28" height="38" rx="2"></rect>
+                            <path d="M16 12h16v7H16zM16 25h3M24 25h3M32 25h1M16 32h3M24 32h3M32 32h1M16 38h3M24 38h3"></path>
+                        </svg>
+                    </span>
+                    <span class="tool-card-copy">
+                        <span class="tool-card-title">LOAN INTEREST CALCULATOR</span>
+                        <span class="tool-card-japanese" lang="ja">ローン利息計算ツール</span>
+                        <span class="tool-card-description">Estimate loan interest, repayment amounts, and outstanding balances.</span>
+                        <span class="tool-card-japanese-description" lang="ja">ローンの支払利息、返済額、借入残高を試算します。</span>
+                    </span>
+                    <span class="tool-card-arrow" aria-hidden="true">&#8599;</span>
                 </a>
-                <div class="tool-card tool-card-coming-soon" aria-disabled="true">
-                    <span class="tool-card-title">MORE TOOLS</span>
-                    <span class="tool-card-description">More finance tools are in development.</span>
-                    <span class="tool-card-japanese" lang="ja">今後、お金の計画や試算に役立つツールを追加予定です。</span>
+                <div class="tool-card tool-card-coming-soon" aria-disabled="true" data-reveal="card">
+                    <span class="tool-card-icon" aria-hidden="true">
+                        <svg viewBox="0 0 48 48" fill="none">
+                            <path d="M8 24h32M24 8v32"></path>
+                            <circle cx="24" cy="24" r="18"></circle>
+                        </svg>
+                    </span>
+                    <span class="tool-card-copy">
+                        <span class="tool-card-title">MORE TOOLS</span>
+                        <span class="tool-card-description">New ideas. New tools. New possibilities.</span>
+                        <span class="tool-card-japanese-description" lang="ja">今後、お金の計画や試算に役立つツールを追加予定です。</span>
+                    </span>
                 </div>
             </div>
         </section>
-        <section class="tools-section tools-directory-section" id="web-design-lab" aria-labelledby="web-design-lab-title">
-            <h2 id="web-design-lab-title">WEB DESIGN LAB</h2>
-            <div class="tool-list" data-selector-label="WEB DESIGN LAB">
-                <a class="tool-card" href="web-design-lab.html">
-                    <span class="lab-visual lab-visual-type" aria-hidden="true">Aa</span>
-                    <span class="tool-card-title">TYPOGRAPHY &amp; LAYOUT LAB<span lang="ja">文字・色・余白・配置のデザイン検討</span></span>
-                    <span class="tool-card-description">Explore typography, colors, spacing, and layouts in one interactive workspace.</span>
-                    <span class="tool-card-japanese" lang="ja">文字サイズ・太さ・行間・文字間隔、文字色・背景色・枠線色、余白、幅・高さ・配置・並び方向を、ひとつの画面で調整・確認できます。</span>
+
+        <section class="tools-directory-section tools-lab-section tools-category-web" id="web-design-lab" aria-labelledby="web-design-lab-title">
+            <div class="tools-section-heading" data-reveal="heading">
+                <p class="tools-section-index">03 / WEB DESIGN LAB</p>
+                <h2 id="web-design-lab-title">WEB DESIGN LAB</h2>
+                <p class="tools-section-subtitle">EXPERIMENT WITH DIGITAL CREATIVITY.</p>
+            </div>
+            <div class="tool-list">
+                <a class="tool-card tool-card-lab" href="web-design-lab.html" data-reveal="lab">
+                    <span class="tool-card-icon" aria-hidden="true">
+                        <svg viewBox="0 0 48 48" fill="none">
+                            <path d="M7 13h34M7 24h34M7 35h34M15 8v10M32 19v10M21 30v10"></path>
+                            <circle cx="15" cy="13" r="3"></circle>
+                            <circle cx="32" cy="24" r="3"></circle>
+                            <circle cx="21" cy="35" r="3"></circle>
+                        </svg>
+                    </span>
+                    <span class="tool-card-copy">
+                        <span class="tool-card-eyebrow">DESIGN SYSTEM / 01</span>
+                        <span class="tool-card-title">TYPOGRAPHY &amp; LAYOUT LAB</span>
+                        <span class="tool-card-japanese" lang="ja">文字・色・余白・配置のデザイン検討</span>
+                        <span class="tool-card-description">Explore typography, colors, spacing, and layouts in one interactive workspace.</span>
+                        <span class="tool-card-japanese-description" lang="ja">文字サイズ・太さ・行間・文字間隔、文字色・背景色・枠線色、余白、幅・高さ・配置・並び方向を、ひとつの画面で調整・確認できます。</span>
+                    </span>
+                    <span class="tool-card-arrow" aria-hidden="true">&#8599;</span>
                 </a>
-                <a class="tool-card" id="web-effects-catalogue" href="web-effects-catalogue.html">
-                    <span class="lab-visual lab-visual-type" aria-hidden="true">↗</span>
-                    <span class="tool-card-title">EFFECTS CATALOUG</span>
-                    <span class="tool-card-description">Explore interactive web effects and animations.</span>
-                    <span class="tool-card-japanese" lang="ja">アニメーション・スクロール・画面遷移・3Dなど、9カテゴリー・103種類の動くデモと実装情報を確認できます。</span>
+                <a class="tool-card tool-card-lab" id="web-effects-catalogue" href="web-effects-catalogue.html" data-reveal="lab">
+                    <span class="tool-card-icon" aria-hidden="true">
+                        <svg viewBox="0 0 48 48" fill="none">
+                            <path d="M24 5 28.5 18.5 42 23l-13.5 4.5L24 41l-4.5-13.5L6 23l13.5-4.5L24 5Z"></path>
+                            <path d="m37 5 1.8 5.2L44 12l-5.2 1.8L37 19l-1.8-5.2L30 12l5.2-1.8L37 5Z"></path>
+                        </svg>
+                    </span>
+                    <span class="tool-card-copy">
+                        <span class="tool-card-eyebrow">INTERACTION CATALOG / 02</span>
+                        <span class="tool-card-title">EFFECTS CATALOG</span>
+                        <span class="tool-card-description">Explore interactive web effects and animations.</span>
+                        <span class="tool-card-japanese-description" lang="ja">アニメーション・スクロール・画面遷移・3Dなど、9カテゴリー・103種類の動くデモと実装情報を確認できます。</span>
+                    </span>
+                    <span class="tool-card-arrow" aria-hidden="true">&#8599;</span>
                 </a>
-                <div class="tool-card tool-card-coming-soon" aria-disabled="true">
-                    <span class="tool-card-title">MORE TOOLS</span>
-                    <span class="tool-card-description">More web design tools are in development.</span>
-                    <span class="tool-card-japanese" lang="ja">今後、Web制作に役立つツールを追加予定です。</span>
+                <div class="tool-card tool-card-coming-soon tool-card-lab" aria-disabled="true" data-reveal="lab">
+                    <span class="tool-card-icon" aria-hidden="true">
+                        <svg viewBox="0 0 48 48" fill="none">
+                            <path d="M8 24h32M24 8v32"></path>
+                            <circle cx="24" cy="24" r="18"></circle>
+                        </svg>
+                    </span>
+                    <span class="tool-card-copy">
+                        <span class="tool-card-title">MORE TOOLS</span>
+                        <span class="tool-card-description">New ideas. New tools. New possibilities.</span>
+                        <span class="tool-card-japanese-description" lang="ja">今後、Web制作に役立つツールを追加予定です。</span>
+                    </span>
                 </div>
             </div>
+        </section>
+
+        <section class="tools-closing" data-reveal="heading" aria-label="More tools to come">
+            <p class="tools-closing-title">MORE TO COME.</p>
+            <p>NEW IDEAS. NEW TOOLS. NEW POSSIBILITIES.</p>
         </section>
     </main>
 
@@ -121,8 +226,7 @@
     </footer>
 
     <script src="site-navigation.js" defer></script>
-    <script src="tools-carousel.js" defer></script>
-    <script src="tools-layers.js" defer></script>
+    <script src="tools-page.js" defer></script>
     <script src="page-parallax.js" defer></script>
 </body>
 
