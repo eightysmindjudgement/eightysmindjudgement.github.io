@@ -3371,6 +3371,7 @@ header {
     gap: 14px;
     padding: 16px 12px;
     border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
     background: rgba(10, 10, 10, 0.82);
     color: #f2f2f2;
     text-align: center;
