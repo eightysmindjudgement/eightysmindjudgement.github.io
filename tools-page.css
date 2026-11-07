@@ -537,6 +537,41 @@
         padding: 21px 17px;
     }
 
+    .tools-page.tools-showcase-page .tool-card-arrow {
+        position: relative;
+        display: block;
+        width: 18px;
+        height: 18px;
+        overflow: visible;
+        font-size: 0;
+        line-height: 0;
+    }
+
+    .tools-page.tools-showcase-page .tool-card-arrow::before,
+    .tools-page.tools-showcase-page .tool-card-arrow::after {
+        position: absolute;
+        color: currentColor;
+        content: "";
+    }
+
+    .tools-page.tools-showcase-page .tool-card-arrow::before {
+        top: 8px;
+        left: 0;
+        width: 16px;
+        height: 1.5px;
+        background: currentColor;
+        transform: rotate(-45deg);
+    }
+
+    .tools-page.tools-showcase-page .tool-card-arrow::after {
+        top: 3px;
+        right: 3px;
+        width: 6px;
+        height: 6px;
+        border-top: 1.5px solid currentColor;
+        border-right: 1.5px solid currentColor;
+    }
+
     .tool-card-icon {
         width: 44px;
         height: 44px;
@@ -598,6 +633,24 @@
         grid-template-columns: 38px minmax(0, 1fr) 14px;
         gap: 10px;
         padding: 18px 13px;
+    }
+
+    .tools-page.tools-showcase-page .tool-card-arrow {
+        width: 14px;
+        height: 14px;
+    }
+
+    .tools-page.tools-showcase-page .tool-card-arrow::before {
+        top: 6px;
+        left: -1px;
+        width: 14px;
+    }
+
+    .tools-page.tools-showcase-page .tool-card-arrow::after {
+        top: 2px;
+        right: 2px;
+        width: 5px;
+        height: 5px;
     }
 
     .tool-card-icon {
