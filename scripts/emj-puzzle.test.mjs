@@ -89,6 +89,36 @@ test('moving walls stop exactly at one third of the original board area',()=>{
   const stopped=JSON.stringify(w.stage);w.step(1/120,7200);
   assert.equal(JSON.stringify(w.stage),stopped);assert.equal(w.wallRate,0);
 });
+test('level 2 slopes retreat until their board-area reduction is halved after Metal Shogun',()=>{
+ const w=new World(()=>0);w.reset(1);
+ w.updateWalls(1,60);assert.equal(w.wallScale,1);
+ const shogun=w.add(8,200,300),boardArea=CONFIG.width*CONFIG.height;
+ const initialSlopeArea=boardArea-w.baseArea;
+ for(let i=0;i<100;i++)w.updateWalls(1,60+i);
+ assert(Math.abs(w.wallScale-w.level2WallTarget)<1e-9);
+ assert(Math.abs((boardArea-w.baseArea*w.wallScale)-initialSlopeArea/2)<1e-8);
+ assert(w.stage.left[0][0]<0&&w.stage.right[0][0]>CONFIG.width);
+ const stopped=JSON.stringify(w.stage);w.updateWalls(10,600);
+ assert.equal(JSON.stringify(w.stage),stopped);assert.equal(w.wallRate,0);
+ assert(w.bodies.includes(shogun));
+});
+test('level 3 Metal Shogun fixes walls at their three-minute scale',()=>{
+ const w=new World(()=>0);w.reset(2);
+ w.updateWalls(4,60);assert(Math.abs(w.wallScale-.94)<1e-9);
+ w.add(8,200,300);
+ w.updateWalls(4,60);assert(Math.abs(w.wallScale-.88)<1e-9);
+ w.updateWalls(4,61);assert(Math.abs(w.wallScale-.82)<1e-9);
+ const stopped=JSON.stringify(w.stage);w.updateWalls(10,300);
+ assert.equal(JSON.stringify(w.stage),stopped);assert.equal(w.wallRate,0);
+
+ const late=new World(()=>0);late.reset(2);
+ for(const elapsed of [60,120,180,240])late.updateWalls(4,elapsed);
+ assert(Math.abs(late.wallScale-.76)<1e-9);
+ late.add(8,200,300);late.updateWalls(4,240);
+ assert(Math.abs(late.wallScale-.82)<1e-9);assert(late.wallRate>0);
+ const expanded=JSON.stringify(late.stage);late.updateWalls(10,600);
+ assert.equal(JSON.stringify(late.stage),expanded);assert.equal(late.wallRate,0);
+});
 test('squeezing walls move resting tiles and keep all corners inside',()=>{
   const w=new World(()=>0);w.reset(2);const b=w.add(3,105,480);
   for(let i=0;i<120;i++)w.step(1/120,10);
