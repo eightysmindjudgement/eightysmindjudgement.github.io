@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="../../style.css">
     <link rel="stylesheet" href="../../page-transitions.css">
     <link rel="stylesheet" href="../../emj-puzzle.css">
-    <link rel="stylesheet" href="game.css?v=20261101-best1">
+    <link rel="stylesheet" href="game.css?v=20261107-hud">
     <link rel="stylesheet" href="../../games-rounded.css">
 </head>
 
@@ -57,13 +57,13 @@
     </nav>
 
     <main class="puzzle-main ms-main" lang="ja">
-<p class="puzzle-lead">鋼鉄を貫く、一撃を。<br>迫るエネルギー球を打ち返し、20秒のラリーに挑もう。<small class="puzzle-translation" lang="en">Strike the energy. Keep the rally alive for 20 seconds.</small></p>
+<p class="puzzle-lead">鋼鉄を貫く、一撃を。<br>ミスするまで打ち返し、連続ラリー記録に挑もう。<small class="puzzle-translation" lang="en">Keep the rally alive and set a new record.</small></p>
 <div class="ms-layout"><section class="ms-game" aria-label="METAL STRIKE">
-<div class="ms-hud"><div>SCORE<strong id="ms-score">0</strong></div><div>TIME<strong id="ms-time" role="timer">20.0</strong></div><div>COMBO<strong id="ms-combo">0</strong></div><div>ミス残数<strong id="ms-lives">3</strong></div><div>BEST<strong id="ms-best">0</strong></div></div>
+<div class="ms-hud"><div>RALLY<strong id="ms-rally">0</strong></div><div>PERFECT<strong id="ms-perfect">0</strong></div><div>GOOD<strong id="ms-good">0</strong></div><div>PLAY TIME<strong id="ms-play-time">0:00</strong></div><div>BEST RALLY<strong id="ms-best">0</strong></div></div>
 <div class="ms-screen"><canvas id="ms-canvas" tabindex="0" aria-label="球が手前の打撃ラインに来たら、その左右位置をクリックまたはタップ。矢印キーで照準、Spaceで打ち返す。">Canvas対応ブラウザで遊んでください。</canvas>
-<div id="ms-overlay"><div><p class="ms-eyebrow">EMJ ARCADE / 03</p><h2 id="ms-title">METAL STRIKE</h2><p id="ms-copy">球が手前のピンクのラインに来た瞬間、球と同じ左右位置をクリック／タップ！<br>PC：マウス移動・← →で照準、Spaceで打撃。<small>Aim with your mouse or arrow keys. Click, tap or press Space as the ball reaches the strike line.</small></p><div id="ms-result" hidden></div><button id="ms-start" type="button">START</button></div></div></div>
+<div id="ms-overlay"><div><p class="ms-eyebrow">EMJ ARCADE / 03</p><h2 id="ms-title">METAL STRIKE</h2><p id="ms-copy">球が手前のピンクのラインに来た瞬間、球と同じ左右位置をクリック／タップ！<br>PERFECT・GOODでラリー継続、MISSで終了。<small>Aim and strike as the ball reaches the line. One miss ends the run.</small></p><div id="ms-result" hidden></div><button id="ms-start" type="button">START</button></div></div></div>
 <p id="ms-status" role="status" aria-live="polite">READY — タイミングと左右位置を合わせよう。</p><div class="ms-controls"><button id="ms-pause" disabled type="button" aria-label="一時停止・再開 / Pause or resume" aria-pressed="false">PAUSE</button><span>一時停止・再開 / Esc</span></div></section>
-<aside class="ms-aside"><h3>HOW TO PLAY</h3><p>球の左右位置を追い、手前の打撃ラインで一撃。クリック／タップした横位置が打撃の中心になります。早すぎる入力は空振りです。<small>Follow the ball and strike at the near line. Your click or tap sets the strike position.</small></p><p>Spaceの場合はマウス移動または← →で照準を合わせてください。ゲーム画面にフォーカスがある間だけキー操作できます。<small>Focus the game screen to use arrow keys and Space.</small></p><h3>SCORING</h3><p>PERFECT 100 / GOOD 50<br>5 COMBO ×1.5 / 10 ×2 / 20 ×3<br>3回ミス、または20秒で終了。<small>Three misses or 20 seconds ends the game.</small></p><h3>PERSONAL BEST</h3><strong id="ms-best-aside">0</strong><p>完全無料・広告なし。自己ベストのみ端末に保存。<small>Free, no ads. Best score stored on this device.</small></p><a href="../../games.html">← GAMESへもどる<small>Back to games</small></a></aside></div>
+<aside class="ms-aside"><h3>HOW TO PLAY</h3><p>球の左右位置を追い、手前の打撃ラインで一撃。クリック／タップした横位置が打撃の中心になります。PERFECT・GOODで継続、MISSで終了。<small>Follow the ball and strike at the near line. One miss ends the run.</small></p><p>Spaceの場合はマウス移動または← →で照準を合わせてください。ゲーム画面にフォーカスがある間だけキー操作できます。<small>Focus the game screen to use arrow keys and Space.</small></p><h3>RALLY RECORD</h3><p>連続成功数を記録し、10回ごとにマイルストーンを表示。BEST RALLYはこのブラウザに保存されます。<small>Best rally is stored in this browser.</small></p><a href="../../games.html">← GAMESへもどる<small>Back to games</small></a></aside></div>
 <noscript>遊ぶにはJavaScriptを有効にしてください。 / Enable JavaScript to play.</noscript><p class="puzzle-note">本ゲームは予告なく改修・変更・公開停止する場合があります。改修に伴う不具合やゲームデータ消失の可能性について、あらかじめご了承ください。<small class="puzzle-translation" lang="en">This game may be updated, modified, or discontinued without prior notice. Updates may cause bugs or loss of game data.</small></p></main>
     <footer>
         <p>℗ 2025 Eighty's Mind Judgement<br>
@@ -74,8 +74,8 @@
 
     <script src="../../site-navigation.js" defer></script>
     <script src="../../emj-puzzle-share.js" defer></script>
-<script src="engine.js?v=20261101-duration20" defer></script>
-<script src="game.js?v=20261101-duration20" defer></script>
+<script src="engine.js?v=20261107-rally" defer></script>
+<script src="game.js?v=20261107-rally" defer></script>
 </body>
 
 </html>
