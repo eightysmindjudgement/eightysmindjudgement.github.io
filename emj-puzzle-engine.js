@@ -76,7 +76,9 @@
       const integral=side=>side.slice(1).reduce((sum,p,i)=>sum+(p[0]+side[i][0])*.5*(p[1]-side[i][1]),0);
       this.baseArea=integral(this.baseStage.right)-integral(this.baseStage.left);
       this.minWallScale=Math.min(1,(CONFIG.width*CONFIG.height/3)/this.baseArea);
-      this.wallScale=1;this.wallRate=0;this.buildWalls();
+      const level2=CONFIG.stages[1],level2Area=integral(level2.right)-integral(level2.left),boardArea=CONFIG.width*CONFIG.height;
+      this.level2WallTarget=Math.max(1,(boardArea+level2Area)/(2*level2Area));
+      this.bossWallTarget=null;this.wallScale=1;this.wallRate=0;this.buildWalls();
       this.effectQueue=[];this.activeEffect=null;this.drill=null;this.discharges=[];this.comboCue=null;this.lasers=[];this.shatters=[];this.blasts=[];this.explosions=0;this.shotsFired=0;this.rocksDestroyed=0;this.bodies=[];this.score=0;this.time=0;this.cooldown=0;this.overflow=0;this.over=false;this.current=this.pick();this.next=this.pick();this.events=[];this.lastMerge=-10;this.combo=0;this.serial=0;
     }
     buildWalls(){
@@ -91,6 +93,19 @@
     }
     updateWalls(dt,elapsed){
       this.wallRate=0;
+      if((this.stageIndex===1||this.stageIndex===2)&&this.bodies.some(b=>b.level===8)){
+        if(this.bossWallTarget===null){
+          this.bossWallTarget=this.stageIndex===1
+            ? this.level2WallTarget
+            : Math.max(this.minWallScale,1-Math.floor(180/60)*.06);
+        }
+      }
+      if(this.bossWallTarget!==null){
+        const previous=this.wallScale,distance=this.bossWallTarget-previous;
+        this.wallScale=previous+Math.sign(distance)*Math.min(Math.abs(distance),.015*dt);
+        if(this.wallScale!==previous){this.wallRate=(this.wallScale-previous)/dt;this.buildWalls();}
+        return;
+      }
       if(!this.baseStage.moving)return;
       // Each minute starts a four-second squeeze; clamp by actual polygon area.
       const target=Math.max(this.minWallScale,1-Math.floor(Math.max(0,elapsed)/60)*.06);
