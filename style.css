@@ -362,85 +362,6 @@ a.tool-card:focus-visible {
     color: #999999;
 }
 
-/* HTML SITEMAP */
-
-.sitemap-main {
-    max-width: 1000px;
-    margin: 0 auto;
-}
-
-.sitemap-section {
-    padding: 24px 40px 30px;
-}
-
-.sitemap-category {
-    padding: 3px 0;
-    border-bottom: 1px solid #333333;
-}
-
-.sitemap-category:first-child {
-    padding-top: 0;
-}
-
-.sitemap-category h2 {
-    margin: 0 0 4px;
-    color: #f2f2f2;
-    font-size: 1.05rem;
-    letter-spacing: 0.12em;
-}
-
-.sitemap-category h2 small {
-    margin-left: 6px;
-    color: #999999;
-    font-size: 0.72em;
-    letter-spacing: 0.04em;
-}
-
-.sitemap-pages,
-.sitemap-items {
-    margin: 0;
-    padding-left: 22px;
-}
-
-.sitemap-pages > li {
-    margin: 2px 0;
-}
-
-.sitemap-pages a {
-    color: #f2f2f2;
-    font-weight: bold;
-    text-decoration: none;
-}
-
-.sitemap-pages a:hover,
-.sitemap-pages a:focus-visible {
-    color: #999999;
-}
-
-.sitemap-items {
-    margin-top: 2px;
-    color: #999999;
-    font-size: 0.88rem;
-}
-
-.sitemap-items li {
-    margin: 1px 0;
-}
-
-.sitemap-tools {
-    list-style-type: circle;
-}
-
-.sitemap-items .sitemap-biography-subsection {
-    margin-left: 2ch;
-}
-
-.sitemap-item-japanese {
-    margin-left: 5px;
-    color: #777777;
-    font-size: 0.86em;
-}
-
 /* COMPOUND INTEREST CALCULATOR */
 
 .compound-calculator-page header h1 {
@@ -1344,10 +1265,6 @@ a.tool-card:focus-visible {
 }
 
 @media (max-width: 700px) {
-    .sitemap-section {
-        padding: 20px 20px 24px;
-    }
-
     .compound-calculator-page header h1 {
         font-size: clamp(1.3rem, 6vw, 2rem);
         letter-spacing: 0.08em;
