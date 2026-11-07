@@ -1,0 +1,486 @@
+/* Shared neon treatment for the arcade directory and its playable games. */
+.games-page {
+    --arcade-cyan: #62fbff;
+    --arcade-blue: #398eff;
+    --arcade-violet: #a45bff;
+    --arcade-magenta: #ff59d6;
+}
+
+.games-page::before {
+    background-image:
+        linear-gradient(180deg, rgb(5 8 18 / .9), rgb(5 8 18 / .68) 44%, #080b10 100%),
+        repeating-linear-gradient(90deg, transparent 0 11.9%, rgb(160 180 200 / .045) 12% 12.08%, transparent 12.18% 24%),
+        repeating-linear-gradient(0deg, transparent 0 119px, rgb(160 180 200 / .045) 120px, transparent 121px 240px),
+        radial-gradient(ellipse at 50% 77%, rgb(54 221 245 / .16), transparent 49%),
+        radial-gradient(ellipse at 18% 62%, rgb(83 71 255 / .12), transparent 37%),
+        var(--page-background-image);
+}
+
+.games-page > header h1 .games-title-label {
+    color: #f5fbff;
+    text-shadow: 0 0 8px rgb(255 255 255 / .48), 0 0 22px rgb(54 221 245 / .46);
+}
+
+.games-page > header h1 .games-title-arcade {
+    color: #f2fdff;
+    text-shadow:
+        0 0 4px #fff,
+        0 0 12px var(--arcade-cyan),
+        0 0 26px var(--arcade-blue),
+        0 0 46px rgb(149 104 255 / .86),
+        0 0 70px rgb(240 91 203 / .5);
+}
+
+.games-page .games-intro {
+    color: #f1f8ff;
+    text-shadow: 0 0 12px rgb(54 221 245 / .34);
+}
+
+.games-page .games-intro-japanese {
+    color: #c3d6e5;
+}
+
+.games-page .arcade-machine {
+    border-color: color-mix(in srgb, var(--machine-neon) 72%, #d7efff);
+    box-shadow:
+        inset 0 1px rgb(255 255 255 / .16),
+        inset 0 0 26px rgb(0 0 0 / .62),
+        0 14px 32px rgb(0 0 0 / .5),
+        0 0 12px color-mix(in srgb, var(--machine-neon) 42%, transparent),
+        0 0 28px color-mix(in srgb, var(--machine-neon) 25%, transparent);
+}
+
+.games-page .arcade-machine::before {
+    inset: 5px;
+    border-color: color-mix(in srgb, var(--machine-neon) 58%, transparent);
+    box-shadow:
+        inset 0 0 8px color-mix(in srgb, var(--machine-neon) 22%, transparent),
+        0 0 9px color-mix(in srgb, var(--machine-neon) 34%, transparent);
+}
+
+.games-page .arcade-machine::after {
+    width: 9px;
+    height: 9px;
+    background: radial-gradient(circle at 35% 30%, #fff 0 10%, var(--machine-neon) 38%, color-mix(in srgb, var(--machine-neon) 35%, #080b10) 76%);
+    box-shadow: 0 0 5px #fff, 0 0 12px var(--machine-neon), 0 0 22px var(--machine-neon);
+}
+
+.games-page .machine-marquee {
+    border-bottom-color: color-mix(in srgb, var(--machine-neon) 74%, #fff);
+    box-shadow: 0 8px 18px -15px var(--machine-neon);
+}
+
+.games-page .machine-title {
+    text-shadow:
+        0 0 3px #fff,
+        0 0 10px color-mix(in srgb, var(--machine-neon) 92%, transparent),
+        0 0 24px color-mix(in srgb, var(--machine-neon) 70%, transparent);
+}
+
+.games-page .machine-screen {
+    border-color: color-mix(in srgb, var(--machine-neon) 80%, #dffaff);
+    box-shadow:
+        inset 0 0 20px rgb(0 0 0 / .9),
+        0 0 7px rgb(255 255 255 / .38),
+        0 0 16px color-mix(in srgb, var(--machine-neon) 52%, transparent),
+        0 0 30px color-mix(in srgb, var(--machine-neon) 24%, transparent);
+}
+
+.games-page .machine-play {
+    border-top-color: color-mix(in srgb, var(--machine-neon) 46%, transparent);
+    color: color-mix(in srgb, var(--machine-neon) 70%, white);
+    text-shadow: 0 0 7px var(--machine-neon), 0 0 17px color-mix(in srgb, var(--machine-neon) 78%, transparent);
+}
+
+.games-page .arcade-machine-loading {
+    --machine-neon: #ffc46e;
+    border-color: color-mix(in srgb, var(--machine-neon) 48%, #222b35);
+    box-shadow:
+        inset 0 1px rgb(255 255 255 / .1),
+        inset 0 0 24px rgb(0 0 0 / .65),
+        0 14px 32px rgb(0 0 0 / .48),
+        0 0 16px color-mix(in srgb, var(--machine-neon) 22%, transparent);
+}
+
+.games-page .arcade-machine-loading::before {
+    border-color: color-mix(in srgb, var(--machine-neon) 32%, transparent);
+    box-shadow: none;
+}
+
+.games-page .arcade-machine-loading .machine-play {
+    color: #e6bf8c;
+    text-shadow: 0 0 8px rgb(255 184 92 / .28);
+}
+
+.puzzle-page {
+    --game-glow-cyan: #63f4ff;
+    --game-glow-blue: #438dff;
+    --game-glow-violet: #a267ff;
+}
+
+.puzzle-page > header h1 {
+    color: #f4fdff;
+    text-shadow:
+        0 0 4px #fff,
+        0 0 13px var(--game-glow-cyan),
+        0 0 28px var(--game-glow-blue),
+        0 0 44px rgb(162 103 255 / .68);
+}
+
+body.puzzle-page:has(#iron-fortress) > header h1 {
+    text-shadow: 0 0 4px #fff, 0 0 12px #63f4ff, 0 0 27px #438dff, 0 0 44px rgb(67 141 255 / .68);
+}
+
+body.puzzle-page:has(.ms-main) > header h1 {
+    text-shadow: 0 0 4px #fff, 0 0 12px #ff78da, 0 0 27px #ff8f9e, 0 0 44px rgb(255 174 103 / .65);
+}
+
+.puzzle-page .puzzle-lead {
+    color: #e2efff;
+    text-shadow: 0 0 12px rgb(67 141 255 / .28);
+}
+
+.puzzle-page .puzzle-board,
+.puzzle-page .puzzle-aside {
+    border-color: rgb(153 226 255 / .72);
+    box-shadow:
+        inset 0 1px rgb(255 255 255 / .16),
+        inset 0 0 20px rgb(67 141 255 / .1),
+        0 12px 38px #0009,
+        0 0 9px rgb(255 255 255 / .24),
+        0 0 22px rgb(67 141 255 / .44),
+        0 0 42px rgb(162 103 255 / .2);
+}
+
+.puzzle-page .puzzle-stats {
+    border-color: rgb(150 218 255 / .74);
+    background:
+        linear-gradient(110deg, rgb(255 255 255 / .12), transparent 44%),
+        linear-gradient(125deg, #303f58, #17243b 60%, #221b3a);
+    box-shadow: inset 0 1px rgb(255 255 255 / .2), 0 0 12px rgb(67 141 255 / .23);
+}
+
+.puzzle-page .puzzle-stats strong {
+    color: #f7fdff;
+    text-shadow: 0 0 6px #fff, 0 0 15px rgb(99 244 255 / .7), 0 0 22px rgb(67 141 255 / .52);
+}
+
+.puzzle-page .puzzle-status {
+    color: #aaf6ff;
+    text-shadow: 0 0 10px rgb(99 244 255 / .48);
+}
+
+.puzzle-page .puzzle-main button,
+.puzzle-page .puzzle-share-buttons button,
+#iron-fortress button,
+.puzzle-page .ms-controls button,
+.puzzle-page #ms-start {
+    border-color: rgb(161 233 255 / .78);
+    background:
+        linear-gradient(115deg, rgb(255 255 255 / .18), transparent 48%),
+        linear-gradient(115deg, #24485e, #27365d 54%, #45305e);
+    color: #f6fdff;
+    box-shadow:
+        inset 0 1px rgb(255 255 255 / .24),
+        0 0 7px rgb(255 255 255 / .2),
+        0 0 15px rgb(67 141 255 / .4),
+        0 0 25px rgb(162 103 255 / .18);
+    transition: color 180ms ease, background-position 420ms ease, box-shadow 220ms ease, transform 180ms ease;
+}
+
+.puzzle-page .puzzle-main button:disabled,
+#iron-fortress button:disabled,
+.puzzle-page .ms-controls button:disabled {
+    box-shadow: none;
+}
+
+.puzzle-page .puzzle-main button[aria-pressed="true"],
+#iron-fortress button[aria-pressed="true"],
+.puzzle-page .ms-controls button[aria-pressed="true"] {
+    border-color: #e9feff;
+    background:
+        linear-gradient(115deg, rgb(255 255 255 / .24), transparent 48%),
+        linear-gradient(115deg, #14677a, #315c9e 54%, #63459a);
+    color: #fff;
+    box-shadow: inset 0 0 12px rgb(124 244 255 / .18), 0 0 8px #fff, 0 0 20px rgb(99 244 255 / .64), 0 0 34px rgb(162 103 255 / .35);
+}
+
+.puzzle-page .puzzle-stage-select button[aria-pressed="false"],
+#iron-fortress #if-difficulty button[aria-pressed="false"] {
+    background: linear-gradient(130deg, #101a2b, #11101e);
+}
+
+.puzzle-page .puzzle-share-buttons button {
+    box-shadow: 0 0 8px rgb(67 141 255 / .32);
+}
+
+.puzzle-page .puzzle-sharing :focus-visible,
+.puzzle-page .puzzle-main button:focus-visible,
+#iron-fortress :focus-visible,
+.puzzle-page .ms-controls button:focus-visible {
+    outline-color: #e7fdff;
+    box-shadow: 0 0 8px #fff, 0 0 20px var(--game-glow-cyan);
+}
+
+#iron-fortress .if-game {
+    border-color: rgb(118 231 255 / .8);
+    background: linear-gradient(145deg, #101c2b, #070d17);
+    box-shadow:
+        inset 0 1px rgb(255 255 255 / .18),
+        inset 0 0 24px rgb(35 153 255 / .08),
+        0 10px 36px #0008,
+        0 0 9px rgb(255 255 255 / .24),
+        0 0 22px rgb(45 181 255 / .5),
+        0 0 42px rgb(50 111 255 / .22);
+}
+
+#iron-fortress .if-hud {
+    background:
+        linear-gradient(105deg, rgb(255 255 255 / .12), transparent 52%),
+        linear-gradient(120deg, #263d52, #101e30 55%, #172443);
+    box-shadow: inset 0 1px rgb(255 255 255 / .16), 0 1px 14px rgb(45 181 255 / .18);
+}
+
+#iron-fortress .if-hud strong {
+    text-shadow: 0 0 5px #fff, 0 0 13px rgb(83 216 255 / .68);
+}
+
+#iron-fortress .if-route {
+    background: linear-gradient(90deg, rgb(38 154 226 / .13), transparent);
+    color: #c6eaff;
+}
+
+#iron-fortress progress {
+    filter: drop-shadow(0 0 5px rgb(78 219 255 / .72));
+}
+
+#iron-fortress .if-screen {
+    outline: 1px solid rgb(111 224 255 / .5);
+    outline-offset: -1px;
+    box-shadow: inset 0 0 30px rgb(35 153 255 / .12), 0 0 17px rgb(45 181 255 / .19);
+}
+
+#iron-fortress #if-title {
+    color: #f4fdff;
+    text-shadow: 0 0 4px #fff, 0 0 14px #41cfff, 0 0 30px #347bff, 2px 3px #305263;
+}
+
+#iron-fortress .if-eyebrow,
+#iron-fortress .if-help h3 {
+    color: #8cf5ff;
+    text-shadow: 0 0 10px rgb(65 207 255 / .72);
+}
+
+#iron-fortress .if-help-device {
+    border-color: rgb(93 193 239 / .48);
+    background: linear-gradient(135deg, rgb(76 173 220 / .14), transparent 60%), #101e2b;
+    box-shadow: inset 0 1px rgb(255 255 255 / .1), 0 0 10px rgb(45 181 255 / .14);
+}
+
+#iron-fortress #if-start {
+    border-color: #e8feff;
+    background: linear-gradient(115deg, #ddfeff, #72eaff 42%, #7c9dff 75%, #d3a2ff);
+    color: #091422;
+    box-shadow: inset 0 1px #fff, 0 0 8px #fff, 0 0 20px #4bdcff, 0 0 38px rgb(67 105 255 / .62);
+}
+
+#iron-fortress #if-fire,
+#iron-fortress #if-fire.active {
+    border-color: #91faff;
+    background: linear-gradient(120deg, #11677c, #18558a 55%, #433b91);
+    color: #f3ffff;
+    text-shadow: 0 0 8px #d8fdff;
+    box-shadow: inset 0 1px rgb(255 255 255 / .25), 0 0 9px rgb(91 236 255 / .7), 0 0 22px rgb(45 181 255 / .42);
+}
+
+#iron-fortress .if-aside h3 {
+    border-bottom-color: rgb(100 203 255 / .48);
+    color: #a9efff;
+    text-shadow: 0 0 11px rgb(45 181 255 / .54);
+}
+
+#iron-fortress #if-boss {
+    color: #ffd2ad;
+    text-shadow: 0 0 9px #ff875e, 0 1px 4px #000;
+}
+
+#iron-fortress #if-boss progress {
+    filter: drop-shadow(0 0 5px rgb(255 125 86 / .76));
+}
+
+.ms-main {
+    --strike-pink: #ff78da;
+    --strike-orange: #ffae67;
+}
+
+.ms-main .puzzle-lead {
+    text-shadow: 0 0 12px rgb(255 120 218 / .28);
+}
+
+.ms-main .ms-game {
+    border-color: rgb(255 155 223 / .84);
+    box-shadow:
+        inset 0 1px rgb(255 255 255 / .18),
+        inset 0 0 24px rgb(255 92 197 / .08),
+        0 0 8px rgb(255 255 255 / .24),
+        0 0 20px rgb(255 89 214 / .52),
+        0 0 38px rgb(255 127 79 / .22);
+}
+
+.ms-main .ms-hud {
+    background:
+        linear-gradient(105deg, rgb(255 255 255 / .13), transparent 50%),
+        linear-gradient(115deg, #48263f, #291a32 52%, #39251e);
+    box-shadow: inset 0 1px rgb(255 255 255 / .17), 0 1px 14px rgb(255 89 214 / .2);
+    color: #ffe5f7;
+}
+
+.ms-main .ms-hud strong {
+    color: #fff8fe;
+    text-shadow: 0 0 5px #fff, 0 0 13px rgb(255 120 218 / .78), 0 0 22px rgb(255 160 91 / .38);
+}
+
+.ms-main .ms-hud #ms-best {
+    color: #a8e9ff;
+    text-shadow: 0 0 7px #fff, 0 0 14px #61dfff, 0 0 23px #397fff;
+}
+
+.ms-main .ms-screen {
+    box-shadow: inset 0 0 28px rgb(255 89 214 / .08), 0 0 14px rgb(255 89 214 / .16);
+}
+
+.ms-main #ms-title {
+    color: #fffaff;
+    text-shadow: 0 0 5px #fff, 0 0 14px #ff77db, 0 0 32px #ff6a92, 0 0 48px rgb(255 162 89 / .65);
+}
+
+.ms-main .ms-eyebrow {
+    color: #ffd4fa;
+    text-shadow: 0 0 10px rgb(255 89 214 / .84), 0 0 18px rgb(255 165 91 / .5);
+}
+
+.ms-main #ms-start {
+    border-color: #fff1ff;
+    background: linear-gradient(110deg, #fff2fc, #ff91df 35%, #ff8f9e 72%, #ffd077);
+    color: #281222;
+    text-shadow: 0 1px rgb(255 255 255 / .5);
+    box-shadow: inset 0 1px #fff, 0 0 8px #fff, 0 0 20px #ff68d3, 0 0 38px rgb(255 134 107 / .58);
+}
+
+.ms-main #ms-status {
+    color: #fff0fb;
+    text-shadow: 0 0 9px rgb(255 120 218 / .46);
+}
+
+.ms-main .ms-controls {
+    background: linear-gradient(100deg, #211827, #1d1926 62%, #261c1c);
+}
+
+.ms-main .ms-controls button {
+    border-color: color-mix(in srgb, var(--strike-pink) 72%, white);
+    background: linear-gradient(115deg, color-mix(in srgb, var(--strike-pink) 34%, #211827), color-mix(in srgb, var(--strike-orange) 34%, #211827));
+    box-shadow: inset 0 1px rgb(255 255 255 / .22), 0 0 8px color-mix(in srgb, var(--strike-pink) 65%, transparent), 0 0 18px color-mix(in srgb, var(--strike-orange) 34%, transparent);
+}
+
+.ms-main .ms-controls span {
+    color: #e9cfe2;
+}
+
+.puzzle-page .puzzle-main button:disabled,
+#iron-fortress button:disabled,
+.puzzle-page .ms-controls button:disabled {
+    box-shadow: none;
+}
+
+.ms-main .ms-aside h3 {
+    color: #ffb8e9;
+    text-shadow: 0 0 11px rgb(255 89 214 / .58);
+}
+
+.ms-main #ms-result strong {
+    color: #fff9fd;
+    text-shadow: 0 0 7px #fff, 0 0 15px rgb(255 120 218 / .7);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .games-page .arcade-machine:not(.arcade-machine-loading):hover,
+    .games-page .arcade-machine:not(.arcade-machine-loading):focus-visible {
+        border-color: color-mix(in srgb, var(--machine-neon) 72%, white);
+        box-shadow:
+            inset 0 1px rgb(255 255 255 / .22),
+            inset 0 0 26px rgb(0 0 0 / .5),
+            0 18px 38px rgb(0 0 0 / .55),
+            0 0 9px #fff,
+            0 0 27px color-mix(in srgb, var(--machine-neon) 78%, transparent),
+            0 0 48px color-mix(in srgb, var(--machine-neon) 48%, transparent);
+    }
+
+    .puzzle-page .puzzle-main button:not(:disabled):hover,
+    .puzzle-page .puzzle-share-buttons button:hover,
+    #iron-fortress button:not(:disabled):hover,
+    .puzzle-page .ms-controls button:not(:disabled):hover {
+        border-color: #efffff;
+        color: #fff;
+        box-shadow: inset 0 1px rgb(255 255 255 / .32), 0 0 9px #fff, 0 0 21px var(--game-glow-cyan), 0 0 34px rgb(162 103 255 / .46);
+        transform: translateY(-2px);
+    }
+
+    .ms-main #ms-start:hover {
+        box-shadow: inset 0 1px #fff, 0 0 10px #fff, 0 0 26px #ff68d3, 0 0 44px rgb(255 134 107 / .76);
+    }
+
+    .ms-main .ms-controls button:not(:disabled):hover {
+        box-shadow: inset 0 1px rgb(255 255 255 / .3), 0 0 8px #fff, 0 0 20px #ff78da, 0 0 34px rgb(255 127 79 / .58);
+    }
+}
+
+.puzzle-page .puzzle-main button:not(:disabled):active,
+#iron-fortress button:not(:disabled):active,
+.puzzle-page .ms-controls button:not(:disabled):active,
+.puzzle-page .ms-main #ms-start:active {
+    transform: translateY(1px) scale(.98);
+}
+
+@media (max-width: 700px) {
+    .games-page .arcade-machine {
+        box-shadow:
+            inset 0 1px rgb(255 255 255 / .14),
+            inset 0 0 20px rgb(0 0 0 / .62),
+            0 12px 26px rgb(0 0 0 / .48),
+            0 0 10px color-mix(in srgb, var(--machine-neon) 40%, transparent),
+            0 0 22px color-mix(in srgb, var(--machine-neon) 23%, transparent);
+    }
+
+    .puzzle-page .puzzle-board,
+    .puzzle-page .puzzle-aside,
+    #iron-fortress .if-game,
+    .ms-main .ms-game {
+        box-shadow:
+            inset 0 1px rgb(255 255 255 / .14),
+            0 8px 26px rgb(0 0 0 / .5),
+            0 0 8px rgb(255 255 255 / .2),
+            0 0 17px rgb(67 141 255 / .38),
+            0 0 29px rgb(162 103 255 / .17);
+    }
+
+    .ms-main .ms-game {
+        box-shadow:
+            inset 0 1px rgb(255 255 255 / .14),
+            0 8px 26px rgb(0 0 0 / .5),
+            0 0 8px rgb(255 255 255 / .2),
+            0 0 17px rgb(255 89 214 / .4),
+            0 0 29px rgb(255 127 79 / .17);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .games-page .arcade-machine,
+    .games-page .machine-play,
+    .games-page .machine-play span,
+    .puzzle-page .puzzle-main button,
+    .puzzle-page .puzzle-share-buttons button,
+    #iron-fortress button,
+    .puzzle-page .ms-controls button {
+        transition-duration: 0.01ms;
+    }
+}

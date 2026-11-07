@@ -18,7 +18,25 @@
 
 .sitemap-page > header {
     min-height: 0;
+    position: relative;
+    isolation: isolate;
     padding: 68px 20px 30px;
+}
+
+.sitemap-page > header::before {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(6, 9, 20, 0.48), rgba(6, 9, 20, 0.48)),
+        var(--page-background-image);
+    background-position: center, center 42%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 48%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 48%, transparent 100%);
+    content: "";
+    pointer-events: none;
 }
 
 .sitemap-page > header img {
