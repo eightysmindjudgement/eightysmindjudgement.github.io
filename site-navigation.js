@@ -1,4 +1,19 @@
 (() => {
+    const currentYear = new Date().getFullYear();
+    const footers = document.querySelectorAll('footer');
+    footers.forEach(footer => {
+        const textNodes = document.createTreeWalker(footer, NodeFilter.SHOW_TEXT);
+        let textNode;
+        while ((textNode = textNodes.nextNode())) {
+            textNode.nodeValue = textNode.nodeValue.replace(
+                /([℗©]\s*)(\d{4})(?=\s+Eighty's Mind Judgement)/g,
+                (match, prefix, startYear) => Number(startYear) < currentYear
+                    ? `${prefix}${startYear} - ${currentYear}`
+                    : match
+            );
+        }
+    });
+
     const menu = [...document.querySelectorAll('body > nav')].find(nav => !nav.classList.contains('digital-philosophy-nav'));
     const header = document.querySelector('body > header');
     if (!menu || !header) return;
