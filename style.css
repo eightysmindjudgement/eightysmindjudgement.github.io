@@ -370,11 +370,11 @@ a.tool-card:focus-visible {
 }
 
 .sitemap-section {
-    padding: 42px 40px 64px;
+    padding: 24px 40px 30px;
 }
 
 .sitemap-category {
-    padding: 22px 0;
+    padding: 3px 0;
     border-bottom: 1px solid #333333;
 }
 
@@ -383,7 +383,7 @@ a.tool-card:focus-visible {
 }
 
 .sitemap-category h2 {
-    margin: 0 0 12px;
+    margin: 0 0 4px;
     color: #f2f2f2;
     font-size: 1.05rem;
     letter-spacing: 0.12em;
@@ -403,7 +403,7 @@ a.tool-card:focus-visible {
 }
 
 .sitemap-pages > li {
-    margin: 7px 0;
+    margin: 2px 0;
 }
 
 .sitemap-pages a {
@@ -418,13 +418,13 @@ a.tool-card:focus-visible {
 }
 
 .sitemap-items {
-    margin-top: 5px;
+    margin-top: 2px;
     color: #999999;
     font-size: 0.88rem;
 }
 
 .sitemap-items li {
-    margin: 3px 0;
+    margin: 1px 0;
 }
 
 .sitemap-tools {
@@ -433,7 +433,7 @@ a.tool-card:focus-visible {
 
 .sitemap-tools a {
     color: #999999;
-    font-weight: normal;
+    font-weight: bold;
 }
 
 .sitemap-items .sitemap-biography-subsection {
@@ -1350,7 +1350,7 @@ a.tool-card:focus-visible {
 
 @media (max-width: 700px) {
     .sitemap-section {
-        padding: 42px 20px 48px;
+        padding: 20px 20px 24px;
     }
 
     .compound-calculator-page header h1 {

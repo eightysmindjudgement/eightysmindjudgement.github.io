@@ -6,7 +6,9 @@
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const duration = reducedMotion.matches ? 0 : 280;
-    let activePanel = panels.querySelector('#about-emj');
+    let activePanel = panels.querySelector(
+        window.location.hash === '#about-creator' ? '#about-creator' : '#about-emj'
+    );
     let isTransitioning = false;
 
     if (!activePanel) return;
