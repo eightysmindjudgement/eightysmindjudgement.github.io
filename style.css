@@ -431,11 +431,6 @@ a.tool-card:focus-visible {
     list-style-type: circle;
 }
 
-.sitemap-tools a {
-    color: #999999;
-    font-weight: bold;
-}
-
 .sitemap-items .sitemap-biography-subsection {
     margin-left: 2ch;
 }
