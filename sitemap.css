@@ -356,6 +356,39 @@
         padding: 12px 10px;
         font-size: clamp(0.78rem, 3.2vw, 0.94rem);
     }
+
+}
+
+@media (max-width: 600px) {
+    .sitemap-module--tools .sitemap-tree {
+        padding-right: 9px;
+        padding-left: 9px;
+    }
+
+    .sitemap-tree li.sitemap-tool-item {
+        display: block;
+    }
+
+    .sitemap-tree a.sitemap-tool-name {
+        display: block;
+        min-width: 0;
+        padding-right: 0;
+        padding-left: 0;
+        overflow-wrap: normal;
+    }
+
+    .sitemap-tree a.sitemap-tool-name [lang="en"],
+    .sitemap-tree a.sitemap-tool-name [lang="ja"] {
+        display: block;
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 319px) {
+    .sitemap-tree a.sitemap-tool-name [lang="en"],
+    .sitemap-tree a.sitemap-tool-name [lang="ja"] {
+        white-space: normal;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {

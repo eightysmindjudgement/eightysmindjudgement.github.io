@@ -620,6 +620,12 @@
     }
 }
 
+@media (max-width: 600px) {
+    .tools-page.tools-showcase-page > header .tools-hero-subcopy-second-line {
+        display: block;
+    }
+}
+
 @media (max-width: 380px) {
     .tools-category-nav {
         gap: 0 12px;
