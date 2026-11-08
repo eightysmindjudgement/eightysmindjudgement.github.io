@@ -250,13 +250,99 @@ body.site-menu-ready > nav:not(.digital-philosophy-nav).is-open { transform: tra
 body.site-menu-ready > nav:not(.digital-philosophy-nav) a { display: block; padding: 12px 4px; border-bottom: 1px solid #333; font-size: .9rem; }
 body.site-menu-ready > nav:not(.digital-philosophy-nav) .site-menu-close { position: absolute; top: 16px; right: 18px; width: 42px; height: 42px; border: 0; background: transparent; color: #fff; font-size: 2rem; cursor: pointer; }
 
+.site-games-group {
+    background: #111;
+    border-bottom: 1px solid #333;
+}
+.site-games-toggle {
+    display: flex;
+    width: 100%;
+    min-height: 48px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 4px;
+    border: 0;
+    background: transparent;
+    color: #fff;
+    font: inherit;
+    font-size: .9rem;
+    font-weight: bold;
+    letter-spacing: .14em;
+    text-align: left;
+    cursor: pointer;
+}
+.site-games-indicator {
+    color: #d7faff;
+    font-size: 1.15rem;
+    font-weight: 400;
+    line-height: 1;
+}
+.site-games-submenu {
+    display: grid;
+    grid-template-rows: 0fr;
+    background: #1b1e20;
+    transition: grid-template-rows .24s ease;
+}
+.site-games-group.is-expanded .site-games-submenu { grid-template-rows: 1fr; }
+.site-games-submenu-content {
+    min-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity .2s ease, transform .2s ease;
+}
+.site-games-group.is-expanded .site-games-submenu-content {
+    opacity: 1;
+    transform: translateY(0);
+}
+body.site-menu-ready > nav:not(.digital-philosophy-nav) .site-games-submenu a {
+    position: relative;
+    min-height: 48px;
+    padding: 12px 30px 12px 16px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    color: #f2f5f6;
+    font-size: .82rem;
+    letter-spacing: .09em;
+    transition: color .2s ease, text-shadow .2s ease, background-color .2s ease;
+}
+body.site-menu-ready > nav:not(.digital-philosophy-nav) .site-games-submenu a::after {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    color: #9bdde5;
+    content: "→";
+    font-size: .8rem;
+    transform: translateY(-50%);
+}
+body.site-menu-ready > nav:not(.digital-philosophy-nav) .site-games-submenu a:hover,
+body.site-menu-ready > nav:not(.digital-philosophy-nav) .site-games-submenu a:focus-visible {
+    background: rgba(31, 191, 210, .08);
+    color: #baf8ff;
+    text-shadow: 0 0 8px rgba(67, 220, 237, .42);
+}
+body.site-menu-ready > nav:not(.digital-philosophy-nav) .site-games-index {
+    margin-top: 4px;
+    border-top: 1px solid rgba(255,255,255,.12);
+    color: #aeb8bb;
+    font-size: .74rem;
+}
+.site-games-toggle:focus-visible {
+    outline: 1px solid #55d5e4;
+    outline-offset: -2px;
+}
+
 .site-menu-toggle { position: fixed; top: 18px; left: 20px; z-index: 1202; display: flex; width: 46px; height: 46px; flex-direction: column; justify-content: center; align-items: center; gap: 6px; padding: 10px; border: 1px solid rgba(255,255,255,.45); border-radius: 3px; background: rgba(10,10,10,.72); cursor: pointer; }
 .site-menu-toggle span { display: block; width: 22px; height: 2px; background: #fff; }
 @media (max-width: 700px) { .site-menu-toggle { right: 20px; left: auto; } }
 .site-menu-backdrop { position: fixed; inset: 0; z-index: 1200; background: rgba(0,0,0,.58); opacity: 0; transition: opacity .24s ease; }
 .site-menu-backdrop.is-visible { opacity: 1; }
 body.site-menu-open { overflow: hidden; }
-@media (prefers-reduced-motion: reduce) { body.site-menu-ready > nav:not(.digital-philosophy-nav), .site-menu-backdrop { transition-duration: .01ms; } }
+@media (prefers-reduced-motion: reduce) {
+    body.site-menu-ready > nav:not(.digital-philosophy-nav),
+    .site-menu-backdrop,
+    .site-games-submenu,
+    .site-games-submenu-content { transition-duration: .01ms; }
+}
 
 nav {
     position: sticky;

@@ -54,12 +54,60 @@
     close.setAttribute('aria-label', 'Close menu');
     close.textContent = String.fromCharCode(0x00D7);
 
+    const gamesLink = [...menu.querySelectorAll('a')].find(link =>
+        /(^|\/)games\.html(?:[?#]|$)/.test(link.getAttribute('href') || '')
+    );
+    if (gamesLink && !menu.querySelector('.site-games-group')) {
+        const gamesPath = gamesLink.getAttribute('href');
+        const gamesPrefix = gamesPath.replace(/games\.html(?:[?#].*)?$/, '');
+        const games = [
+            { name: 'EMJ PUZZLE', href: 'emj-puzzle.html' },
+            { name: 'METAL STRIKE', href: 'games/metal-strike/metal-strike.html' },
+            { name: 'IRON FORTRESS', href: 'games/iron-fortress/iron-fortness.html' }
+        ];
+        const group = document.createElement('div');
+        group.className = 'site-games-group';
+
+        const gamesToggle = document.createElement('button');
+        gamesToggle.className = 'site-games-toggle';
+        gamesToggle.type = 'button';
+        gamesToggle.setAttribute('aria-expanded', 'false');
+        gamesToggle.setAttribute('aria-controls', 'site-games-submenu');
+        gamesToggle.innerHTML = '<span>GAMES</span><span class="site-games-indicator" aria-hidden="true">+</span>';
+
+        const submenu = document.createElement('div');
+        submenu.className = 'site-games-submenu';
+        submenu.id = 'site-games-submenu';
+        submenu.setAttribute('aria-hidden', 'true');
+        submenu.inert = true;
+
+        const submenuContent = document.createElement('div');
+        submenuContent.className = 'site-games-submenu-content';
+        games.forEach(game => {
+            const link = document.createElement('a');
+            link.href = `${gamesPrefix}${game.href}`;
+            link.textContent = game.name;
+            submenuContent.append(link);
+        });
+
+        gamesLink.textContent = 'EMJ ARCADE';
+        gamesLink.classList.add('site-games-index');
+        gamesLink.before(group);
+        submenuContent.append(gamesLink);
+        submenu.append(submenuContent);
+        group.append(gamesToggle, submenu);
+
+        gamesToggle.addEventListener('click', () => {
+            const expanded = gamesToggle.getAttribute('aria-expanded') !== 'true';
+            gamesToggle.setAttribute('aria-expanded', String(expanded));
+            gamesToggle.querySelector('.site-games-indicator').textContent = expanded ? '−' : '+';
+            submenu.setAttribute('aria-hidden', String(!expanded));
+            submenu.inert = !expanded;
+            group.classList.toggle('is-expanded', expanded);
+        });
+    }
+
     const links = [...menu.querySelectorAll('a')];
-    links.forEach(link => {
-        if (/(^|\/)games\.html(?:[?#]|$)/.test(link.getAttribute('href') || '')) {
-            link.textContent = 'GAMES ｰ EMJ ARCADE ｰ';
-        }
-    });
     let returnFocus = toggle;
     let closeTimer;
 
@@ -100,7 +148,9 @@
             event.preventDefault();
             closeMenu();
         } else if (event.key === 'Tab') {
-            const focusable = [close, ...links];
+            const focusable = [...menu.querySelectorAll('button:not(.site-menu-close), a[href]')]
+                .filter(element => !element.closest('[inert]') && !element.hasAttribute('disabled'));
+            focusable.unshift(close);
             const first = focusable[0];
             const last = focusable[focusable.length - 1];
             if (event.shiftKey && document.activeElement === first) {
