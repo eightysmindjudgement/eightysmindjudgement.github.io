@@ -34,6 +34,7 @@
         header.prepend(toggle);
     }
     toggle.setAttribute('aria-controls', 'site-navigation');
+    document.body.append(toggle);
     menu.id = 'site-navigation';
     let backdrop = document.querySelector('.site-menu-backdrop');
     if (!backdrop) {

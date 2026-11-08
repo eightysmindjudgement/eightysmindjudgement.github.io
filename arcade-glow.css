@@ -171,7 +171,6 @@ body.puzzle-page:has(.ms-main) > header h1 {
 }
 
 .puzzle-page .puzzle-main button,
-.puzzle-page .puzzle-share-buttons button,
 #iron-fortress button,
 .puzzle-page .ms-controls button,
 .puzzle-page #ms-start {
@@ -210,11 +209,6 @@ body.puzzle-page:has(.ms-main) > header h1 {
     background: linear-gradient(130deg, #101a2b, #11101e);
 }
 
-.puzzle-page .puzzle-share-buttons button {
-    box-shadow: 0 0 8px rgb(67 141 255 / .32);
-}
-
-.puzzle-page .puzzle-sharing :focus-visible,
 .puzzle-page .puzzle-main button:focus-visible,
 #iron-fortress :focus-visible,
 .puzzle-page .ms-controls button:focus-visible {
@@ -416,7 +410,6 @@ body.puzzle-page:has(.ms-main) > header h1 {
     }
 
     .puzzle-page .puzzle-main button:not(:disabled):hover,
-    .puzzle-page .puzzle-share-buttons button:hover,
     #iron-fortress button:not(:disabled):hover,
     .puzzle-page .ms-controls button:not(:disabled):hover {
         border-color: #efffff;
@@ -478,7 +471,6 @@ body.puzzle-page:has(.ms-main) > header h1 {
     .games-page .machine-play,
     .games-page .machine-play span,
     .puzzle-page .puzzle-main button,
-    .puzzle-page .puzzle-share-buttons button,
     #iron-fortress button,
     .puzzle-page .ms-controls button {
         transition-duration: 0.01ms;

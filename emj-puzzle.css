@@ -16,20 +16,11 @@
 
 .puzzle-rock-guide{width:48px;height:48px;margin-right:10px;vertical-align:middle}
 
-/* Sharing controls are scoped to the header; game styles stay unchanged. */
-.puzzle-sharing{min-height:0;max-width:460px;margin:6px auto 0;padding:0 12px;border-bottom:0;box-sizing:border-box;color:#c1c9d2;font-size:.8rem}
-.puzzle-share-buttons{display:flex;justify-content:center;flex-wrap:wrap;gap:6px}
-.puzzle-share-buttons button{display:grid;place-items:center;width:28px;height:28px;padding:5px;border:1px solid #687785;border-radius:4px;background:#202833;color:#e6edf3;font:inherit;cursor:pointer}
-.puzzle-share-buttons svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 /* Keep the sharing row close to the introductory copy. */
 .puzzle-page>header{padding-bottom:0}
+.puzzle-page>header>.puzzle-sharing{margin-top:6px}
 .puzzle-main{padding-top:20px}
 .puzzle-main>.puzzle-lead{margin-top:0}
-.puzzle-share-buttons button:hover{background:#303d4b}
-.puzzle-sharing :focus-visible{outline:3px solid #8ce5ed;outline-offset:3px}
-.puzzle-page>header #puzzle-share-status:empty{display:none}
-.puzzle-page>header #puzzle-share-status{margin:8px 0;line-height:1.6}
-.puzzle-sharing [hidden]{display:none}
 #puzzle-copy-fallback{margin-top:10px}
 #puzzle-copy-fallback label{display:block;margin-bottom:6px}
 #puzzle-share-url{box-sizing:border-box;width:100%;min-height:44px;padding:8px;border:1px solid #687785;border-radius:4px;background:#111820;color:#fff;font:inherit}
