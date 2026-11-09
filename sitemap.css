@@ -235,8 +235,9 @@
     text-shadow: 0 0 6px rgba(182, 160, 255, 0.92), 0 0 13px rgba(175, 70, 255, 0.72);
 }
 
-.sitemap-tree .tree-branch--last {
-    color: #ec9cff;
+.sitemap-tree .tree-branch-stem {
+    color: #76efff;
+    text-shadow: 0 0 6px rgba(104, 239, 255, 0.92), 0 0 13px rgba(62, 146, 255, 0.74);
 }
 
 .sitemap-tree strong {
@@ -264,10 +265,6 @@
 
 .sitemap-tree .tree-groups > li > ul > li {
     gap: 0.3em;
-}
-
-.sitemap-tree .tree-branch--final {
-    color: #ed9fff;
 }
 
 .sitemap-tree a:hover,
@@ -366,27 +363,21 @@
     }
 
     .sitemap-tree li.sitemap-tool-item {
-        display: block;
+        align-items: flex-start;
     }
 
     .sitemap-tree a.sitemap-tool-name {
         display: block;
+        flex: 1 1 0%;
         min-width: 0;
         padding-right: 0;
         padding-left: 0;
-        overflow-wrap: normal;
+        overflow-wrap: anywhere;
     }
 
     .sitemap-tree a.sitemap-tool-name [lang="en"],
     .sitemap-tree a.sitemap-tool-name [lang="ja"] {
         display: block;
-        white-space: nowrap;
-    }
-}
-
-@media (max-width: 319px) {
-    .sitemap-tree a.sitemap-tool-name [lang="en"],
-    .sitemap-tree a.sitemap-tool-name [lang="ja"] {
         white-space: normal;
     }
 }
