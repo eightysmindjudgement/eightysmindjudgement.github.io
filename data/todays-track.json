@@ -1,6 +1,6 @@
 {
   "channelId": "UChh-9Ik4sCslLBSzaKTD7Sg",
-  "updatedAt": "2026-11-09T23:45:00.023Z",
+  "updatedAt": "2026-11-10T21:15:30.528Z",
   "videos": [
     {
       "videoId": "_x22SWqkM4U",
@@ -246,6 +246,13 @@
       "thumbnailUrl": "https://i.ytimg.com/vi/87KO9_JvbF4/maxresdefault.jpg",
       "publishedAt": "2026-04-30T13:00:24Z",
       "watchUrl": "https://www.youtube.com/watch?v=87KO9_JvbF4"
+    },
+    {
+      "videoId": "8n9eIMyM4Kw",
+      "title": "[Full086] Industrial Darwinism / by Eighty's Mind Judgement (EMJ) / Heavy Metal",
+      "thumbnailUrl": "https://i.ytimg.com/vi/8n9eIMyM4Kw/maxresdefault.jpg",
+      "publishedAt": "2026-11-10T13:00:09Z",
+      "watchUrl": "https://www.youtube.com/watch?v=8n9eIMyM4Kw"
     },
     {
       "videoId": "8nyc0FjubAs",
@@ -1327,11 +1334,11 @@
     }
   ],
   "dailyTrack": {
-    "date": "2026-11-10",
-    "videoId": "P-RIxTF-GYA",
-    "title": "[Full020] Let It Out / by Eighty's Mind Judgement  （EMJ）/ Heavy Metal",
-    "thumbnailUrl": "https://i.ytimg.com/vi/P-RIxTF-GYA/hqdefault.jpg",
-    "publishedAt": "2025-12-10T11:00:56Z",
-    "watchUrl": "https://www.youtube.com/watch?v=P-RIxTF-GYA"
+    "date": "2026-11-11",
+    "videoId": "ISbE5EXYTCI",
+    "title": "[Clip]Freedom to Run Away / by Eighty's Mind Judgement (EMJ)",
+    "thumbnailUrl": "https://i.ytimg.com/vi/ISbE5EXYTCI/maxresdefault.jpg",
+    "publishedAt": "2026-04-23T13:00:35Z",
+    "watchUrl": "https://www.youtube.com/watch?v=ISbE5EXYTCI"
   }
 }
