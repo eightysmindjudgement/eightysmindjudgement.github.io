@@ -1,6 +1,6 @@
 {
   "channelId": "UChh-9Ik4sCslLBSzaKTD7Sg",
-  "updatedAt": "2026-11-11T21:51:30.162Z",
+  "updatedAt": "2026-11-12T21:48:51.300Z",
   "videos": [
     {
       "videoId": "_x22SWqkM4U",
@@ -407,6 +407,13 @@
       "thumbnailUrl": "https://i.ytimg.com/vi/BQAJ-ssN9bs/maxresdefault.jpg",
       "publishedAt": "2026-04-02T13:00:26Z",
       "watchUrl": "https://www.youtube.com/watch?v=BQAJ-ssN9bs"
+    },
+    {
+      "videoId": "bXAQc4Sb49U",
+      "title": "[Clip] What Do You See / by Eighty's Mind Judgement (EMJ) / Heavy Metal",
+      "thumbnailUrl": "https://i.ytimg.com/vi/bXAQc4Sb49U/maxresdefault.jpg",
+      "publishedAt": "2026-11-12T12:30:08Z",
+      "watchUrl": "https://www.youtube.com/watch?v=bXAQc4Sb49U"
     },
     {
       "videoId": "bXhVJXk1iFI",
@@ -1334,11 +1341,11 @@
     }
   ],
   "dailyTrack": {
-    "date": "2026-11-12",
-    "videoId": "1d4-vAlOfdk",
-    "title": "[Full074] Reflections Don’t Lie / by Eighty's Mind Judgement (EMJ) / Heavy Metal",
-    "thumbnailUrl": "https://i.ytimg.com/vi/1d4-vAlOfdk/maxresdefault.jpg",
-    "publishedAt": "2026-08-18T13:00:04Z",
-    "watchUrl": "https://www.youtube.com/watch?v=1d4-vAlOfdk"
+    "date": "2026-11-13",
+    "videoId": "AEDNpxj5YYY",
+    "title": "[4th Album] Awakening of Recognition / by Eighty's Mind Judgement (EMJ)/ Heavy Metal",
+    "thumbnailUrl": "https://i.ytimg.com/vi/AEDNpxj5YYY/maxresdefault.jpg",
+    "publishedAt": "2026-02-12T09:00:13Z",
+    "watchUrl": "https://www.youtube.com/watch?v=AEDNpxj5YYY"
   }
 }
