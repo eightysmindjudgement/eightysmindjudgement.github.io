@@ -68,11 +68,11 @@
         const controls = document.createElement('div');
         controls.className = 'studio-album-controls';
         controls.addEventListener('pointerdown', event => event.stopPropagation());
-        for (const [label, direction] of [['PREV', -1], ['NEXT', 1]]) {
+        for (const [label, direction] of [['PREV', 1], ['NEXT', -1]]) {
             const button = document.createElement('button');
             button.type = 'button';
             button.textContent = label;
-            button.setAttribute('aria-label', `${direction < 0 ? 'Previous' : 'Next'} ${isCompilation ? 'compilation' : 'studio'} album`);
+            button.setAttribute('aria-label', `${label === 'PREV' ? 'Previous' : 'Next'} ${isCompilation ? 'compilation' : 'studio'} album`);
             button.addEventListener('click', () => selectAlbum((activeIndex + direction + albums.length) % albums.length));
             controls.append(button);
         }
@@ -128,7 +128,7 @@
         const nearestIndex = ((Math.round(-rotation / step) % albums.length) + albums.length) % albums.length;
         ring.classList.toggle('is-moving', !animate);
         cards.forEach((card, index) => {
-            const angle = index * step + rotation;
+            const angle = (isCompilation ? 1 : -1) * (index * step + rotation);
             const depth = Math.cos(angle * Math.PI / 180);
             const scale = 0.72 + (depth + 1) * 0.14;
             const opacity = 0.55 + (depth + 1) * 0.22;
