@@ -119,6 +119,9 @@
             }
             return item;
         }));
+        experience.dispatchEvent(new CustomEvent('studioalbumchange', {
+            detail: { title: albums[index].title }
+        }));
     }
 
     function render(animate = true) {

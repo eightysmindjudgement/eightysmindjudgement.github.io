@@ -48,6 +48,74 @@
 .home-page .slogan-pending .slogan-character,
 .home-page .slogan-typing .slogan-character:not(.is-typed) { visibility: hidden; }
 .home-page .slogan-typing .slogan-character.is-typed { visibility: visible; }
+
+.home-page .emj-spotify-section {
+    min-width: 0;
+    min-height: 0;
+    margin: clamp(28px, 5vw, 56px) 0 0;
+    padding: clamp(22px, 4vw, 40px);
+    border: 1px solid #42474b;
+    border-radius: 24px;
+    background: linear-gradient(135deg, #131619e8, #08090bea);
+    box-shadow: inset 0 1px 0 #ffffff08, 0 12px 32px #0006;
+}
+.home-page .emj-spotify-heading {
+    margin-bottom: 28px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid #42474b;
+}
+.home-page .emj-spotify-heading h2 {
+    margin: 0;
+    color: #f1fbff;
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    letter-spacing: .1em;
+}
+.home-page .emj-spotify-heading p {
+    margin: 10px 0 0;
+    color: #b5d4df;
+    font-size: .78rem;
+    letter-spacing: .12em;
+    line-height: 1.7;
+}
+.home-page .emj-spotify-playlists {
+    display: grid;
+    gap: 28px;
+}
+.home-page .emj-spotify-playlist {
+    min-width: 0;
+    padding: clamp(16px, 2.5vw, 24px);
+    border: 1px solid #343a3e;
+    border-radius: 16px;
+    background: #08090b99;
+}
+.home-page .emj-spotify-playlist h3 {
+    margin: 0 0 8px;
+    color: #dce5e9;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    letter-spacing: .06em;
+    overflow-wrap: anywhere;
+}
+.home-page .emj-spotify-playlist p {
+    margin: 0 0 16px;
+    color: #b8bec2;
+    line-height: 1.7;
+}
+.home-page .emj-spotify-playlist iframe {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: 352px;
+    border: 0;
+    border-radius: 12px;
+}
+@media (max-width: 700px) {
+    .home-page .emj-spotify-section { padding: 20px 16px; }
+    .home-page .emj-spotify-heading { margin-bottom: 20px; }
+    .home-page .emj-spotify-heading p { font-size: .7rem; }
+    .home-page .emj-spotify-playlists { gap: 20px; }
+    .home-page .emj-spotify-playlist { padding: 14px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .home-page .home-album.slide-pending,
     .home-page .home-album.slide-visible { animation: none; opacity: 1; transform: none; }

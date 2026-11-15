@@ -161,66 +161,54 @@
     text-underline-offset: 4px;
 }
 
-.discography-page .emj-spotify-section {
+.discography-page .emj-player-controller {
+    width: 100%;
     min-width: 0;
-    min-height: 0;
-    margin: 36px 0 0;
-    padding: clamp(22px, 4vw, 40px);
-    border: 1px solid #42474b;
-    border-radius: 24px;
-    background: linear-gradient(135deg, #131619e8, #08090bea);
-    box-shadow: inset 0 1px 0 #ffffff08, 0 12px 32px #0006;
+    margin-top: 24px;
 }
 
-.discography-page .emj-spotify-heading {
-    margin-bottom: 28px;
-    padding-bottom: 18px;
-    border-bottom: 1px solid #42474b;
+.discography-page .emj-player-controls {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 12px;
 }
 
-.discography-page .emj-spotify-heading h2 {
-    margin: 0;
-    color: #f1fbff;
-    font-size: clamp(1.5rem, 3vw, 2.2rem);
+.discography-page .emj-player-service {
+    min-width: 120px;
+    min-height: 44px;
+    padding: 10px 18px;
+    border: 1px solid #555b60;
+    border-radius: 999px;
+    background: #101214;
+    color: #c9cdd0;
+    font: bold .78rem/1.3 Arial, Helvetica, sans-serif;
     letter-spacing: .1em;
+    cursor: pointer;
 }
 
-.discography-page .emj-spotify-heading p {
-    margin: 10px 0 0;
-    color: #b5d4df;
-    font-size: .78rem;
-    letter-spacing: .12em;
-    line-height: 1.7;
+.discography-page .emj-player-service[aria-pressed="true"] {
+    border-color: #8cbdce;
+    background: linear-gradient(175deg, #373b3e, #191b1d 48%, #101113 51%, #25282b);
+    box-shadow: inset 0 -2px 0 #ade5f5, 0 0 14px #86c8e02b;
+    color: #f1fbff;
 }
 
-.discography-page .emj-spotify-playlists {
-    display: grid;
-    gap: 28px;
+.discography-page .emj-player-service:focus-visible {
+    outline: 2px solid #b4e7f7;
+    outline-offset: 3px;
 }
 
-.discography-page .emj-spotify-playlist {
+.discography-page .emj-player-frame {
     min-width: 0;
-    padding: clamp(16px, 2.5vw, 24px);
+    min-height: 352px;
+    overflow: hidden;
     border: 1px solid #343a3e;
-    border-radius: 16px;
+    border-radius: 12px;
     background: #08090b99;
 }
 
-.discography-page .emj-spotify-playlist h3 {
-    margin: 0 0 8px;
-    color: #dce5e9;
-    font-size: clamp(1rem, 2vw, 1.25rem);
-    letter-spacing: .06em;
-    overflow-wrap: anywhere;
-}
-
-.discography-page .emj-spotify-playlist p {
-    margin: 0 0 16px;
-    color: #b8bec2;
-    line-height: 1.7;
-}
-
-.discography-page .emj-spotify-playlist iframe {
+.discography-page .emj-player-frame iframe {
     display: block;
     width: 100%;
     max-width: 100%;
@@ -235,11 +223,8 @@
         gap: 10px;
         padding: 1.7rem 18px 22px;
     }
-    .discography-page .emj-spotify-section { margin-top: 24px; padding: 20px 16px; }
-    .discography-page .emj-spotify-heading { margin-bottom: 20px; }
-    .discography-page .emj-spotify-heading p { font-size: .7rem; }
-    .discography-page .emj-spotify-playlists { gap: 20px; }
-    .discography-page .emj-spotify-playlist { padding: 14px; }
+    .discography-page .emj-player-controller { margin-top: 20px; }
+    .discography-page .emj-player-service { min-width: 0; flex: 1; }
     .discography-page .is-enhanced .discography-layer { padding: 18px 18px 24px; }
     .discography-page .discography-layer-heading { flex-direction: column; align-items: flex-start; gap: 0; margin-bottom: 18px; }
     .discography-page .discography-layer h2 { font-size: clamp(1.1rem, 4.5vw, 1.5rem); letter-spacing: .08em; }

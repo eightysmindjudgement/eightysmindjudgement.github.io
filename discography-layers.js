@@ -6,8 +6,8 @@
     const panels = [...stage.querySelectorAll('.discography-layer')];
     if (buttons.length !== 4 || panels.length !== 4) return;
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    let current = 0;
-    let requested = 0;
+    let current = Math.max(0, panels.findIndex(panel => `#${panel.id}` === window.location.hash));
+    let requested = current;
     let animating = false;
 
     const resize = () => { stage.style.height = `${panels[current].getBoundingClientRect().height}px`; };
@@ -18,7 +18,11 @@
         panel.hidden = index !== current;
         panel.inert = index !== current;
     });
-    panels[0].classList.add('is-current');
+    panels[current].classList.add('is-current');
+    buttons.forEach((button, index) => {
+        button.setAttribute('aria-selected', String(index === current));
+        button.tabIndex = index === current ? 0 : -1;
+    });
     stage.classList.add('is-enhanced');
     tabs.hidden = false;
     resize();
@@ -35,11 +39,13 @@
         stage.style.setProperty('--slide-direction', next > current ? 1 : -1);
         // Move focus before making the old panel inert (also covers programmatic clicks).
         if (outgoing.contains(document.activeElement)) buttons[next].focus();
+        outgoing.dispatchEvent(new Event('discography:deactivate'));
         outgoing.inert = true;
         outgoing.setAttribute('aria-hidden', 'true');
         incoming.hidden = false;
         incoming.inert = false;
         incoming.removeAttribute('aria-hidden');
+        incoming.dispatchEvent(new Event('discography:activate'));
         incoming.classList.add('is-entering');
         outgoing.classList.remove('is-current');
         incoming.classList.add('is-current');
@@ -71,6 +77,13 @@
             timer = setTimeout(finish, 750);
         }
     }
+
+    window.addEventListener('hashchange', () => {
+        const index = panels.findIndex(panel => `#${panel.id}` === window.location.hash);
+        if (index < 0) return;
+        requested = index;
+        switchLayer();
+    });
 
     buttons.forEach((button, index) => {
         button.addEventListener('click', () => {
