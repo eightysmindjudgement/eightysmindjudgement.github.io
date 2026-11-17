@@ -1,6 +1,6 @@
 {
   "channelId": "UChh-9Ik4sCslLBSzaKTD7Sg",
-  "updatedAt": "2026-11-16T23:42:46.551Z",
+  "updatedAt": "2026-11-17T22:50:42.048Z",
   "videos": [
     {
       "videoId": "_x22SWqkM4U",
@@ -1193,6 +1193,13 @@
       "watchUrl": "https://www.youtube.com/watch?v=x_p6hhRo-EY"
     },
     {
+      "videoId": "X1see20-8d8",
+      "title": "[Full087] Finite Flame / by Eighty's Mind Judgement (EMJ) / Heavy Metal",
+      "thumbnailUrl": "https://i.ytimg.com/vi/X1see20-8d8/maxresdefault.jpg",
+      "publishedAt": "2026-11-17T13:00:20Z",
+      "watchUrl": "https://www.youtube.com/watch?v=X1see20-8d8"
+    },
+    {
       "videoId": "X3PFG6OlL5k",
       "title": "[Clip] Cyber Attack (Instrumental) / by Eighty's Mind Judgement （EMJ）",
       "thumbnailUrl": "https://i.ytimg.com/vi/X3PFG6OlL5k/maxresdefault.jpg",
@@ -1341,11 +1348,11 @@
     }
   ],
   "dailyTrack": {
-    "date": "2026-11-17",
-    "videoId": "9qjdgY0ldQU",
-    "title": "[Full042] Island Inside/ by Eighty's Mind Judgement (EMJ)/ Heavy Metal",
-    "thumbnailUrl": "https://i.ytimg.com/vi/9qjdgY0ldQU/maxresdefault.jpg",
-    "publishedAt": "2026-01-29T13:00:14Z",
-    "watchUrl": "https://www.youtube.com/watch?v=9qjdgY0ldQU"
+    "date": "2026-11-18",
+    "videoId": "jfLKnIJisyo",
+    "title": "[Clip]Not by Chance / by Eighty's Mind Judgement (EMJ)",
+    "thumbnailUrl": "https://i.ytimg.com/vi/jfLKnIJisyo/maxresdefault.jpg",
+    "publishedAt": "2026-03-06T13:01:31Z",
+    "watchUrl": "https://www.youtube.com/watch?v=jfLKnIJisyo"
   }
 }
