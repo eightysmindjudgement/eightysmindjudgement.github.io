@@ -38,9 +38,18 @@
     <main>
 
         <div class="biography-switcher">
-            <img src="profile-artwork.JPG"
-                 alt="Eighty's Mind Judgement"
-                 class="profile-artwork">
+            <div class="biography-artwork-flipper" role="img" aria-label="Eighty's Mind Judgement">
+                <div class="biography-artwork-card">
+                    <img src="profile-artwork.JPG"
+                         alt=""
+                         aria-hidden="true"
+                         class="profile-artwork biography-artwork-front">
+                    <img src="Creator.PNG"
+                         alt=""
+                         aria-hidden="true"
+                         class="profile-artwork biography-artwork-back">
+                </div>
+            </div>
         </div>
 
         <div class="biography-switch-controls" role="group" aria-label="Biography sections">

@@ -1,8 +1,10 @@
 (() => {
     const page = document.querySelector('.biography-page');
     const panels = page?.querySelector('.biography-panels');
+    const artworkFlipper = page?.querySelector('.biography-artwork-flipper');
+    const artworkCard = page?.querySelector('.biography-artwork-card');
     const controls = [...(page?.querySelectorAll('[data-biography-target]') || [])];
-    if (!page || !panels || controls.length !== 2) return;
+    if (!page || !panels || !artworkFlipper || !artworkCard || controls.length !== 2) return;
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const duration = reducedMotion.matches ? 0 : 280;
@@ -15,6 +17,12 @@
 
     const setActivePanel = (panel) => {
         activePanel = panel;
+        const isCreator = panel.id === 'about-creator';
+        artworkCard.classList.toggle('is-creator', isCreator);
+        artworkFlipper.setAttribute(
+            'aria-label',
+            isCreator ? 'Creator' : "Eighty's Mind Judgement"
+        );
         panels.querySelectorAll('.biography-panel').forEach((item) => {
             const isActive = item === panel;
             item.hidden = !isActive;
@@ -38,6 +46,11 @@
             const currentHeight = panels.getBoundingClientRect().height;
 
             isTransitioning = true;
+            artworkCard.classList.toggle('is-creator', nextPanel.id === 'about-creator');
+            artworkFlipper.setAttribute(
+                'aria-label',
+                nextPanel.id === 'about-creator' ? 'Creator' : "Eighty's Mind Judgement"
+            );
             panels.classList.add('is-transitioning');
             panels.style.height = `${currentHeight}px`;
             panels.getBoundingClientRect();
