@@ -21,13 +21,14 @@
     </a>
     <main>
         <div class="visions-scroll-track">
-            <section class="visions-stage" aria-label="Three-dimensional album journey">
-                <canvas class="visions-canvas" aria-label="Floating album cubes. Select a cube or use the album buttons to explore." role="img"></canvas>
+            <section class="visions-stage" aria-label="Three-dimensional album journey and night desert">
+                <canvas class="visions-canvas" aria-label="Drag to look around the album space and night desert. Scroll to travel. Select an album cube or character to explore." role="img"></canvas>
                 <div class="visions-loading">
                     <progress class="visions-loading-bar" max="100" value="0" aria-label="Album space loading progress"></progress>
                     <span class="visions-loading-percent" aria-hidden="true">0%</span>
                 </div>
                 <p class="visions-scroll-prompt">SCROLL TO TRAVEL <span aria-hidden="true">↓</span></p>
+                <p class="visions-look-prompt">DRAG OR SWIPE TO LOOK AROUND</p>
                 <nav class="visions-index" aria-label="Choose an album"></nav>
                 <section class="visions-details" aria-labelledby="visions-title" aria-live="polite" hidden>
                     <button class="visions-close" type="button" aria-label="Close album details">×</button>
@@ -36,6 +37,13 @@
                     <h3>TRACKLIST</h3>
                     <ol class="visions-tracklist"></ol>
                 </section>
+                <section class="visions-character-details" aria-labelledby="visions-character-title" aria-live="polite" hidden>
+                    <button class="visions-close visions-character-close" type="button" aria-label="Close character details">×</button>
+                    <img class="visions-character-image" alt="">
+                    <p class="visions-character-status">INTRODUCTION NOT REGISTERED</p>
+                    <h2 class="visions-character-title" id="visions-character-title"></h2>
+                </section>
+                <p class="visions-world-label" aria-live="polite">ALBUM SPACE</p>
                 <div class="visions-fallback" hidden>
                     <p>3D is unavailable on this device. Choose an album to explore.</p>
                     <div class="visions-fallback-grid"></div>
