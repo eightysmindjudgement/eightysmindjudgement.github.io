@@ -71,22 +71,22 @@ import * as THREE from "./vendor/three.module.min.js";
             introductionJa: "日米のCorporate Warriorが共演。国境を越えて、Corporate Warriorの精神が交差する。",
             introductionEn: "A collaboration between the Japanese and American Corporate Warriors. Across borders, their shared spirit comes together.",
             x: -52, z: 112, height: 5
-        },
-        {
+        }
+    ];
+    const celestialCharacterIntroductions = {
+        metalShogun: {
             name: "Metal Shogun",
             image: "profile-artwork.JPG",
             introductionJa: "Eighty's Mind Judgement誕生の原点となった記念すべき作品に登場。将軍の立場にありながら、民の声に真摯に耳を傾け、自ら先頭に立って行動するリーダー。",
-            introductionEn: "Featured in the landmark work that marked the origin of Eighty's Mind Judgement. Despite his position as a shogun, he listens sincerely to the voices of the people and leads by example, taking action at the forefront.",
-            x: -42, z: 145, height: 4.8
+            introductionEn: "Featured in the landmark work that marked the origin of Eighty's Mind Judgement. Despite his position as a shogun, he listens sincerely to the voices of the people and leads by example, taking action at the forefront."
         },
-        {
+        creator: {
             name: "Creator",
             image: "Creator.PNG",
             introductionJa: "Eighty's Mind Judgementを生み出した創作者。会社員として働く傍ら、ヘヴィメタルを愛し、創作活動を続けている。心に響いた言葉を集めることも趣味のひとつ。",
-            introductionEn: "The creator of Eighty's Mind Judgement. A working professional who continues to pursue creative endeavors while embracing a passion for heavy metal. Collecting words that resonate deeply is also one of his hobbies.",
-            x: 42, z: 145, height: 4.8
+            introductionEn: "The creator of Eighty's Mind Judgement. A working professional who continues to pursue creative endeavors while embracing a passion for heavy metal. Collecting words that resonate deeply is also one of his hobbies."
         }
-    ];
+    };
     const stage = document.querySelector(".visions-stage");
     const track = document.querySelector(".visions-scroll-track");
     const canvas = document.querySelector(".visions-canvas");
@@ -160,6 +160,7 @@ import * as THREE from "./vendor/three.module.min.js";
     let selectedCharacterIndex = -1;
     let pinnedCelestialTarget = null;
     let hoveredCelestialTarget = null;
+    let hoveredCharacterIntroduction = null;
     let scrollProgress = 0;
     let pointerDown = null;
     let yawTarget = 0;
@@ -931,6 +932,7 @@ import * as THREE from "./vendor/three.module.min.js";
             moon.position.set(0, 15, 137);
             moon.userData.isBillboard = true;
             moon.userData.isCelestialTarget = true;
+            moon.userData.characterIntroduction = celestialCharacterIntroductions.metalShogun;
             scene.add(moon);
             sceneObjects.push(moon);
             const moonLabel = createCelestialLabel(
@@ -1009,14 +1011,16 @@ import * as THREE from "./vendor/three.module.min.js";
                     toneMapped: false
                 })
             );
-            star.position.set(-16, 33, 158);
+            const creatorStarPosition = new THREE.Vector3(-105, 33, 158);
+            star.position.copy(creatorStarPosition);
             star.userData.isBillboard = true;
             star.userData.isCelestialTarget = true;
+            star.userData.characterIntroduction = celestialCharacterIntroductions.creator;
             scene.add(star);
             sceneObjects.push(star);
             const starLabel = createCelestialLabel(
                 "Creator",
-                new THREE.Vector3(-16, 37, 158),
+                new THREE.Vector3(creatorStarPosition.x, creatorStarPosition.y + 4, creatorStarPosition.z),
                 9
             );
             if (starLabel) celestialTargets.push({ object: star, label: starLabel });
@@ -1046,7 +1050,7 @@ import * as THREE from "./vendor/three.module.min.js";
                 fog: false,
                 toneMapped: false
             }));
-            glowSprite.position.set(-16, 33, 158.5);
+            glowSprite.position.set(creatorStarPosition.x, creatorStarPosition.y, creatorStarPosition.z + 0.5);
             glowSprite.scale.set(8, 8, 1);
             scene.add(glowSprite);
             sceneObjects.push(glowSprite);
@@ -1300,6 +1304,7 @@ import * as THREE from "./vendor/three.module.min.js";
     }
 
     function selectAlbum(albumIndex, information = albumInformation) {
+        updateHoveredCharacterIntroduction(null);
         selectedCharacterIndex = -1;
         characterDetails.hidden = true;
         selectedIndex = selectedIndex === albumIndex ? -1 : albumIndex;
@@ -1324,21 +1329,40 @@ import * as THREE from "./vendor/three.module.min.js";
     function selectCharacter(characterIndex) {
         const character = desertCharacters[characterIndex];
         if (!character) return;
+        updateHoveredCharacterIntroduction(null);
         const switching = !characterDetails.hidden;
         selectedIndex = -1;
         selectedCharacterIndex = characterIndex;
         details.hidden = true;
-        characterImage.src = character.image;
-        characterTitle.textContent = character.name;
-        characterIntroductionJa.textContent = character.introductionJa;
-        characterIntroductionEn.textContent = character.introductionEn;
-        characterDetails.hidden = false;
+        showCharacterIntroduction(character);
         if (switching && !reduceMotion.matches) {
             characterDetails.animate(
                 [{ opacity: 0.72, transform: "translateY(5px)" }, { opacity: 1, transform: "translateY(0)" }],
                 { duration: 220, easing: "ease-out" }
             );
         }
+        updateCurrentAlbumButton();
+    }
+
+    function showCharacterIntroduction(character) {
+        characterImage.src = character.image;
+        characterTitle.textContent = character.name;
+        characterIntroductionJa.textContent = character.introductionJa;
+        characterIntroductionEn.textContent = character.introductionEn;
+        characterDetails.hidden = false;
+    }
+
+    function updateHoveredCharacterIntroduction(character) {
+        if (hoveredCharacterIntroduction === character) return;
+        hoveredCharacterIntroduction = character;
+        if (!character) {
+            characterDetails.hidden = true;
+            return;
+        }
+        selectedIndex = -1;
+        selectedCharacterIndex = -1;
+        details.hidden = true;
+        showCharacterIntroduction(character);
         updateCurrentAlbumButton();
     }
 
@@ -1522,16 +1546,22 @@ import * as THREE from "./vendor/three.module.min.js";
             const hit = raycaster.intersectObjects(hitTargets, false)[0];
             if (hit?.object.userData.characterIndex !== undefined) {
                 pinnedCelestialTarget = null;
+                updateHoveredCharacterIntroduction(null);
                 selectCharacter(hit.object.userData.characterIndex);
             } else if (hit?.object.userData.isCelestialTarget) {
                 if (event.pointerType === "touch") {
-                    pinnedCelestialTarget = pinnedCelestialTarget === hit.object ? null : hit.object;
+                    const isPinned = pinnedCelestialTarget === hit.object;
+                    pinnedCelestialTarget = isPinned ? null : hit.object;
+                    updateHoveredCharacterIntroduction(
+                        isPinned ? null : hit.object.userData.characterIntroduction || null
+                    );
                 }
             } else if (hit) {
                 pinnedCelestialTarget = null;
                 selectAlbum(hit.object.userData.albumIndex, albumInformation);
             } else if (event.pointerType === "touch") {
                 pinnedCelestialTarget = null;
+                updateHoveredCharacterIntroduction(null);
             }
         }, { signal: abortController.signal });
         canvas.addEventListener("pointercancel", () => { pointerDown = null; }, { signal: abortController.signal });
@@ -1554,6 +1584,7 @@ import * as THREE from "./vendor/three.module.min.js";
                         Math.cos(yawTarget - deltaX * 0.004)
                     );
                     pitchTarget = THREE.MathUtils.clamp(pitchTarget - deltaY * 0.003, -0.78, 0.78);
+                    updateHoveredCharacterIntroduction(null);
                     canvas.style.cursor = "grabbing";
                 }
                 pointerDown.lastX = event.clientX;
@@ -1587,11 +1618,17 @@ import * as THREE from "./vendor/three.module.min.js";
             if (!pointerDown) {
                 const hoveredObject = raycaster.intersectObjects(hoverTargets, false)[0]?.object;
                 hoveredCelestialTarget = hoveredObject?.userData.isCelestialTarget ? hoveredObject : null;
+                if (event.pointerType !== "touch") {
+                    updateHoveredCharacterIntroduction(hoveredObject?.userData.characterIntroduction || null);
+                }
                 canvas.style.cursor = hoveredObject ? "pointer" : "grab";
             }
         }, { signal: abortController.signal });
         canvas.addEventListener("pointerleave", event => {
-            if (event.pointerType !== "touch") hoveredCelestialTarget = null;
+            if (event.pointerType !== "touch") {
+                hoveredCelestialTarget = null;
+                updateHoveredCharacterIntroduction(null);
+            }
         }, { signal: abortController.signal });
         animationFrame = requestAnimationFrame(animate);
     }
