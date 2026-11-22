@@ -2164,6 +2164,23 @@ section h2 {
     font-size: 2rem;
 }
 
+.videos-page .video-promo-heading {
+    margin: 0 0 8px;
+    color: #d7d7d7;
+    font-size: 1rem;
+    letter-spacing: 0.08em;
+    text-align: left;
+}
+
+.videos-page .video-promo-description {
+    max-width: 700px;
+    margin: 0 0 20px;
+    color: #cfcfcf;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    text-align: left;
+}
+
 section p {
     max-width: 700px;
     color: #cfcfcf;
