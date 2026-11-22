@@ -159,7 +159,6 @@ import * as THREE from "./vendor/three.module.min.js";
     let selectedIndex = -1;
     let selectedCharacterIndex = -1;
     let pinnedCelestialTarget = null;
-    let hoveredCelestialTarget = null;
     let hoveredCharacterIntroduction = null;
     let scrollProgress = 0;
     let pointerDown = null;
@@ -836,64 +835,6 @@ import * as THREE from "./vendor/three.module.min.js";
         });
     }
 
-    function createCelestialLabel(name, position, width) {
-        const labelCanvas = document.createElement("canvas");
-        labelCanvas.width = 512;
-        labelCanvas.height = 112;
-        const context = labelCanvas.getContext("2d");
-        if (!context) {
-            console.error(`VISIONS could not prepare the "${name}" label.`);
-            return null;
-        }
-
-        const radius = 24;
-        context.beginPath();
-        context.moveTo(radius, 8);
-        context.lineTo(labelCanvas.width - radius, 8);
-        context.quadraticCurveTo(labelCanvas.width - 8, 8, labelCanvas.width - 8, radius);
-        context.lineTo(labelCanvas.width - 8, labelCanvas.height - radius);
-        context.quadraticCurveTo(
-            labelCanvas.width - 8,
-            labelCanvas.height - 8,
-            labelCanvas.width - radius,
-            labelCanvas.height - 8
-        );
-        context.lineTo(radius, labelCanvas.height - 8);
-        context.quadraticCurveTo(8, labelCanvas.height - 8, 8, labelCanvas.height - radius);
-        context.lineTo(8, radius);
-        context.quadraticCurveTo(8, 8, radius, 8);
-        context.closePath();
-        context.fillStyle = "rgba(7, 9, 12, .88)";
-        context.fill();
-        context.strokeStyle = "rgba(220, 231, 240, .55)";
-        context.lineWidth = 3;
-        context.stroke();
-        context.fillStyle = "#fff";
-        context.font = "600 48px Arial, Helvetica, sans-serif";
-        context.textAlign = "center";
-        context.textBaseline = "middle";
-        context.fillText(name, labelCanvas.width / 2, labelCanvas.height / 2);
-
-        const texture = new THREE.CanvasTexture(labelCanvas);
-        texture.colorSpace = THREE.SRGBColorSpace;
-        desertTextures.push(texture);
-        const label = new THREE.Sprite(new THREE.SpriteMaterial({
-            map: texture,
-            transparent: true,
-            opacity: 0,
-            depthWrite: false,
-            fog: false,
-            toneMapped: false
-        }));
-        label.position.copy(position);
-        label.scale.set(width, width * labelCanvas.height / labelCanvas.width, 1);
-        label.userData.isCelestialLabel = true;
-        label.userData.targetOpacity = 0;
-        scene.add(label);
-        sceneObjects.push(label);
-        return label;
-    }
-
     function addDesertMoon() {
         const image = new Image();
         image.onload = () => {
@@ -935,12 +876,7 @@ import * as THREE from "./vendor/three.module.min.js";
             moon.userData.characterIntroduction = celestialCharacterIntroductions.metalShogun;
             scene.add(moon);
             sceneObjects.push(moon);
-            const moonLabel = createCelestialLabel(
-                "Metal Shogun",
-                new THREE.Vector3(0, 25, 137),
-                13
-            );
-            if (moonLabel) celestialTargets.push({ object: moon, label: moonLabel });
+            celestialTargets.push(moon);
 
             const glowCanvas = document.createElement("canvas");
             glowCanvas.width = 256;
@@ -1018,12 +954,7 @@ import * as THREE from "./vendor/three.module.min.js";
             star.userData.characterIntroduction = celestialCharacterIntroductions.creator;
             scene.add(star);
             sceneObjects.push(star);
-            const starLabel = createCelestialLabel(
-                "Creator",
-                new THREE.Vector3(creatorStarPosition.x, creatorStarPosition.y + 4, creatorStarPosition.z),
-                9
-            );
-            if (starLabel) celestialTargets.push({ object: star, label: starLabel });
+            celestialTargets.push(star);
 
             const glowCanvas = document.createElement("canvas");
             glowCanvas.width = 128;
@@ -1265,14 +1196,6 @@ import * as THREE from "./vendor/three.module.min.js";
         if (endLogo) {
             endLogo.rotation.y = reduceMotion.matches ? 0 : Math.sin(time * 0.00018) * 0.12;
         }
-        const activeCelestialTarget = pinnedCelestialTarget || hoveredCelestialTarget;
-        celestialTargets.forEach(target => {
-            const label = target.label;
-            label.userData.targetOpacity = target.object === activeCelestialTarget ? 1 : 0;
-            const easing = reduceMotion.matches ? 1 : 0.18;
-            label.material.opacity += (label.userData.targetOpacity - label.material.opacity) * easing;
-            label.visible = label.material.opacity > 0.01 || label.userData.targetOpacity > 0;
-        });
         sceneObjects.forEach(object => {
             if (object.userData.isBillboard || object.userData.characterIndex !== undefined) {
                 object.quaternion.copy(camera.quaternion);
@@ -1542,7 +1465,7 @@ import * as THREE from "./vendor/three.module.min.js";
             hitTargets.length = 0;
             desertSprites.forEach(sprite => { if (sprite) hitTargets.push(sprite); });
             cubes.forEach(cube => { if (cube) hitTargets.push(cube); });
-            celestialTargets.forEach(target => hitTargets.push(target.object));
+            celestialTargets.forEach(target => hitTargets.push(target));
             raycaster.setFromCamera(pointer, camera);
             const hit = raycaster.intersectObjects(hitTargets, false)[0];
             if (hit?.object.userData.characterIndex !== undefined) {
@@ -1614,11 +1537,10 @@ import * as THREE from "./vendor/three.module.min.js";
                 -((event.clientY - rect.top) / rect.height) * 2 + 1
             );
             const hoverTargets = [...desertSprites.filter(Boolean), ...cubes.filter(Boolean)];
-            celestialTargets.forEach(target => hoverTargets.push(target.object));
+            celestialTargets.forEach(target => hoverTargets.push(target));
             raycaster.setFromCamera(pointer, camera);
             if (!pointerDown) {
                 const hoveredObject = raycaster.intersectObjects(hoverTargets, false)[0]?.object;
-                hoveredCelestialTarget = hoveredObject?.userData.isCelestialTarget ? hoveredObject : null;
                 if (event.pointerType !== "touch") {
                     updateHoveredCharacterIntroduction(hoveredObject?.userData.characterIntroduction || null);
                 }
@@ -1627,7 +1549,6 @@ import * as THREE from "./vendor/three.module.min.js";
         }, { signal: abortController.signal });
         canvas.addEventListener("pointerleave", event => {
             if (event.pointerType !== "touch") {
-                hoveredCelestialTarget = null;
                 updateHoveredCharacterIntroduction(null);
             }
         }, { signal: abortController.signal });
