@@ -1344,7 +1344,8 @@ import * as THREE from "./vendor/three.module.min.js";
         updateCurrentAlbumButton();
     }
 
-    function showCharacterIntroduction(character) {
+    function showCharacterIntroduction(character, circularImage = false) {
+        characterImage.classList.toggle("is-circular", circularImage);
         characterImage.src = character.image;
         characterTitle.textContent = character.name;
         characterIntroductionJa.textContent = character.introductionJa;
@@ -1362,7 +1363,7 @@ import * as THREE from "./vendor/three.module.min.js";
         selectedIndex = -1;
         selectedCharacterIndex = -1;
         details.hidden = true;
-        showCharacterIntroduction(character);
+        showCharacterIntroduction(character, true);
         updateCurrentAlbumButton();
     }
 
