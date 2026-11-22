@@ -16,14 +16,76 @@ import * as THREE from "./vendor/three.module.min.js";
         { title: "Mind Wall Resistance", image: "Mind Wall Resistance.jpg" }
     ];
     const desertCharacters = [
-        { name: "Corporate Warrior", image: "透過CW.PNG", x: -34, z: 50, height: 4.2 },
-        { name: "Raijin Girl", image: "透過RG.PNG", x: -7, z: 32, height: 4.4 },
-        { name: "Hard Rock OJISAN", image: "透過HROJI.PNG", x: 8, z: 45, height: 4.1 },
-        { name: "Cyborg Grandpa", image: "透過CGP.PNG", x: 37, z: 67, height: 4.5 },
-        { name: "Metal Messiah", image: "透過MM.PNG", x: 47, z: 93, height: 4.8 },
-        { name: "Chrome Man", image: "透過CM.PNG", x: 27, z: 119, height: 4.3 },
-        { name: "EMJ LADY", image: "透過EL.PNG", x: -13, z: 132, height: 4.2 },
-        { name: "Corporate Warrior & Corporate Warrior AMERICA", image: "透過CW2.PNG", x: -52, z: 112, height: 5 }
+        {
+            name: "Corporate Warrior",
+            image: "透過CW.PNG",
+            introductionJa: "EMJを象徴する存在。企業組織の中で権限と責任を与えられた中間管理職。変わりゆく社会の中で、自らの不満を胸にしまい、あらゆる方面から寄せられる不満を一手に引き受けながら、自らの責務を全うしようとするプロフェッショナル。First albumから継続的に登場。",
+            introductionEn: "An iconic figure of EMJ. A middle manager entrusted with authority and responsibility within a corporate organization. In a changing society, he keeps his own frustrations to himself while taking on complaints from all directions, striving to fulfill his duties as a true professional. He has appeared consistently since the first album.",
+            x: -34, z: 50, height: 4.2
+        },
+        {
+            name: "Raijin Girl",
+            image: "透過RG.PNG",
+            introductionJa: "雷神の血を引く一族の末裔。神の世界から人間界へ降臨したその血統を受け継ぐ。勇気に満ち、強い正義感を持つ女性。First albumに登場。",
+            introductionEn: "A descendant of a lineage connected to Raijin, the Japanese god of thunder. She carries the bloodline of those who descended from the divine realm into the human world. Courageous and driven by a strong sense of justice. She appears in the first album.",
+            x: -7, z: 32, height: 4.4
+        },
+        {
+            name: "Hard Rock OJISAN",
+            image: "透過HROJI.PNG",
+            introductionJa: "ハードロック全盛期の1980年代に20代を過ごした会社員。陽気で面倒見が良い。First albumに登場。",
+            introductionEn: "A company employee who spent his twenties during the golden age of hard rock in the 1980s. Cheerful and caring, he is always ready to lend a helping hand. He appears in the first album.",
+            x: 8, z: 45, height: 4.1
+        },
+        {
+            name: "Cyborg Grandpa",
+            image: "透過CGP.PNG",
+            introductionJa: "超高齢化社会において、科学の力を借りながらなお働き続けるおじいさん。",
+            introductionEn: "An elderly man who continues to work in an aging society, relying on the power of science to keep going.",
+            x: 37, z: 67, height: 4.5
+        },
+        {
+            name: "Metal Messiah",
+            image: "透過MM.PNG",
+            introductionJa: "人類が抱える課題の解決に向け、その鍵を握る救世主。6th albumのジャケットに登場。",
+            introductionEn: "A messianic figure holding the key to solving humanity's challenges. Featured on the cover of the sixth album.",
+            x: 47, z: 93, height: 4.8
+        },
+        {
+            name: "Chrome Man",
+            image: "透過CM.PNG",
+            introductionJa: "7th albumの主役。大衆心理を映し出す鏡として誕生した存在。",
+            introductionEn: "The central figure of the seventh album. Born as a mirror reflecting the psychology of the masses.",
+            x: 27, z: 119, height: 4.3
+        },
+        {
+            name: "EMJ LADY",
+            image: "透過EL.PNG",
+            introductionJa: "Eighty's Mind Judgementの熱狂的なファンであり、EMJの広告塔。",
+            introductionEn: "A devoted fan of Eighty's Mind Judgement and its promotional figure.",
+            x: -13, z: 132, height: 4.2
+        },
+        {
+            name: "Corporate Warrior & Corporate Warrior AMERICA",
+            image: "透過CW2.PNG",
+            introductionJa: "日米のCorporate Warriorが共演。国境を越えて、Corporate Warriorの精神が交差する。",
+            introductionEn: "A collaboration between the Japanese and American Corporate Warriors. Across borders, their shared spirit comes together.",
+            x: -52, z: 112, height: 5
+        },
+        {
+            name: "Metal Shogun",
+            image: "profile-artwork.JPG",
+            introductionJa: "Eighty's Mind Judgement誕生の原点となった記念すべき作品に登場。将軍の立場にありながら、民の声に真摯に耳を傾け、自ら先頭に立って行動するリーダー。",
+            introductionEn: "Featured in the landmark work that marked the origin of Eighty's Mind Judgement. Despite his position as a shogun, he listens sincerely to the voices of the people and leads by example, taking action at the forefront.",
+            x: -42, z: 145, height: 4.8
+        },
+        {
+            name: "Creator",
+            image: "Creator.PNG",
+            introductionJa: "Eighty's Mind Judgementを生み出した創作者。会社員として働く傍ら、ヘヴィメタルを愛し、創作活動を続けている。心に響いた言葉を集めることも趣味のひとつ。",
+            introductionEn: "The creator of Eighty's Mind Judgement. A working professional who continues to pursue creative endeavors while embracing a passion for heavy metal. Collecting words that resonate deeply is also one of his hobbies.",
+            x: 42, z: 145, height: 4.8
+        }
     ];
     const stage = document.querySelector(".visions-stage");
     const track = document.querySelector(".visions-scroll-track");
@@ -45,6 +107,8 @@ import * as THREE from "./vendor/three.module.min.js";
     const characterDetails = document.querySelector(".visions-character-details");
     const characterImage = document.querySelector(".visions-character-image");
     const characterTitle = document.querySelector(".visions-character-title");
+    const characterIntroductionJa = document.querySelector(".visions-character-introduction-ja");
+    const characterIntroductionEn = document.querySelector(".visions-character-introduction-en");
     const fallback = document.querySelector(".visions-fallback");
     const fallbackGrid = document.querySelector(".visions-fallback-grid");
     const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
@@ -59,6 +123,7 @@ import * as THREE from "./vendor/three.module.min.js";
     const cubes = [];
     const desertSprites = [];
     const desertTextures = [];
+    const celestialTargets = [];
     const endOfSpaceZ = -120;
     const cameraEndZ = endOfSpaceZ + 12;
     const narrowViewport = window.innerWidth <= 700;
@@ -93,6 +158,8 @@ import * as THREE from "./vendor/three.module.min.js";
     let animationFrame = 0;
     let selectedIndex = -1;
     let selectedCharacterIndex = -1;
+    let pinnedCelestialTarget = null;
+    let hoveredCelestialTarget = null;
     let scrollProgress = 0;
     let pointerDown = null;
     let yawTarget = 0;
@@ -768,6 +835,64 @@ import * as THREE from "./vendor/three.module.min.js";
         });
     }
 
+    function createCelestialLabel(name, position, width) {
+        const labelCanvas = document.createElement("canvas");
+        labelCanvas.width = 512;
+        labelCanvas.height = 112;
+        const context = labelCanvas.getContext("2d");
+        if (!context) {
+            console.error(`VISIONS could not prepare the "${name}" label.`);
+            return null;
+        }
+
+        const radius = 24;
+        context.beginPath();
+        context.moveTo(radius, 8);
+        context.lineTo(labelCanvas.width - radius, 8);
+        context.quadraticCurveTo(labelCanvas.width - 8, 8, labelCanvas.width - 8, radius);
+        context.lineTo(labelCanvas.width - 8, labelCanvas.height - radius);
+        context.quadraticCurveTo(
+            labelCanvas.width - 8,
+            labelCanvas.height - 8,
+            labelCanvas.width - radius,
+            labelCanvas.height - 8
+        );
+        context.lineTo(radius, labelCanvas.height - 8);
+        context.quadraticCurveTo(8, labelCanvas.height - 8, 8, labelCanvas.height - radius);
+        context.lineTo(8, radius);
+        context.quadraticCurveTo(8, 8, radius, 8);
+        context.closePath();
+        context.fillStyle = "rgba(7, 9, 12, .88)";
+        context.fill();
+        context.strokeStyle = "rgba(220, 231, 240, .55)";
+        context.lineWidth = 3;
+        context.stroke();
+        context.fillStyle = "#fff";
+        context.font = "600 48px Arial, Helvetica, sans-serif";
+        context.textAlign = "center";
+        context.textBaseline = "middle";
+        context.fillText(name, labelCanvas.width / 2, labelCanvas.height / 2);
+
+        const texture = new THREE.CanvasTexture(labelCanvas);
+        texture.colorSpace = THREE.SRGBColorSpace;
+        desertTextures.push(texture);
+        const label = new THREE.Sprite(new THREE.SpriteMaterial({
+            map: texture,
+            transparent: true,
+            opacity: 0,
+            depthWrite: false,
+            fog: false,
+            toneMapped: false
+        }));
+        label.position.copy(position);
+        label.scale.set(width, width * labelCanvas.height / labelCanvas.width, 1);
+        label.userData.isCelestialLabel = true;
+        label.userData.targetOpacity = 0;
+        scene.add(label);
+        sceneObjects.push(label);
+        return label;
+    }
+
     function addDesertMoon() {
         const image = new Image();
         image.onload = () => {
@@ -804,9 +929,16 @@ import * as THREE from "./vendor/three.module.min.js";
                 })
             );
             moon.position.set(0, 15, 137);
-            moon.userData.isDesertMoon = true;
+            moon.userData.isBillboard = true;
+            moon.userData.isCelestialTarget = true;
             scene.add(moon);
             sceneObjects.push(moon);
+            const moonLabel = createCelestialLabel(
+                "Metal Shogun",
+                new THREE.Vector3(0, 25, 137),
+                13
+            );
+            if (moonLabel) celestialTargets.push({ object: moon, label: moonLabel });
 
             const glowCanvas = document.createElement("canvas");
             glowCanvas.width = 256;
@@ -837,6 +969,92 @@ import * as THREE from "./vendor/three.module.min.js";
             console.error("VISIONS could not load the desert moon artwork profile-artwork.JPG.", error);
         };
         image.src = "profile-artwork.JPG";
+    }
+
+    function addCreatorStar() {
+        const image = new Image();
+        image.onload = () => {
+            if (disposed || !scene) return;
+            const side = Math.min(image.naturalWidth, image.naturalHeight);
+            const size = Math.min(512, side);
+            const artwork = document.createElement("canvas");
+            artwork.width = size;
+            artwork.height = size;
+            const context = artwork.getContext("2d");
+            if (!context) {
+                console.error("VISIONS could not prepare the Creator star artwork.");
+                return;
+            }
+            context.drawImage(
+                image,
+                (image.naturalWidth - side) / 2,
+                (image.naturalHeight - side) / 2,
+                side,
+                side,
+                0,
+                0,
+                size,
+                size
+            );
+            const texture = new THREE.CanvasTexture(artwork);
+            texture.colorSpace = THREE.SRGBColorSpace;
+            texture.anisotropy = textureAnisotropy;
+            desertTextures.push(texture);
+            const star = new THREE.Mesh(
+                new THREE.CircleGeometry(2.7, 64),
+                new THREE.MeshBasicMaterial({
+                    map: texture,
+                    color: 0xffffff,
+                    fog: false,
+                    toneMapped: false
+                })
+            );
+            star.position.set(-16, 33, 158);
+            star.userData.isBillboard = true;
+            star.userData.isCelestialTarget = true;
+            scene.add(star);
+            sceneObjects.push(star);
+            const starLabel = createCelestialLabel(
+                "Creator",
+                new THREE.Vector3(-16, 37, 158),
+                9
+            );
+            if (starLabel) celestialTargets.push({ object: star, label: starLabel });
+
+            const glowCanvas = document.createElement("canvas");
+            glowCanvas.width = 128;
+            glowCanvas.height = 128;
+            const glowContext = glowCanvas.getContext("2d");
+            if (!glowContext) {
+                console.error("VISIONS could not prepare the Creator star glow.");
+                return;
+            }
+            const glow = glowContext.createRadialGradient(64, 64, 8, 64, 64, 64);
+            glow.addColorStop(0, "rgba(220, 231, 255, .4)");
+            glow.addColorStop(1, "rgba(153, 175, 215, 0)");
+            glowContext.fillStyle = glow;
+            glowContext.fillRect(0, 0, 128, 128);
+            const glowTexture = new THREE.CanvasTexture(glowCanvas);
+            glowTexture.colorSpace = THREE.SRGBColorSpace;
+            desertTextures.push(glowTexture);
+            const glowSprite = new THREE.Sprite(new THREE.SpriteMaterial({
+                map: glowTexture,
+                blending: THREE.AdditiveBlending,
+                transparent: true,
+                opacity: 0.7,
+                depthWrite: false,
+                fog: false,
+                toneMapped: false
+            }));
+            glowSprite.position.set(-16, 33, 158.5);
+            glowSprite.scale.set(8, 8, 1);
+            scene.add(glowSprite);
+            sceneObjects.push(glowSprite);
+        };
+        image.onerror = error => {
+            console.error("VISIONS could not load the Creator star artwork Creator.PNG.", error);
+        };
+        image.src = "Creator.PNG";
     }
 
     function updateWorldLabel() {
@@ -1043,8 +1261,16 @@ import * as THREE from "./vendor/three.module.min.js";
         if (endLogo) {
             endLogo.rotation.y = reduceMotion.matches ? 0 : Math.sin(time * 0.00018) * 0.12;
         }
+        const activeCelestialTarget = pinnedCelestialTarget || hoveredCelestialTarget;
+        celestialTargets.forEach(target => {
+            const label = target.label;
+            label.userData.targetOpacity = target.object === activeCelestialTarget ? 1 : 0;
+            const easing = reduceMotion.matches ? 1 : 0.18;
+            label.material.opacity += (label.userData.targetOpacity - label.material.opacity) * easing;
+            label.visible = label.material.opacity > 0.01 || label.userData.targetOpacity > 0;
+        });
         sceneObjects.forEach(object => {
-            if (object.userData.isDesertMoon || object.userData.characterIndex !== undefined) {
+            if (object.userData.isBillboard || object.userData.characterIndex !== undefined) {
                 object.quaternion.copy(camera.quaternion);
             }
         });
@@ -1104,6 +1330,8 @@ import * as THREE from "./vendor/three.module.min.js";
         details.hidden = true;
         characterImage.src = character.image;
         characterTitle.textContent = character.name;
+        characterIntroductionJa.textContent = character.introductionJa;
+        characterIntroductionEn.textContent = character.introductionEn;
         characterDetails.hidden = false;
         if (switching && !reduceMotion.matches) {
             characterDetails.animate(
@@ -1178,6 +1406,7 @@ import * as THREE from "./vendor/three.module.min.js";
         addDesertStars();
         addDesertCharacters();
         addDesertMoon();
+        addCreatorStar();
         addEndLogo();
 
         const resize = () => {
@@ -1288,12 +1517,21 @@ import * as THREE from "./vendor/three.module.min.js";
             hitTargets.length = 0;
             desertSprites.forEach(sprite => { if (sprite) hitTargets.push(sprite); });
             cubes.forEach(cube => { if (cube) hitTargets.push(cube); });
+            celestialTargets.forEach(target => hitTargets.push(target.object));
             raycaster.setFromCamera(pointer, camera);
             const hit = raycaster.intersectObjects(hitTargets, false)[0];
             if (hit?.object.userData.characterIndex !== undefined) {
+                pinnedCelestialTarget = null;
                 selectCharacter(hit.object.userData.characterIndex);
+            } else if (hit?.object.userData.isCelestialTarget) {
+                if (event.pointerType === "touch") {
+                    pinnedCelestialTarget = pinnedCelestialTarget === hit.object ? null : hit.object;
+                }
             } else if (hit) {
+                pinnedCelestialTarget = null;
                 selectAlbum(hit.object.userData.albumIndex, albumInformation);
+            } else if (event.pointerType === "touch") {
+                pinnedCelestialTarget = null;
             }
         }, { signal: abortController.signal });
         canvas.addEventListener("pointercancel", () => { pointerDown = null; }, { signal: abortController.signal });
@@ -1344,10 +1582,16 @@ import * as THREE from "./vendor/three.module.min.js";
                 -((event.clientY - rect.top) / rect.height) * 2 + 1
             );
             const hoverTargets = [...desertSprites.filter(Boolean), ...cubes.filter(Boolean)];
+            celestialTargets.forEach(target => hoverTargets.push(target.object));
             raycaster.setFromCamera(pointer, camera);
             if (!pointerDown) {
-                canvas.style.cursor = raycaster.intersectObjects(hoverTargets, false).length ? "pointer" : "grab";
+                const hoveredObject = raycaster.intersectObjects(hoverTargets, false)[0]?.object;
+                hoveredCelestialTarget = hoveredObject?.userData.isCelestialTarget ? hoveredObject : null;
+                canvas.style.cursor = hoveredObject ? "pointer" : "grab";
             }
+        }, { signal: abortController.signal });
+        canvas.addEventListener("pointerleave", event => {
+            if (event.pointerType !== "touch") hoveredCelestialTarget = null;
         }, { signal: abortController.signal });
         animationFrame = requestAnimationFrame(animate);
     }
