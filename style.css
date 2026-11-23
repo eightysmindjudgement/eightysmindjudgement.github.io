@@ -3522,11 +3522,13 @@ header {
     width: min(860px, calc(100% - 40px));
     margin: 0 auto;
     padding: 34px 0 64px;
+    text-align: left;
 }
 
 .blog-list-item {
     padding: 26px 0 30px;
     border-bottom: 1px solid rgba(242, 242, 242, 0.28);
+    text-align: left;
 }
 
 .blog-list-item:first-child {
@@ -3539,6 +3541,7 @@ header {
     color: #b9b9b9;
     font-size: 0.82rem;
     letter-spacing: 0.12em;
+    text-align: left;
 }
 
 .blog-category {
@@ -3547,12 +3550,14 @@ header {
     font-size: 0.78rem;
     font-weight: bold;
     letter-spacing: 0.12em;
+    text-align: left;
 }
 
 .blog-list-item h2 {
     margin: 4px 0 10px;
     font-size: clamp(1.25rem, 3vw, 1.65rem);
     line-height: 1.4;
+    text-align: left;
 }
 
 .blog-list-item h2 a,
@@ -3591,6 +3596,7 @@ header {
     margin: 10px 0 0;
     font-size: clamp(1.7rem, 5vw, 2.5rem);
     line-height: 1.35;
+    text-align: left;
 }
 
 .blog-article-body {
