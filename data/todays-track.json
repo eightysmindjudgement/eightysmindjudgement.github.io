@@ -1,6 +1,6 @@
 {
   "channelId": "UChh-9Ik4sCslLBSzaKTD7Sg",
-  "updatedAt": "2026-11-24T02:07:29.225Z",
+  "updatedAt": "2026-11-24T23:50:42.599Z",
   "videos": [
     {
       "videoId": "_x22SWqkM4U",
@@ -1137,6 +1137,13 @@
       "watchUrl": "https://www.youtube.com/watch?v=UntKbvuCV4Y"
     },
     {
+      "videoId": "UOli0Icctz4",
+      "title": "[Full088] Ringelmann Warning / by Eighty's Mind Judgement (EMJ) / Heavy Metal",
+      "thumbnailUrl": "https://i.ytimg.com/vi/UOli0Icctz4/maxresdefault.jpg",
+      "publishedAt": "2026-11-24T13:00:09Z",
+      "watchUrl": "https://www.youtube.com/watch?v=UOli0Icctz4"
+    },
+    {
       "videoId": "uuly0wwr21I",
       "title": "[Full041] Clash of Justice (Instrumental) / by Eighty's Mind Judgement (EMJ)/ Heavy Metal",
       "thumbnailUrl": "https://i.ytimg.com/vi/uuly0wwr21I/maxresdefault.jpg",
@@ -1362,11 +1369,11 @@
     }
   ],
   "dailyTrack": {
-    "date": "2026-11-24",
-    "videoId": "4Ir1BKNUkcE",
-    "title": "[Full065] Still We Choose / by Eighty's Mind Judgement (EMJ) / Heavy Metal",
-    "thumbnailUrl": "https://i.ytimg.com/vi/4Ir1BKNUkcE/maxresdefault.jpg",
-    "publishedAt": "2026-06-16T13:00:09Z",
-    "watchUrl": "https://www.youtube.com/watch?v=4Ir1BKNUkcE"
+    "date": "2026-11-25",
+    "videoId": "uulY4iYU4OY",
+    "title": "[Clip]Selfless Choice / by Eighty's Mind Judgement (EMJ)",
+    "thumbnailUrl": "https://i.ytimg.com/vi/uulY4iYU4OY/maxresdefault.jpg",
+    "publishedAt": "2026-01-16T12:31:29Z",
+    "watchUrl": "https://www.youtube.com/watch?v=uulY4iYU4OY"
   }
 }
