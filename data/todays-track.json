@@ -1,6 +1,6 @@
 {
   "channelId": "UChh-9Ik4sCslLBSzaKTD7Sg",
-  "updatedAt": "2026-11-25T23:33:50.494Z",
+  "updatedAt": "2026-11-26T23:43:58.401Z",
   "videos": [
     {
       "videoId": "_x22SWqkM4U",
@@ -1186,6 +1186,13 @@
       "watchUrl": "https://www.youtube.com/watch?v=VuNoZ1AwvLo"
     },
     {
+      "videoId": "vyoWew4G66E",
+      "title": "[Clip] Break the Illusion / by Eighty's Mind Judgement (EMJ) / Heavy Metal",
+      "thumbnailUrl": "https://i.ytimg.com/vi/vyoWew4G66E/maxresdefault.jpg",
+      "publishedAt": "2026-11-26T12:30:09Z",
+      "watchUrl": "https://www.youtube.com/watch?v=vyoWew4G66E"
+    },
+    {
       "videoId": "w-hnqtd1MYc",
       "title": "[Full085] Replaceable No More / by Eighty's Mind Judgement (EMJ) / Heavy Metal",
       "thumbnailUrl": "https://i.ytimg.com/vi/w-hnqtd1MYc/maxresdefault.jpg",
@@ -1369,11 +1376,11 @@
     }
   ],
   "dailyTrack": {
-    "date": "2026-11-26",
-    "videoId": "y861V426y3o",
-    "title": "[Full034] Stand Down Tonight / by Eighty's Mind Judgement (EMJ)/ Heavy Metal",
-    "thumbnailUrl": "https://i.ytimg.com/vi/y861V426y3o/maxresdefault.jpg",
-    "publishedAt": "2026-01-11T12:31:31Z",
-    "watchUrl": "https://www.youtube.com/watch?v=y861V426y3o"
+    "date": "2026-11-27",
+    "videoId": "20FhtsW3Mjk",
+    "title": "[Full025] Invisible Walls / by Eighty's Mind Judgement (EMJ)/ Heavy Metal",
+    "thumbnailUrl": "https://i.ytimg.com/vi/20FhtsW3Mjk/maxresdefault.jpg",
+    "publishedAt": "2025-12-24T12:30:02Z",
+    "watchUrl": "https://www.youtube.com/watch?v=20FhtsW3Mjk"
   }
 }
