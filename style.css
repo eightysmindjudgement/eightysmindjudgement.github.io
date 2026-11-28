@@ -255,8 +255,6 @@ body.site-menu-ready > nav:not(.digital-philosophy-nav).is-open { transform: tra
 body.site-menu-ready > nav:not(.digital-philosophy-nav) a { display: block; padding: 12px 4px; border-bottom: 1px solid #333; font-size: .9rem; }
 body.site-menu-ready > nav:not(.digital-philosophy-nav) > a { opacity: 0; transform: translateX(-8px); transition: opacity .22s ease, transform .22s ease; }
 body.site-menu-ready > nav:not(.digital-philosophy-nav).is-open > a { opacity: 1; transform: translateX(0); transition-delay: .08s; }
-body.site-menu-ready > nav:not(.digital-philosophy-nav) .site-menu-close { position: absolute; top: 16px; right: 18px; width: 42px; height: 42px; border: 0; background: transparent; color: #fff; font-size: 2rem; cursor: pointer; }
-
 .site-games-group {
     background: #111;
     border-bottom: 1px solid #333;

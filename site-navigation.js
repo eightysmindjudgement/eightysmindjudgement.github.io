@@ -44,16 +44,6 @@
         document.body.insertBefore(backdrop, menu);
     }
 
-    let close = menu.querySelector('.site-menu-close');
-    if (!close) {
-        close = document.createElement('button');
-        close.className = 'site-menu-close';
-        close.type = 'button';
-        menu.prepend(close);
-    }
-    close.setAttribute('aria-label', 'Close menu');
-    close.textContent = String.fromCharCode(0x00D7);
-
     const gamesLink = [...menu.querySelectorAll('a')].find(link =>
         /(^|\/)games\.html(?:[?#]|$)/.test(link.getAttribute('href') || '')
     );
@@ -115,7 +105,7 @@
     function openMenu() {
         clearTimeout(closeTimer);
         if (openFrame !== null) cancelAnimationFrame(openFrame);
-        returnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : toggle;
+        returnFocus = toggle;
         backdrop.hidden = false;
         menu.inert = false;
         menu.setAttribute('aria-hidden', 'false');
@@ -126,7 +116,6 @@
             openFrame = null;
             backdrop.classList.add('is-visible');
             menu.classList.add('is-open');
-            close.focus();
         });
     }
 
@@ -152,7 +141,6 @@
         if (toggle.getAttribute('aria-expanded') === 'true') closeMenu();
         else openMenu();
     });
-    close.addEventListener('click', () => closeMenu());
     backdrop.addEventListener('click', () => closeMenu());
     links.forEach(link => link.addEventListener('click', () => closeMenu(false)));
 
@@ -162,9 +150,8 @@
             event.preventDefault();
             closeMenu();
         } else if (event.key === 'Tab') {
-            const focusable = [...menu.querySelectorAll('button:not(.site-menu-close), a[href]')]
+            const focusable = [...menu.querySelectorAll('button, a[href]'), toggle]
                 .filter(element => !element.closest('[inert]') && !element.hasAttribute('disabled'));
-            focusable.unshift(close);
             const first = focusable[0];
             const last = focusable[focusable.length - 1];
             if (event.shiftKey && document.activeElement === first) {

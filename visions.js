@@ -965,8 +965,9 @@ import * as THREE from "./vendor/three.module.min.js";
                 return;
             }
             const glow = glowContext.createRadialGradient(64, 64, 8, 64, 64, 64);
-            glow.addColorStop(0, "rgba(188, 199, 220, .58)");
-            glow.addColorStop(.55, "rgba(143, 156, 181, .28)");
+            glow.addColorStop(0, "rgba(214, 222, 238, .72)");
+            glow.addColorStop(.45, "rgba(196, 206, 226, .42)");
+            glow.addColorStop(.72, "rgba(154, 168, 193, .20)");
             glow.addColorStop(1, "rgba(112, 126, 150, 0)");
             glowContext.fillStyle = glow;
             glowContext.fillRect(0, 0, 128, 128);
@@ -977,13 +978,13 @@ import * as THREE from "./vendor/three.module.min.js";
                 map: glowTexture,
                 blending: THREE.AdditiveBlending,
                 transparent: true,
-                opacity: 0.68,
+                opacity: 0.78,
                 depthWrite: false,
                 fog: false,
                 toneMapped: false
             }));
             glowSprite.position.set(creatorStarPosition.x, creatorStarPosition.y, creatorStarPosition.z + 0.5);
-            glowSprite.scale.set(8, 8, 1);
+            glowSprite.scale.set(11, 11, 1);
             scene.add(glowSprite);
             sceneObjects.push(glowSprite);
         };
