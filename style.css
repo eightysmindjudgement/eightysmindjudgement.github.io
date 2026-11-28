@@ -248,11 +248,13 @@ body.site-menu-ready > nav:not(.digital-philosophy-nav) {
     box-shadow: 12px 0 36px rgba(0,0,0,.35);
     transform: translateX(-105%);
     visibility: hidden;
-    transition: transform .26s ease, visibility .26s;
+    transition: transform .3s ease, visibility .3s;
 }
 
 body.site-menu-ready > nav:not(.digital-philosophy-nav).is-open { transform: translateX(0); visibility: visible; }
 body.site-menu-ready > nav:not(.digital-philosophy-nav) a { display: block; padding: 12px 4px; border-bottom: 1px solid #333; font-size: .9rem; }
+body.site-menu-ready > nav:not(.digital-philosophy-nav) > a { opacity: 0; transform: translateX(-8px); transition: opacity .22s ease, transform .22s ease; }
+body.site-menu-ready > nav:not(.digital-philosophy-nav).is-open > a { opacity: 1; transform: translateX(0); transition-delay: .08s; }
 body.site-menu-ready > nav:not(.digital-philosophy-nav) .site-menu-close { position: absolute; top: 16px; right: 18px; width: 42px; height: 42px; border: 0; background: transparent; color: #fff; font-size: 2rem; cursor: pointer; }
 
 .site-games-group {
@@ -336,17 +338,24 @@ body.site-menu-ready > nav:not(.digital-philosophy-nav) .site-games-index {
     outline-offset: -2px;
 }
 
-.site-menu-toggle { position: fixed; top: 18px; left: 20px; z-index: 1202; display: flex; width: 46px; height: 46px; flex-direction: column; justify-content: center; align-items: center; gap: 6px; padding: 10px; border: 1px solid rgba(255,255,255,.45); border-radius: 3px; background: rgba(10,10,10,.72); cursor: pointer; }
-.site-menu-toggle span { display: block; width: 22px; height: 2px; background: #fff; }
+.site-menu-toggle { position: fixed; top: 18px; left: 20px; z-index: 1202; display: flex; width: 46px; height: 46px; flex-direction: column; justify-content: center; align-items: center; padding: 10px; border: 1px solid rgba(255,255,255,.45); border-radius: 3px; background: rgba(10,10,10,.72); cursor: pointer; }
+.site-menu-toggle span { position: absolute; top: 50%; left: 50%; display: block; width: 22px; height: 2px; background: #fff; transform: translate(-50%, -50%); transition: transform .3s ease, opacity .16s ease; }
+.site-menu-toggle span:first-child { transform: translate(-50%, calc(-50% - 8px)); }
+.site-menu-toggle span:last-child { transform: translate(-50%, calc(-50% + 8px)); }
+.site-menu-toggle[aria-expanded="true"] span:first-child { transform: translate(-50%, -50%) rotate(45deg); }
+.site-menu-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.site-menu-toggle[aria-expanded="true"] span:last-child { transform: translate(-50%, -50%) rotate(-45deg); }
 @media (max-width: 700px) { .site-menu-toggle { right: 20px; left: auto; } }
-.site-menu-backdrop { position: fixed; inset: 0; z-index: 1200; background: rgba(0,0,0,.58); opacity: 0; transition: opacity .24s ease; }
+.site-menu-backdrop { position: fixed; inset: 0; z-index: 1200; background: rgba(0,0,0,.58); opacity: 0; transition: opacity .3s ease; }
 .site-menu-backdrop.is-visible { opacity: 1; }
 body.site-menu-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
     body.site-menu-ready > nav:not(.digital-philosophy-nav),
+    body.site-menu-ready > nav:not(.digital-philosophy-nav) > a,
+    .site-menu-toggle span,
     .site-menu-backdrop,
     .site-games-submenu,
-    .site-games-submenu-content { transition-duration: .01ms; }
+    .site-games-submenu-content { transition-duration: .01ms; transition-delay: 0s; }
 }
 
 nav {
@@ -3599,6 +3608,18 @@ header {
     }
 
     .links-page .service-link.is-spinning > span {
+        backface-visibility: hidden;
+        animation: links-card-counter-rotation 1.35s cubic-bezier(0.4, 0, 0.2, 1) both;
+    }
+}
+
+@media (hover: none) and (pointer: coarse) and (prefers-reduced-motion: no-preference) {
+    .links-page .service-link:active {
+        transform-style: preserve-3d;
+        animation: links-card-flip 1.35s cubic-bezier(0.4, 0, 0.2, 1) both;
+    }
+
+    .links-page .service-link:active > span {
         backface-visibility: hidden;
         animation: links-card-counter-rotation 1.35s cubic-bezier(0.4, 0, 0.2, 1) both;
     }

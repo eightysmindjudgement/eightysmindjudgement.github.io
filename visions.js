@@ -965,8 +965,8 @@ import * as THREE from "./vendor/three.module.min.js";
                 return;
             }
             const glow = glowContext.createRadialGradient(64, 64, 8, 64, 64, 64);
-            glow.addColorStop(0, "rgba(188, 199, 220, .38)");
-            glow.addColorStop(.55, "rgba(143, 156, 181, .18)");
+            glow.addColorStop(0, "rgba(188, 199, 220, .58)");
+            glow.addColorStop(.55, "rgba(143, 156, 181, .28)");
             glow.addColorStop(1, "rgba(112, 126, 150, 0)");
             glowContext.fillStyle = glow;
             glowContext.fillRect(0, 0, 128, 128);
@@ -977,7 +977,7 @@ import * as THREE from "./vendor/three.module.min.js";
                 map: glowTexture,
                 blending: THREE.AdditiveBlending,
                 transparent: true,
-                opacity: 0.48,
+                opacity: 0.68,
                 depthWrite: false,
                 fog: false,
                 toneMapped: false
