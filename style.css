@@ -352,6 +352,7 @@ body.site-menu-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
     body.site-menu-ready > nav:not(.digital-philosophy-nav),
     body.site-menu-ready > nav:not(.digital-philosophy-nav) > a,
+    body.site-menu-ready > nav:not(.digital-philosophy-nav).is-open > a,
     .site-menu-toggle span,
     .site-menu-backdrop,
     .site-games-submenu,

@@ -110,16 +110,20 @@
     const links = [...menu.querySelectorAll('a')];
     let returnFocus = toggle;
     let closeTimer;
+    let openFrame = null;
 
     function openMenu() {
         clearTimeout(closeTimer);
+        if (openFrame !== null) cancelAnimationFrame(openFrame);
         returnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : toggle;
         backdrop.hidden = false;
         menu.inert = false;
         menu.setAttribute('aria-hidden', 'false');
         document.body.classList.add('site-menu-open');
         toggle.setAttribute('aria-expanded', 'true');
-        requestAnimationFrame(() => {
+        toggle.setAttribute('aria-label', 'Close menu');
+        openFrame = requestAnimationFrame(() => {
+            openFrame = null;
             backdrop.classList.add('is-visible');
             menu.classList.add('is-open');
             close.focus();
@@ -127,17 +131,27 @@
     }
 
     function closeMenu(restoreFocus = true) {
+        const openingFramePending = openFrame !== null;
+        if (openingFramePending) {
+            cancelAnimationFrame(openFrame);
+            openFrame = null;
+        }
         menu.classList.remove('is-open');
         backdrop.classList.remove('is-visible');
         toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-label', 'Open menu');
         menu.setAttribute('aria-hidden', 'true');
         menu.inert = true;
         document.body.classList.remove('site-menu-open');
-        closeTimer = setTimeout(() => { backdrop.hidden = true; }, 270);
+        if (openingFramePending) backdrop.hidden = true;
+        else closeTimer = setTimeout(() => { backdrop.hidden = true; }, 310);
         if (restoreFocus) returnFocus.focus();
     }
 
-    toggle.addEventListener('click', openMenu);
+    toggle.addEventListener('click', () => {
+        if (toggle.getAttribute('aria-expanded') === 'true') closeMenu();
+        else openMenu();
+    });
     close.addEventListener('click', () => closeMenu());
     backdrop.addEventListener('click', () => closeMenu());
     links.forEach(link => link.addEventListener('click', () => closeMenu(false)));
