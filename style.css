@@ -3593,21 +3593,30 @@ header {
 }
 
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-    .links-page .service-link {
-        transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.28s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.28s ease;
+    .links-page .service-link.is-spinning {
+        transform-style: preserve-3d;
+        animation: links-card-flip 1.35s cubic-bezier(0.4, 0, 0.2, 1) both;
     }
 
-    .links-page .service-link:hover {
-        transform: perspective(900px) translate3d(0, -3px, 0) rotateX(var(--service-card-tilt-x, 0deg)) rotateY(var(--service-card-tilt-y, 0deg));
-        box-shadow: 0 10px 22px rgba(0, 0, 0, 0.34);
+    .links-page .service-link.is-spinning > span {
+        backface-visibility: hidden;
+        animation: links-card-counter-rotation 1.35s cubic-bezier(0.4, 0, 0.2, 1) both;
     }
+}
 
-    .links-page .service-logo {
-        transition: transform 0.28s cubic-bezier(0.2, 0.7, 0.2, 1);
-    }
+@keyframes links-card-flip {
+    from { transform: perspective(900px) rotateY(0deg); }
+    to { transform: perspective(900px) rotateY(360deg); }
+}
 
-    .links-page .service-link:hover .service-logo {
-        transform: scale(1.04);
+@keyframes links-card-counter-rotation {
+    from { transform: rotateY(0deg); }
+    to { transform: rotateY(-360deg); }
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: reduce) {
+    .links-page .service-link.is-spinning {
+        animation: none;
     }
 }
 

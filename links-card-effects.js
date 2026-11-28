@@ -1,21 +1,41 @@
 (() => {
     const pointerMotion = matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
-    if (!pointerMotion.matches) return;
+    const cards = document.querySelectorAll('.links-page .service-link');
+    if (!cards.length) return;
 
-    document.querySelectorAll('.links-page .service-link').forEach((card) => {
-        card.addEventListener('pointermove', (event) => {
-            if (event.pointerType !== 'mouse') return;
+    cards.forEach((card) => {
+        card.addEventListener('pointerenter', (event) => {
+            if (!pointerMotion.matches || event.pointerType !== 'mouse') return;
 
-            const bounds = card.getBoundingClientRect();
-            const x = (event.clientX - bounds.left) / bounds.width - 0.5;
-            const y = (event.clientY - bounds.top) / bounds.height - 0.5;
-            card.style.setProperty('--service-card-tilt-x', `${-y * 5}deg`);
-            card.style.setProperty('--service-card-tilt-y', `${x * 5}deg`);
-        }, { passive: true });
+            if (card.classList.contains('is-spinning')) {
+                card.dataset.spinQueued = 'true';
+                return;
+            }
 
-        card.addEventListener('pointerleave', () => {
-            card.style.removeProperty('--service-card-tilt-x');
-            card.style.removeProperty('--service-card-tilt-y');
+            card.classList.add('is-spinning');
+        });
+
+        card.addEventListener('animationend', (event) => {
+            if (event.target !== card || event.animationName !== 'links-card-flip') return;
+
+            if (card.dataset.spinQueued === 'true' && pointerMotion.matches) {
+                delete card.dataset.spinQueued;
+                card.classList.remove('is-spinning');
+                void card.offsetWidth;
+                card.classList.add('is-spinning');
+                return;
+            }
+
+            delete card.dataset.spinQueued;
+            card.classList.remove('is-spinning');
+        });
+    });
+
+    pointerMotion.addEventListener('change', (event) => {
+        if (event.matches) return;
+        cards.forEach((card) => {
+            card.classList.remove('is-spinning');
+            delete card.dataset.spinQueued;
         });
     });
 })();
